@@ -47,6 +47,13 @@
 
 추가적인 내용은 자유롭게 작성하세요.
 
+```
+master
+backend  - Dockerfile, Python Flask 코드
+frontend - 팀 페이지(홈페이지), 대시보드 페이지, 관리자 페이지
+infra    - OpenStack 구축 자동화
+
+```
 
 ## Markdown을 사용하여 내용꾸미기
 
