@@ -1,5 +1,5 @@
 [![Work in Repl.it](https://classroom.github.com/assets/work-in-replit-14baed9a392b3a25080506f3b7b6d57f295ec2978f6f33ec97e36a161684cbe9.svg)](https://classroom.github.com/online_ide?assignment_repo_id=350588&assignment_repo_type=GroupAssignmentRepo)
-# Welcome to GitHub
+# SomeCloud
 
 캡스톤 팀 생성을 축하합니다.
 
@@ -47,6 +47,13 @@
 
 추가적인 내용은 자유롭게 작성하세요.
 
+```
+master
+backend  - Dockerfile, Python Flask 코드
+frontend - 팀 페이지(홈페이지), 대시보드 페이지, 관리자 페이지
+infra    - OpenStack 구축 자동화
+
+```
 
 ## Markdown을 사용하여 내용꾸미기
 
