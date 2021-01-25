@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+  web: 
+    env_file: .env
+    ports: 
+      - 8080:80  
+    build: ./ 
+    volumes:
+      - ~/.aws/:/root/.aws

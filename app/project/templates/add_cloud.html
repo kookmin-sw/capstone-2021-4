@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% block title %}Add Item{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-6">
+    <form action="{{ url_for('cloud.add_cloud') }}" method="post" name="itemsform">
+        {{ form.csrf_token }}
+        <div class="form-group">
+          {{ form.Hostname.label }}
+          {{ render_field(form.Hostname, class="form-control") }}
+        </div>
+        <div class="form-group">
+          {{ form.Plan.label }}
+          {{ render_field(form.Plan, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.os.label }}
+            {{ render_field(form.os, class="form-control") }}
+          </div>
+        <input type="submit" value="Add Item" class="btn btn-lg btn-success">
+    </form>
+  </div>
+  <div class="col-md-6">
+    <h4>클라우드 인스턴스를 만듭니다.</h4>
+    <p>Hostname, Plan, OS 를 고르시기 바랍니다.</p>
+  </div>
+</div>
+
+{% endblock %}

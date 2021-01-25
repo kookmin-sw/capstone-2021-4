@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+{% block title %}Cloud Instances{% endblock %}
+{% block content %}
+
+{% if items[0] == NULL %}
+<div class="panel-body">
+  <p>No Cloud are added yet, <a href="{{ url_for('cloud.add_cloud') }}">add a new item</a>.</p>
+</div>
+{% else %}
+<table class="table table-stripe">
+  <thead>
+    <tr>
+      <th class="border-top-0">Name</th>
+      <th class="border-top-0">Hostname</th>
+      <th class="border-top-0">created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.hostname }}</td>
+      <td>
+        {{ item.plan_id }}
+      </td>
+      <td>
+        <a href="{{ url_for('cloud.edit_item', items_id=cloud.id) }}">Edit</a>
+        <a href="{{ url_for('cloud.delete_item', items_id=cloud.id) }}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
