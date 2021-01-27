@@ -11,7 +11,7 @@ class Config(object):
     BCRYPT_LOG_ROUNDS = 15
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = 465
-    MAIL_USE_TLS = True
+    MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'your-mandrill-username'
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'your mandrill-password'
@@ -26,7 +26,7 @@ class Config(object):
             'mode': 'standard'
         },
     )
-    SQLALCHEMY_DATABASE_URI =  os.environ.get("SQLALCHEMY_DATABASE_URI")
+    SQLALCHEMY_DATABASE_URI =  os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProductionConfig(Config):

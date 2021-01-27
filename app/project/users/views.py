@@ -17,13 +17,12 @@ from project.models import User
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
 # HELPERS
 def send_async_email(msg):
-    print(app.config['MAIL_SERVER'])
     with app.app_context():  
         try:
-            mail.send(msg) 
+            mail.send(msg)
+            print(msg)
         except Exception as e:
             print("ERROR")
             print(e)
@@ -47,7 +46,7 @@ def send_confirmation_email(user_email):
     html = render_template(
         'email_confirmation.html',
         confirm_url=confirm_url)
-
+    print("send to {}".format(user_email))
     send_email('Confirm Your Email Address', [user_email], html)
 
 

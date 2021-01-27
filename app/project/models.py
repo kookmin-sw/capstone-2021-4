@@ -86,11 +86,22 @@ class Items(db.Model):
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
+class Oslist(db.Model): # 제공 os
+    __tablename__ = 'oslist'
+    id = db.Column(db.Integer, primary_key=True)
+    os_name = db.Column(db.String(30), nullable=False)
+    aws_image_id = db.Column(db.String(30), nullable=False)
+
+    def __init__(self, id, os_name,aws_image_id ):
+        self.id = id
+        self.os_name = os_name
+        self.aws_image_id = aws_image_id
+
 class Plan(db.Model):
     __tablename__ = 'plan'
     id = db.Column(db.Integer, primary_key=True)
-    plan_name = db.Column(db.String(10), nullable=False)
-    aws_plan = db.Column(db.String(10), nullable=False)
+    plan_name = db.Column(db.String(30), nullable=False)
+    aws_plan = db.Column(db.String(30), nullable=False)
     core = db.Column(db.Integer, nullable=False)
     ram = db.Column(db.Integer, nullable=False)
     traffic = db.Column(db.Integer, nullable=False)
@@ -106,7 +117,29 @@ class Plan(db.Model):
         self.ssd = ssd
         self.iops = iops
         
- 
+
+class VPC(db.Model):
+    __tablename__ = 'user_vpc'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    vpc_id = db.Column(db.String(40), nullable=False)
+    
+    def __init__(self, user_id, vpc_id):
+        self.user_id = user_id
+        self.vpc_id = vpc_id
+
+class Subnet(db.Model):
+    __tablename__ = 'subnets'
+    id = db.Column(db.Integer, primary_key=True)
+    subnet_id = db.Column(db.String(20), nullable=False)
+    cidr_block_ipv4 = db.Column(db.String(24))
+    subnet_vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
+
+    def __init__(self, subnet_id, cidr_block_ipv4, subnet_vpc_id):
+        self.subnet_id = subnet_id
+        self.cidr_block_ipv4 = cidr_block_ipv4
+        self.subnet_vpc_id = subnet_vpc_id
+
 
 class Cloud(db.Model):
     __tablename__ = 'cloud'
@@ -121,7 +154,7 @@ class Cloud(db.Model):
     created_at = db.Column(db.DateTime, nullable=True)
     deleted_at = db.Column(db.DateTime, nullable=True)
     
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, created_at):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -130,6 +163,7 @@ class Cloud(db.Model):
         self.ip_addr = ip_addr
         self.region = region
         self.created_at = datetime.now()
+        
 
 # class Billing(db.Model):
 #     __tablename__ = 'billing'

@@ -6,12 +6,17 @@ from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_required
 from flask_mail import Mail 
 import os
-
+from dotenv import load_dotenv 
+load_dotenv(verbose=True)
 
 # CONFIG
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object(os.environ['APP_SETTINGS'])
-db = SQLAlchemy(app)
+app.config.from_object(os.getenv('APP_SETTINGS'))
+
+db = SQLAlchemy(app) 
+with app.app_context():
+    db.init_app(app)
+    
 bcrypt = Bcrypt(app)
 mail = Mail(app)
  

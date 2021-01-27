@@ -2,7 +2,7 @@
 {% block title %}Cloud Instances{% endblock %}
 {% block content %}
 
-{% if items[0] == NULL %}
+{% if cloud[0] == NULL %}
 <div class="panel-body">
   <p>No Cloud are added yet, <a href="{{ url_for('cloud.add_cloud') }}">add a new item</a>.</p>
 </div>
@@ -10,26 +10,57 @@
 <table class="table table-stripe">
   <thead>
     <tr>
-      <th class="border-top-0">Name</th>
+      <th class="border-top-0">id</th>
       <th class="border-top-0">Hostname</th>
+      <th class="border-top-0">plan_id</th>
+      <th class="border-top-0">os</th>
+      <th class="border-top-0">status</th>
+      <th class="border-top-0">ip_addr</th>
+      <th class="border-top-0">Region</th>
       <th class="border-top-0">created_at</th>
+      <th class="border-top-0">Actions</th> 
+      
     </tr>
   </thead>
   <tbody>
-    {% for item in items %}
+    {% for item in cloud %}
     <tr>
-      <td>{{ item.hostname }}</td>
+      <td>{{ item.id }}</td>
       <td>
-        {{ item.plan_id }}
+        {{ item.hostname }}
       </td>
       <td>
-        <a href="{{ url_for('cloud.edit_item', items_id=cloud.id) }}">Edit</a>
-        <a href="{{ url_for('cloud.delete_item', items_id=cloud.id) }}">Delete</a>
+        {{ item.plan_id}}
       </td>
+      <td>
+        {{ item.os}}
+      </td>
+      
+      <td>
+        {{ item.status}}
+      </td>
+      
+      <td>
+        {{ item.ip_addr}}
+      </td>
+           
+      <td>
+        {{ item.region}}
+      </td> 
+      <td>
+        {{ item.created_at}}
+      </td> 
+
+      <td>
+        <a href="{{ url_for('cloud.update_cloud', items_id=cloud.id) }}">Edit</a>
+        <a href="{{ url_for('cloud.delete_cloud', items_id=cloud.id) }}">Delete</a>
+      </td>
+      
     </tr>
     {% endfor %}
   </tbody>
 </table>
+<p>클라우드를 더 생성할 수 있습니다.<a href="{{ url_for('cloud.add_cloud') }}">add a new item</a>.</p>
 {% endif %}
 
 {% endblock %}
