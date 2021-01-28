@@ -23,8 +23,12 @@ python3 -m pip install http.server
 ```
 app
 - css
+  - views - ./views 에 해당하는(cloud_add, cloud_list ...) 파일 이름과 일치
 - img
 - js
+  - cloud_add.js
+  - cloud_list.js
+  - dashboard.js - ./views 에 해당하는(cloud_add, cloud_list ...) 파일 이름과 일치
 pages 
 - 로그인, 인트로 페이지 파일
 templates
@@ -41,6 +45,14 @@ views
 index.html - 메인 index.html 파일
 localserver.sh - 실행 파일
 refer_* - 개발할 때 참고하는 파일 ( 아이콘, 버튼, 영역, 등등)
+```
+
+## 커밋 / 푸쉬 요령 - ex) cloud_add.html 완성 후 여기에 커밋 할 때
+```
+git add views/cloud_add.html
+git add app/css/views/cloud_add.css
+git commit -m "cloud_add.html 에서 버튼을 추가하고, css디자인을 입힘ㄴ
+
 ```
 
 ## 팀소개 및 페이지를 꾸며주세요.
