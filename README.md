@@ -1,7 +1,23 @@
 [![Work in Repl.it](https://classroom.github.com/assets/work-in-replit-14baed9a392b3a25080506f3b7b6d57f295ec2978f6f33ec97e36a161684cbe9.svg)](https://classroom.github.com/online_ide?assignment_repo_id=350588&assignment_repo_type=GroupAssignmentRepo)
-# Welcome to GitHub
+# Somecloud Front-end
 
-캡스톤 팀 생성을 축하합니다.
+썸클라우드 프론트엔드 코드-모듈화 뼈대
+
+## Usage
+- clone
+```
+git clone https://github.com/kookmin-sw/capstone-2021-4/ -b frontend
+```
+
+- run
+```
+sh localserver.sh
+```
+
+- 안될 시
+```
+python3 -m pip install http.server 
+```
 
 ## 팀소개 및 페이지를 꾸며주세요.
 
