@@ -51,9 +51,10 @@ refer_* - 개발할 때 참고하는 파일 ( 아이콘, 버튼, 영역, 등등)
 ```
 git add views/cloud_add.html
 git add app/css/views/cloud_add.css
-git commit -m "cloud_add.html 에서 버튼을 추가하고, css디자인을 입힘ㄴ
-
+git commit -m "cloud_add.html 에서 버튼을 추가하고, css디자인을 입힘"
+git push origin frontend
 ```
+- 파일마다 꼭 할 필요는 없지만 해주면 좋고, 최소한 커밋할 때 어떤걸 했는지 커밋메세지로 남기는것이 중요함.
 
 ## 팀소개 및 페이지를 꾸며주세요.
 
