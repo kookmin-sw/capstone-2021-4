@@ -48,6 +48,15 @@ refer_* - 개발할 때 참고하는 파일 ( 아이콘, 버튼, 영역, 등등)
 ```
 
 ## 커밋 / 푸쉬 요령 - ex) cloud_add.html 완성 후 여기에 커밋 할 때
+``` 
+❯ git status
+On branch frontend
+Your branch is up to date with 'origin/frontend'.
+
+nothing to commit, working tree clean
+```
+- git status 를 치고 현재 브랜치가 `frontend` 브랜치인지 확인한다. 
+
 ```
 git add views/cloud_add.html
 git add app/css/views/cloud_add.css
