@@ -19,6 +19,30 @@ sh localserver.sh
 python3 -m pip install http.server 
 ```
 
+## 디렉터리 구조
+```
+app
+- css
+- img
+- js
+pages 
+- 로그인, 인트로 페이지 파일
+templates
+- _content-area - 콘텐츠 영역 렌더링하는데 필요한 파일
+- _left-side - 왼쪽 매뉴 영역
+- _menu - 상단 매뉴 영역
+- _right-side - 아직 사용 안하지만 냅둔파일
+vendor
+- Wintermin 내부 라이브러리 파일들
+views
+- cloud_add - 클라우드 추가 화면
+- cloud_list - 클라우드 리스트 화면
+- dashboard - 대시보드 화면
+index.html - 메인 index.html 파일
+localserver.sh - 실행 파일
+refer_* - 개발할 때 참고하는 파일 ( 아이콘, 버튼, 영역, 등등)
+```
+
 ## 팀소개 및 페이지를 꾸며주세요.
 
 - 프로젝트 소개
