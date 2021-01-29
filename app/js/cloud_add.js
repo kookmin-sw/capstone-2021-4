@@ -1,3 +1,5 @@
-function create_instance() {
+var cloud_add = {}
+
+cloud_add.create = function() {
     route("cloud_list")
 }

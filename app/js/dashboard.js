@@ -1,3 +1,5 @@
-function add_cloud() {
+var dashboard = {}
+
+dashboard.add_cloud = function() {
     route("cloud_add")
 }
