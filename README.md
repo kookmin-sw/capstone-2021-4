@@ -1,3 +1,37 @@
+# Somecloud-backend
+- SomeCloudBackend
+
+## Usage
+```
+git clone <this repo URL>
+```
+
+## PIP
+```
+pip3 install -r requirements.txt
+```
+
+## environment set
+```
+cp -rf .env.example .env
+```
+
+## DB Migration (schema construct)
+```
+python3 main.py db init
+python3 main.py db migrate 
+python3 main.py db upgrade
+```
+## Run (Local)
+```
+python3 main.py runserver
+```
+
+## Deploy on Container 
+```
+docker-compose up -d
+```
+--
 # Flask App Blueprint: the fast way to start your MVP
 [![CircleCI](https://circleci.com/gh/jelmerdejong/flask-app-blueprint.svg?style=shield)](https://circleci.com/gh/jelmerdejong/flask-app-blueprint)
 

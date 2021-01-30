@@ -8,6 +8,8 @@ class CloudForm(FlaskForm):
                                          Length(min=1, max=254)])
     os = TextField('OS')
     plan = TextField('plan')
+    subnet = TextField('subnet')
+    keypair = TextField('keypair')
 
 
 class EditCloudForm(FlaskForm):

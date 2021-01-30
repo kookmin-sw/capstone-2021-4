@@ -131,7 +131,7 @@ class VPC(db.Model):
 class Subnet(db.Model):
     __tablename__ = 'subnets'
     id = db.Column(db.Integer, primary_key=True)
-    subnet_id = db.Column(db.String(20), nullable=False)
+    subnet_id = db.Column(db.String(30), nullable=False)
     cidr_block_ipv4 = db.Column(db.String(24))
     subnet_vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
 
@@ -140,6 +140,19 @@ class Subnet(db.Model):
         self.cidr_block_ipv4 = cidr_block_ipv4
         self.subnet_vpc_id = subnet_vpc_id
 
+class Keypair(db.Model): #for connector
+    __tablename__ = 'keypair'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    fingerprint = db.Column(db.String(59), nullable=True)
+    keyid = db.Column(db.String(30), nullable=False)
+    user_id = db.Column(db.String(30), nullable=False)
+
+    def __init__(self, name, fingerprint, keyid, user_id):
+        self.name = name
+        self.fingerprint = fingerprint
+        self.keyid = keyid
+        self.user_id = user_id
 
 class Cloud(db.Model):
     __tablename__ = 'cloud'
@@ -153,8 +166,9 @@ class Cloud(db.Model):
     region = db.Column(db.String(10), nullable=False)
     created_at = db.Column(db.DateTime, nullable=True)
     deleted_at = db.Column(db.DateTime, nullable=True)
-    
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region):
+    keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
+
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -163,6 +177,7 @@ class Cloud(db.Model):
         self.ip_addr = ip_addr
         self.region = region
         self.created_at = datetime.now()
+        self.keypair_id = keypair_id
         
 
 # class Billing(db.Model):

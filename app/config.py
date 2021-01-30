@@ -28,6 +28,10 @@ class Config(object):
     )
     SQLALCHEMY_DATABASE_URI =  os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    def __init__(self):
+        if os.getenv("SQLALCHEMY_DATABASE_URI") == "sqlite":
+            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
 
 class ProductionConfig(Config):
     DEBUG = False

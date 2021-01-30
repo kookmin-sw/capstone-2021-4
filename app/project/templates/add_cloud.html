@@ -20,13 +20,27 @@
           </select>
         </div>
         <div class="form-group">
-            <label for="oslist">OS 선택</label>
-            <select class="form-control" name="os" id="">
-              {% for o in oslist %}
-              <option value="{{ o.id }}">{{ o.os_name }}</option>
-              {% endfor %}
+          <label for="oslist">OS 선택</label>
+          <select class="form-control" name="os" id="">
+            {% for o in oslist %}
+            <option value="{{ o.id }}">{{ o.os_name }}</option>
+            {% endfor %}
+          </select> 
+        </div>
+        <div class="form-group">
+          <label for="oslist">Keypair 선택</label> 
+            {% if keypair[0] == NULL %}
+            <p>Keypair로 들어가서 Keypair를 새로 생성해 주세요.</p>
+            {% else %}
+            <select class="form-control" name="keypair" id="">
+            {% for o in keypair %}
+            <option value="{{ o.id }}">{{ o.name }}</option>
+            {% endfor %}
             </select> 
-          </div>
+            {% endif %} 
+        </div>
+        
+         
         <input type="submit" value="Add Item" class="btn btn-lg btn-success">
     </form>
   </div>

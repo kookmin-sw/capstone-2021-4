@@ -23,6 +23,9 @@
           <li class="nav-item {% if request.path == url_for('home') %}active{% endif %}">
             <a class="nav-link" href="{{ url_for('home') }}">Home</a>
           </li>
+          <li class="nav-item {% if request.path == url_for('keypair.all_keypairs') %}active{% endif %}">
+            <a class="nav-link" href="{{ url_for('keypair.all_keypairs') }}">keypairs</a>
+          </li> 
           <li class="nav-item {% if request.path == url_for('cloud.all_clouds') %}active{% endif %}">
             <a class="nav-link" href="{{ url_for('cloud.all_clouds') }}">Cloud Instances</a>
           </li> 

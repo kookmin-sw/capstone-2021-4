@@ -37,6 +37,7 @@ def load_user(user_id):
 from project.users.views import users_blueprint
 from project.items.views import items_blueprint
 from project.cloud.views import cloud_blueprint
+from project.keypair.views import keypair_blueprint
 
 # template blueprints
 app.register_blueprint(users_blueprint)
@@ -44,6 +45,7 @@ app.register_blueprint(items_blueprint)
 
 #custom blueprints
 app.register_blueprint(cloud_blueprint,url_prefix='/cloud')
+app.register_blueprint(keypair_blueprint, url_prefix='/keypair')
 
 # ROUTES
 @app.route('/', methods=['GET', 'POST'])
