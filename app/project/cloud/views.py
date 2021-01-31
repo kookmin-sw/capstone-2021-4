@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, request, redirect, url_for, flash,
 from flask_login import current_user, login_required
 from project import db
 from project import app
-from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair
+from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityRule, NetInterface
 import boto3
 import os
 from .forms import CloudForm, EditCloudForm
@@ -51,6 +51,32 @@ def back_ec2_create_vpc():
     
     return response
 
+def back_ec2_create_net_interface(subnetid):
+    response = ec2.create_network_interface(
+        Description='string',   
+        SubnetId=subnetid,
+        TagSpecifications=[
+            {
+                'ResourceType': 'network-interface' ,
+                'Tags': [
+                    {
+                        'Key': 'string',
+                        'Value': 'string'
+                    },
+                ]
+            },
+        ]
+    )
+    return response
+
+
+def back_ec2_delete_net_interface(interfaceid):
+    response = ec2.delete_network_interface(
+        # NetworkInterfaceId='eni-e5aa89a3',
+        NetworkInterfaceId=interfaceid
+    )
+    return response 
+
 def back_ec2_create_subnet(vpcid):
     response = ec2.create_subnet(
         TagSpecifications=[
@@ -68,7 +94,7 @@ def back_ec2_create_subnet(vpcid):
         CidrBlock='10.0.1.0/16',  
         VpcId=vpcid
     )
-    # 'Subnet': {'AvailabilityZone': 'ap-northeast-2b', 'AvailabilityZoneId': 'apne2-az2', 'AvailableIpAddressCount': 4091, 'CidrBlock': '10.0.0.0/20', 'DefaultForAz': False, 'MapPublicIpOnLaunch': False, 'State': 'available', 'SubnetId': 'subnet-0c6ed9be7c2136f5b', 'VpcId': 'vpc-0c2050c79701c3695', 'OwnerId': '453409655393', 'AssignIpv6AddressOnCreation': False, 'Ipv6CidrBlockAssociationSet': [], 'Tags': [{'Key': 'string', 'Value': 'string'}], 'SubnetArn': 'arn:aws:ec2:ap-northeast-2:453409655393:subnet/subnet-0c6ed9be7c2136f5b'}, 'ResponseMetadata': {'RequestId': '113593d1-9ac0-4a75-b128-9c1b7968e6ef', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '113593d1-9ac0-4a75-b128-9c1b7968e6ef', 'cache-control': 'no-cache, no-store', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '1086', 'date': 'Fri, 29 Jan 2021 11:24:22 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}
+    
     return response
     
 def back_ec2_delete_subnet(subnetid):
@@ -81,7 +107,7 @@ def back_ec2_create_int_gateway(vpcid):
     response = ec2.create_internet_gateway(
         TagSpecifications=[
             {
-                'ResourceType': ' internet-gateway',
+                'ResourceType': 'internet-gateway',
                 'Tags': [
                     {
                         'Key': 'string',
@@ -94,11 +120,134 @@ def back_ec2_create_int_gateway(vpcid):
     return response 
 
 
-
 def back_ec2_delete_int_gateway(intgatewayid):
     pass
 
-def back_ec2_create_ec2( plan, iops ,volumesize , subnet_id, keypair_name):
+
+def back_ec2_int_gateway_attach_vpc(intgatewayid, vpc_id): 
+    response = ec2.attach_internet_gateway( 
+        InternetGatewayId=intgatewayid,
+        VpcId=vpc_id
+    )
+    return response
+
+def back_ec2_int_gateway_detach_vpc(intgatewayid, vpc_id): 
+    response = ec2.detach_internet_gateway( 
+        InternetGatewayId=intgatewayid,
+        VpcId=vpc_id
+    )
+    return response
+
+
+
+def back_ec2_create_security_group(vpc_id):
+    response = ec2.create_security_group(
+        Description='string',
+        GroupName='string',
+        VpcId=vpc_id,
+        TagSpecifications=[
+            {
+                'ResourceType': 'security-group',
+                'Tags': [
+                    {
+                        'Key': 'string',
+                        'Value': 'string'
+                    },
+                ]
+            },
+        ], 
+    )
+    return response
+
+def find_route_table(vpc_id,Index=0):
+    response = ec2.describe_route_tables(
+        Filters=[
+            {
+                'Name': 'vpc-id',
+                'Values': [
+                    vpc_id,
+                ]
+            },
+        ],
+        MaxResults=100
+    )
+    route_table_id = response["RouteTables"][Index]["RouteTableId"] 
+    return route_table_id
+
+def route_table_init( inter_gw_id, route_table_id):
+
+    response = ec2.create_route(
+        DestinationCidrBlock='0.0.0.0/0', 
+        GatewayId=inter_gw_id,     
+        RouteTableId=route_table_id,  
+    ) 
+    return response
+
+def check_environment(userid):
+    result = db.session.query(VPC.vpc_id).filter(VPC.user_id == userid).scalar() # VPC check  
+    if result == None:
+        return False # 환경구축이 필요함
+    else:
+        return True
+
+def create_environment(userid): # 사용자마다 한번씩만 해주는..
+    try:
+        print("[Console] Create_env Started")
+        vpc_result = back_ec2_create_vpc() 
+        print("[Console] VPC Create")
+        vpc_id = vpc_result["Vpc"]["VpcId"]
+        
+        print("[Console] Subnet Create")
+        subnet_res = back_ec2_create_subnet(vpc_id)
+        subnet_id = subnet_res["Subnet"]["SubnetId"]
+        subnet_cidr = subnet_res["Subnet"]["CidrBlock"] 
+        print("[Console] Internet Gateway Create")
+        int_gateway = back_ec2_create_int_gateway(vpc_id)
+        int_gw_id = int_gateway["InternetGateway"]["InternetGatewayId"]
+        print("[Console] VPC-Internet GW Attach")
+        back_ec2_int_gateway_attach_vpc(int_gw_id, vpc_id)
+        
+        route_table_id = find_route_table(vpc_id)
+        print("[Console] RouteTable Init - {}".format(route_table_id))
+        router_init = route_table_init(int_gw_id, route_table_id)
+        print("[Console] SecurityGroup Create")
+        security_group = back_ec2_create_security_group(vpc_id)   
+        security_group_id = security_group["GroupId"] 
+        print("[Console] SecurityGroup {} created".format(security_group_id))
+        print("[Console] DB Record create")
+        # Create record structure
+        new_subnet = Subnet(subnet_id, subnet_cidr)
+        new_vpc = VPC(userid, vpc_id, int_gw_id, subnet_id ,security_group_id )
+        new_security_rule = SecurityRule(security_group_id, userid)
+        print("[Console] DB Commit")
+        # Apply to DB 
+        db.session.add(new_subnet)
+        db.session.add(new_vpc)
+        
+        db.session.add(new_security_rule)
+
+        db.session.commit()  
+        print("[Console] created user environment")
+    except:
+        print("[Console] Error..")
+        # delete_environment(current_user.id)
+        # print("[Console] VPC deleting")
+        # response =ec2.delete_vpc(
+        #     VpcId=vpc_id
+        # )
+        print(response)
+        print("DB rollback process..")
+        db.session.rollback()
+    
+
+def delete_environment(userid):
+    # delete vpc table on vpc id
+     
+    pass
+ 
+
+
+def back_ec2_create_ec2( plan, iops ,volumesize , subnet_id, keypair_name, sec_group_id):
     instance = ec2.run_instances(
     BlockDeviceMappings=[
         {
@@ -117,19 +266,25 @@ def back_ec2_create_ec2( plan, iops ,volumesize , subnet_id, keypair_name):
     MinCount=1,
     Monitoring={ # 이건 대체 머하는옵션
         'Enabled': True 
-    },
-    SecurityGroupIds=[
-        'sg-092b8d63',
-    ],
-    # RamdiskId='string',   
-    # UserData='string', # StackScript 같은거..
-    # AdditionalInfo='string',
-    # ClientToken='string', 
-     
-     
+    }, 
+    NetworkInterfaces=[
+    { 
+        "AssociatePublicIpAddress": True,
+        "DeviceIndex": 0,
+        'SubnetId': subnet_id,
+        'Groups' : sec_group_id,
+        "DeleteOnTermination": True,
+    }, 
+    ]  
+    # UserData='string', # StackScript 같은거..  
     )
+    print(instance) 
     return instance 
 
+@cloud_blueprint.route('/init', methods=['GET', 'POST'])
+@login_required
+def init_environment():
+    pass
 
 @cloud_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -142,47 +297,35 @@ def add_cloud():
     if request.method == 'POST': 
         if form.validate_on_submit(): 
             try:
-                vpc_id = ""
-                # 1. AWS EC2 API 호출 - SDK (db 단은 Transaction  수행)
-                #  if not have vpc -> create_vpc() / create_internet_gateway()
-                check_user_vpc = db.session.query(VPC.id).filter(VPC.user_id == current_user.id).scalar()
-                check_plan = db.session.query(Plan.aws_plan, Plan.ssd, Plan.iops ).filter(Plan.id == form.data["plan"])[0]
-                
-                selected_keypair = form.data["keypair"]
-                keypair_formatted = "{}_{}".format(current_user.email, db.session.query(Keypair.name).filter(Keypair.id == selected_keypair).scalar())
+                plan_id = form.data["plan"]
+                get_aws_plan = db.session.query(Plan.aws_plan,Plan.ssd, Plan.iops).filter(Plan.id == plan_id)[0]
+                param_plan = get_aws_plan[0]
+                param_ssd = get_aws_plan[1]
+                param_iops = get_aws_plan[2]
+                vpc_info = db.session.query(VPC.vpc_id, VPC.inter_gw_id, VPC.default_subnet_id, VPC.default_sec_id, VPC.id).filter(VPC.user_id == current_user.id)[0]
+                aws_image_id = db.session.query(Oslist.aws_image_id).filter(Oslist.id == form.data["os"]).scalar()
+                vpc_id = vpc_info[4]
+                vpc_default_subnetid = vpc_info[2]
+                vpc_default_secid = vpc_info[3]
+                keypair_id = form.data["keypair"]
 
-                aws_plan = check_plan[0]
-                aws_ssd = check_plan[1]
-                aws_iops = check_plan[2]
-
-                if not check_user_vpc:
-                    # 1. Create VPC 
-                    vpc_result = back_ec2_create_vpc() 
-                    # 2. Create Subnet for VPC
-                    vpc_id = vpc_result["Vpc"]["VpcId"]
-                    subnet_res = back_ec2_create_subnet(vpc_id)
-                    # 3. Getting ID
-                    subnet_id = subnet_res["Subnet"]["SubnetId"]
-                    subnet_cidr = subnet_res["Subnet"]["CidrBlock"]
-                    # 4. Register to DB
-                    new_vpc = VPC(current_user.id, vpc_id)
+                if check_environment(current_user.id) == True: 
+                    get_keypair = db.session.query(Keypair.name).filter(Keypair.id == keypair_id).scalar()
+                    keypairname_formatted = "{}_{}".format( current_user.email , get_keypair)
                     
-                    db.session.add(new_vpc) 
-                    vpc_idx = db.session.query(VPC.id).filter(VPC.vpc_id == vpc_id)
-                    db.session.commit()
-                    new_subnet = Subnet(subnet_id, subnet_cidr, vpc_idx)
-                    db.session.add(new_subnet)
+                    # net_interface = back_ec2_create_net_interface(vpc_default_subnetid) 
+                    # net_interface_id = net_interface["NetworkInterface"]["NetworkInterfaceId"]
+                    # new_interface = NetInterface(net_interface_id, vpc_default_subnetid)
+                    # db.session.add(new_interface)
+                    # back_ec2_create_ec2( plan, iops ,volumesize , subnet_id, keypair_name, sec_group_id):
+                    back_ec2_create_ec2( param_plan, param_iops ,param_ssd , vpc_default_subnetid, keypairname_formatted, [vpc_default_secid])
+                    new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id)
+                    db.session.add(new_cloud) 
                     db.session.commit()
                 else:
-                    # 기존 VPC가 있을 경우 기존 vpc사용
-                    vpc_id = check_user_vpc 
-                # back_ec2_create_ec2( plan, iops ,volumesize , subnet_id, keypair_name)
-                subnet_id = db.session.query(Subnet.subnet_id).filter(Subnet.subnet_vpc_id == vpc_id).scalar()
-                back_ec2_create_ec2(aws_plan,aws_iops, aws_ssd, subnet_id, keypair_formatted )
+                    raise Exception("관리자에게 문의해 주세요.")
+
                 
-                new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , selected_keypair )
-                db.session.add(new_cloud) 
-                db.session.commit()
                 # 2. DB 에 기록..
                 # new_cloud = Cloud(form.name.data, form.
                 message = Markup(

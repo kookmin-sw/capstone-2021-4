@@ -123,22 +123,55 @@ class VPC(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     vpc_id = db.Column(db.String(40), nullable=False)
+    inter_gw_id = db.Column(db.String(40), nullable=False)
+    default_subnet_id = db.Column(db.String(40), nullable=False)
+    default_sec_id = db.Column(db.String(40), nullable=False)
     
-    def __init__(self, user_id, vpc_id):
+    def __init__(self, user_id, vpc_id, inter_gw_id, default_subnet_id, default_sec_id):
         self.user_id = user_id
         self.vpc_id = vpc_id
+        self.inter_gw_id = inter_gw_id
+        self.default_subnet_id = default_subnet_id
+        self.default_sec_id = default_sec_id
+
+class NetInterface(db.Model):
+    __tablename__ = 'netinterface'
+    id = db.Column(db.Integer, primary_key=True)
+    interface_id = db.Column(db.String(30), nullable=False)
+    subnet_id = db.Column(db.Integer, db.ForeignKey("subnets.id"))
+    cloud_id = db.Column(db.Integer, nullable=True) # cloud id
+    
+
+    def __init__(self, interface_id, subnet_id, cloud_id=None): 
+        self.cloud_id = cloud_id
+        self.interface_id = interface_id
+        self.subnet_id = subnet_id
+        
+
+class SecurityRule(db.Model):
+    __tablename__ = 'securityrule'
+    id = db.Column(db.Integer, primary_key=True)
+    sec_group_id = db.Column(db.String(30), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    associated_to = db.Column(db.Integer, nullable=True) # cloud.id
+    def __init__(self, sec_group_id, user_id, associated_to=None):
+        self.sec_group_id = sec_group_id
+        self.user_id = user_id
+        self.associated_to = associated_to
+
+        
+
 
 class Subnet(db.Model):
     __tablename__ = 'subnets'
     id = db.Column(db.Integer, primary_key=True)
     subnet_id = db.Column(db.String(30), nullable=False)
     cidr_block_ipv4 = db.Column(db.String(24))
-    subnet_vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
+    
 
-    def __init__(self, subnet_id, cidr_block_ipv4, subnet_vpc_id):
+    def __init__(self, subnet_id, cidr_block_ipv4):
         self.subnet_id = subnet_id
-        self.cidr_block_ipv4 = cidr_block_ipv4
-        self.subnet_vpc_id = subnet_vpc_id
+        self.cidr_block_ipv4 = cidr_block_ipv4 
 
 class Keypair(db.Model): #for connector
     __tablename__ = 'keypair'
@@ -154,6 +187,7 @@ class Keypair(db.Model): #for connector
         self.keyid = keyid
         self.user_id = user_id
 
+
 class Cloud(db.Model):
     __tablename__ = 'cloud'
     id = db.Column(db.Integer, primary_key=True)
@@ -167,8 +201,9 @@ class Cloud(db.Model):
     created_at = db.Column(db.DateTime, nullable=True)
     deleted_at = db.Column(db.DateTime, nullable=True)
     keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
+    vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -178,6 +213,7 @@ class Cloud(db.Model):
         self.region = region
         self.created_at = datetime.now()
         self.keypair_id = keypair_id
+        self.vpc_id = vpc_id
         
 
 # class Billing(db.Model):
