@@ -23,18 +23,24 @@
           <li class="nav-item {% if request.path == url_for('home') %}active{% endif %}">
             <a class="nav-link" href="{{ url_for('home') }}">Home</a>
           </li>
-          <li class="nav-item {% if request.path == url_for('keypair.all_keypairs') %}active{% endif %}">
-            <a class="nav-link" href="{{ url_for('keypair.all_keypairs') }}">keypairs</a>
-          </li> 
-          <li class="nav-item {% if request.path == url_for('cloud.all_clouds') %}active{% endif %}">
-            <a class="nav-link" href="{{ url_for('cloud.all_clouds') }}">Cloud Instances</a>
-          </li> 
+          
           <li class="nav-item {% if request.path == url_for('items.all_items') %}active{% endif %}">
             <a class="nav-link" href="{{ url_for('items.all_items') }}">All Items</a>
           </li> 
           <li class="nav-item {% if request.path == url_for('items.add_item') %}active{% endif %}">
             <a class="nav-link" href="{{ url_for('items.add_item') }}">Add Items</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Cloud
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{ url_for('cloud.all_clouds') }}">Cloud Instances</a>
+              <a class="dropdown-item" href="{{ url_for('keypair.all_keypairs') }}">Key pair</a> 
+              <div class="dropdown-divider"></div> 
+            </div>
+          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{current_user.email}}

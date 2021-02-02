@@ -18,42 +18,42 @@
       <th class="border-top-0">ip_addr</th>
       <th class="border-top-0">Region</th>
       <th class="border-top-0">created_at</th>
-      <th class="border-top-0">Actions</th> 
+      <th class="border-top-0">Actions(재부팅,끄기,삭제)</th> 
       
     </tr>
   </thead>
   <tbody>
     {% for item in cloud %}
     <tr>
-      <td>{{ item.id }}</td>
+      <td>{{ item.Cloud.id }}</td>
       <td>
-        {{ item.hostname }}
+        <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
       </td>
       <td>
-        {{ item.plan_id}}
+        {{ item.Plan.plan_name}}
       </td>
       <td>
-        {{ item.os}}
-      </td>
-      
-      <td>
-        {{ item.status}}
+        {{ item.Oslist.os_name}}
       </td>
       
       <td>
-        {{ item.ip_addr}}
+        {{ item.Cloud.status}}
+      </td>
+      
+      <td>
+        {{ item.Cloud.ip_addr}}
       </td>
            
       <td>
-        {{ item.region}}
+        {{ item.Cloud.region}}
       </td> 
       <td>
-        {{ item.created_at}}
+        {{ item.Cloud.created_at}}
       </td> 
 
       <td>
-        <a href="{{ url_for('cloud.update_cloud', items_id=item.id) }}">Edit</a>
-        <a href="{{ url_for('cloud.delete_cloud', items_id=item.id) }}">Delete</a>
+        <a href="{{ url_for('cloud.update_cloud', items_id=item.Cloud.id) }}">Edit</a>
+        <a href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
       </td>
       
     </tr>

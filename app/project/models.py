@@ -202,8 +202,10 @@ class Cloud(db.Model):
     deleted_at = db.Column(db.DateTime, nullable=True)
     keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
     vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
+    aws_instance_id = db.Column(db.String(30), nullable=False)
+    
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -214,7 +216,7 @@ class Cloud(db.Model):
         self.created_at = datetime.now()
         self.keypair_id = keypair_id
         self.vpc_id = vpc_id
-        
+        self.aws_instance_id = aws_instance_id
 
 # class Billing(db.Model):
 #     __tablename__ = 'billing'

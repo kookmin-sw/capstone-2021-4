@@ -39,6 +39,18 @@
             </select> 
             {% endif %} 
         </div>
+        <div class="form-group">
+          <label for="oslist">Secuirty Rule 선택</label> 
+            {% if secgroup[0] == NULL %}
+            <p>Security Group 을 생성해 주세요.</p>
+            {% else %}
+            <select class="form-control" name="secgroup" id="">
+            {% for o in secgroup %}
+            <option value="{{ o.id }}">{{ o.sec_group_id }}</option>
+            {% endfor %}
+            </select> 
+            {% endif %} 
+        </div>
         
          
         <input type="submit" value="Add Item" class="btn btn-lg btn-success">

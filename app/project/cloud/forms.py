@@ -10,6 +10,8 @@ class CloudForm(FlaskForm):
     plan = TextField('plan')
     subnet = TextField('subnet')
     keypair = TextField('keypair')
+    secgroup = TextField('secgroup')
+    
 
 
 class EditCloudForm(FlaskForm):
