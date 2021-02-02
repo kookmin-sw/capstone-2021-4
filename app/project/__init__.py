@@ -13,6 +13,14 @@ load_dotenv(verbose=True)
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(os.getenv('APP_SETTINGS'))
 
+import redis
+from rq import Queue
+import time
+
+r = redis.Redis()
+q = Queue(connection=r)
+
+
 db = SQLAlchemy(app) 
 with app.app_context():
     db.init_app(app)
