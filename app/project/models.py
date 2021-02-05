@@ -16,7 +16,14 @@ class User(db.Model):
     last_logged_in = db.Column(db.DateTime, nullable=True)
     current_logged_in = db.Column(db.DateTime, nullable=True)
     role = db.Column(db.String(60), default='user')
+
     items = db.relationship('Items', backref='user', lazy='dynamic')
+    clouds = db.relationship('Cloud', backref='user', lazy='dynamic')
+
+    def __json__(self):
+        return ['id', 'email', '_password', 'authenticated', 'email_confirmation_sent_on', 
+        'email_confirmed', 'email_confirmed_on', 'registered_on', 'last_logged_in', 'current_logged_in',
+        'role', 'items']
 
     def __init__(self, email, password, email_confirmation_sent_on=None, role='user'):
         self.email = email
@@ -69,6 +76,7 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
+  
 
 
 class Items(db.Model):
@@ -92,11 +100,23 @@ class Oslist(db.Model): # 제공 os
     os_name = db.Column(db.String(30), nullable=False)
     aws_image_id = db.Column(db.String(30), nullable=False)
 
+    def __json__(self):
+        return ['id', 'os_name', 'aws_image_id']
+
+
     def __init__(self, id, os_name,aws_image_id ):
         self.id = id
         self.os_name = os_name
         self.aws_image_id = aws_image_id
+    @property
+    def serialize(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
+def dump_datetime(value):
+    """Deserialize datetime object into string form for JSON processing."""
+    if value is None:
+        return None
+    return [value.strftime("%Y-%m-%d"), value.strftime("%H:%M:%S")]
 class Plan(db.Model):
     __tablename__ = 'plan'
     id = db.Column(db.Integer, primary_key=True)
@@ -107,7 +127,10 @@ class Plan(db.Model):
     traffic = db.Column(db.Integer, nullable=False)
     ssd = db.Column(db.Integer, nullable=False)
     iops = db.Column(db.Integer, nullable=False)
-    
+    def __json__(self):
+        return ['id', 'plan_name', 'aws_plan', 'core', 'ram', 
+        'traffic', 'ssd', 'iops']
+
     def __init__(self, plan_name, aws_plan, core, ram, traffic, ssd, iops):
         self.plan_name = plan_name
         self.aws_plan = aws_plan
@@ -116,6 +139,15 @@ class Plan(db.Model):
         self.traffic = traffic 
         self.ssd = ssd
         self.iops = iops
+    
+    
+    @property
+    def serialize(self):
+       """Return object data in easily serializable format"""
+       return [
+           self.id
+       ]
+            
         
 
 class VPC(db.Model):
@@ -133,6 +165,9 @@ class VPC(db.Model):
         self.inter_gw_id = inter_gw_id
         self.default_subnet_id = default_subnet_id
         self.default_sec_id = default_sec_id
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
 class NetInterface(db.Model):
     __tablename__ = 'netinterface'
@@ -146,6 +181,9 @@ class NetInterface(db.Model):
         self.cloud_id = cloud_id
         self.interface_id = interface_id
         self.subnet_id = subnet_id
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
         
 
 class SecurityRule(db.Model):
@@ -158,6 +196,9 @@ class SecurityRule(db.Model):
         self.sec_group_id = sec_group_id
         self.user_id = user_id
         self.associated_to = associated_to
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
         
 
@@ -172,6 +213,9 @@ class Subnet(db.Model):
     def __init__(self, subnet_id, cidr_block_ipv4):
         self.subnet_id = subnet_id
         self.cidr_block_ipv4 = cidr_block_ipv4 
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
 class Keypair(db.Model): #for connector
     __tablename__ = 'keypair'
@@ -186,6 +230,9 @@ class Keypair(db.Model): #for connector
         self.fingerprint = fingerprint
         self.keyid = keyid
         self.user_id = user_id
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
 
 class Cloud(db.Model):
@@ -204,6 +251,10 @@ class Cloud(db.Model):
     vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
     aws_instance_id = db.Column(db.String(30), nullable=False)
     
+    def __json__(self):
+        return ['id', 'hostname', 'plan_id', 'user_id', 'os', 
+        'status', 'ip_addr', 'region', 'created_at', 'keypair_id',
+        'vpc_id', 'aws_instance_id']
 
     def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id):
         self.hostname = hostname
@@ -217,6 +268,10 @@ class Cloud(db.Model):
         self.keypair_id = keypair_id
         self.vpc_id = vpc_id
         self.aws_instance_id = aws_instance_id
+
+    @property
+    def as_dict(self):
+       return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
 # class Billing(db.Model):
 #     __tablename__ = 'billing'
