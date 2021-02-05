@@ -4,6 +4,7 @@ TOP_LEVEL_DIR = os.path.abspath(os.curdir)
 from botocore.config import Config as AWSConfig
 
 class Config(object):
+    TZ="Asia/Seoul"
     DEBUG = True
     TESTING = False
     CSRF_ENABLED = True
