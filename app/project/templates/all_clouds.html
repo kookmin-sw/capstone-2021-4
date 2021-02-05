@@ -27,7 +27,11 @@
     <tr>
       <td>{{ item.Cloud.id }}</td>
       <td>
+        {% if item.Cloud.status == "Running" %}
         <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
+        {% else %}
+          {{ item.Cloud.hostname }}
+        {% endif %}
       </td>
       <td>
         {{ item.Plan.plan_name}}
@@ -52,8 +56,8 @@
       </td> 
 
       <td>
-        <a href="{{ url_for('cloud.update_cloud', items_id=item.Cloud.id) }}">Edit</a>
-        <a href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
+        <a  href="{{ url_for('cloud.update_cloud', items_id=item.Cloud.id) }}">Edit</a>
+        <a onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
       </td>
       
     </tr>
