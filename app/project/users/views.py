@@ -13,7 +13,7 @@ from .forms import RegisterForm, LoginForm, EmailForm, PasswordForm
 from project import app, db, mail
 from project.models import User
 import project.cloud.views as cloud_env
-
+ 
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -89,6 +89,12 @@ def register():
                 flash(message, 'danger')
     return render_template('register.html', form=form)
 
+@users_blueprint.route('/auth', methods=["POST"])
+def login_token():
+    if request.method == 'POST':
+        email = request.args.da
+        user = User.query.filter_by(email=form.email.data).first()
+        pass
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
