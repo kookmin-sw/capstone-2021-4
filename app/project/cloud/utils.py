@@ -12,6 +12,18 @@ def reboot_instances():
     
     pass
 
+def get_console_screenshot(instance_id):
+    response = ec2.get_console_screenshot(
+        InstanceId=instance_id,
+        WakeUp=True
+    )
+    return response
+
+def get_console_output(instance_id):
+    response = ec2.get_console_output(
+        InstanceId=instance_id
+    )
+    return response
 
 def back_ec2_delete_vpc(id):
     response = ec2.delete_vpc(

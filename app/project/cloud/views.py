@@ -9,7 +9,7 @@ from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, Secu
 import boto3
 import os
 from .forms import CloudForm, EditCloudForm
-from .utils import back_ec2_delete_vpc,back_ec2_create_vpc, back_ec2_create_net_interface, back_ec2_delete_net_interface, back_ec2_create_subnet, back_ec2_delete_subnet, back_ec2_create_int_gateway, back_ec2_delete_int_gateway, back_ec2_int_gateway_attach_vpc, back_ec2_int_gateway_detach_vpc, back_ec2_create_security_group, find_route_table, route_table_init, check_environment, set_default_security_group, create_environment, back_ec2_create_ec2, back_ec2_instance_detail, delete_ec2
+from .utils import *
  
 from sqlalchemy import or_, and_
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -112,7 +112,10 @@ def detail(cloud_id):
             aws_instance = cloud_with_user.Cloud.aws_instance_id 
             cloudid = cloud_with_user.Cloud.id
             response = back_ec2_instance_detail(aws_instance)
-            return render_template('cloud_detail.html', cloud=response)
+            screenshot = get_console_screenshot(aws_instance)
+            output = get_console_output(aws_instance)
+
+            return render_template('cloud_detail.html', cloud=response, screenshot=screenshot, output=output)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 

@@ -13,13 +13,12 @@
   </div>
   <div class="col-md-12">
       <h2>Console Status</h2>
-      <img width="100" height="100" src="">
+      
+      <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="300" height="300" src="">
   </div>
   <div class="col-md-12">
     <h2>Console Logs</h2>
-    <pre>
-      awefawefawe
-    </pre>
+    <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
 </div>
 
 </div>
