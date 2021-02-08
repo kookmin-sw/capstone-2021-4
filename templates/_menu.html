@@ -1,14 +1,23 @@
+<script type="text/javascript">
+   var dashboard = {}
+
+   dashboard.add_cloud = function() {
+      route("cloud_add")
+   }
+
+</script>
+
 <nav role="navigation" class="navbar navbar-default navbar-top navbar-fixed-top">
     <!-- START navbar header-->
     <div class="navbar-header">
-       <a href="dashboard.html" class="navbar-brand">
-          <div class="brand-logo">
-             <img src="app/img/logo.png" alt="App Logo" class="img-responsive">
-          </div>
-          <div class="brand-logo-collapsed">
-             <img src="app/img/logo-single.png" alt="App Logo" class="img-responsive">
-          </div>
-       </a>
+      <a href="pages/landing_ori.html" class="navbar-brand">
+         <div class="brand-logo">
+            <img src="app/img/logo.png" alt="App Logo" class="img-responsive">
+         </div>
+         <div class="brand-logo-collapsed">
+            <img src="app/img/logo-single.png" alt="App Logo" class="img-responsive">
+         </div>
+      </a>
     </div>
     <!-- END navbar header-->
     <!-- START Nav wrapper-->
@@ -40,10 +49,16 @@
        <ul class="nav navbar-nav navbar-right">
           <!-- Search icon-->
           <li>
-             <a href="#" data-toggle="navbar-search">
-                <em class="fa fa-search"></em>
+            <a href="views/cloud_add.html" class="navbar-brand">
+             <a href="#" data-toggle="Profile">
+                <em class="fa f"></em>
              </a>
           </li>
+          <li>
+            <a href="#" data-toggle="navbar-search">
+               <em class="fa fa-search"></em>
+            </a>
+         </li>
           <!-- START Alert menu-->
           <li class="dropdown dropdown-list">
              <a href="#" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">

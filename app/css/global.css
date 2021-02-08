@@ -1,0 +1,16 @@
+.btn {
+    background-color: rgba(0, 0, 0, 0);
+    color:  #31ba85;
+    border-radius: 5px;
+    border: #31ba85 1px solid;
+ }
+ .btn:hover{
+    background-color: #31ba85;
+    color: white ;
+ }
+ .container{  
+   text-align: center;  
+   width: 100%;
+   height: max-content;
+   }  
+

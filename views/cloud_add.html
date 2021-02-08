@@ -1,39 +1,93 @@
-<div class="main-content">
-    <h3>Page title
+<div class="main-content" style="text-align: center;">
+    <h3>Page title (cloud_add)
         <br>
         <small>Subtitle</small>
      </h3>
-     <div class="row">
-        <div class="col-lg-12">
-           <p>A row with content</p>
-        </div>
-         
+     <div class="row" style="text-align: center; padding-bottom: 50px;">
+         <div class="col-lg-12">
+            <h3>필요한 서비스를 선택해주세요</p>
+         </div>
+         <div class="col-lg-12">
+            <h5 style="font-size: larger; color: grey;">호스팅 상품을 선택해주세요</p>
+         </div>
      </div>
-     <div class="row">
+
+     <div class="row" style="padding-bottom: 150px;">
         <div class="col-lg-3">
-           <div class="box-placeholder">plan1 </div>
+           <div class="box-placeholder" class="card">
+              <p id="option">1VCore</p>
+              <p id="option_detail">1GB RAM</p>
+              <p id="option_detail">30GB SSD</p>
+              <p id="option_detail">1TB</p>
+              <a href="#go_plan" class="btn" >select</a>
+            </div>
         </div>
         <div class="col-lg-3">
-           <div class="box-placeholder">plan2 </div>
+            <div class="box-placeholder" clsss="card">
+               <p id="option">2VCore</p>
+               <p id="option_detail">2GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn" >select</a>
+            </div>
         </div>
         <div class="col-lg-3">
-           <div class="box-placeholder">plan3</div>
-        </div>
-        
-        <div class="col-lg-3">
-           <div class="box-placeholder">plan4 </div>
+            <div class="box-placeholder" class="card">
+               <p id="option">4VCore</p>
+               <p id="option_detail">4GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn" >select</a>
+            </div>
         </div> 
+        <div class="col-lg-3">
+            <div class="box-placeholder" class="card">
+               <p id="option">8VCore</p>
+               <p id="option_detail">6GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn" >select</a>
+            </div>        
+         </div> 
      </div>
+
+
+     <div id="go_plan" class="row">
+         <div class="col-lg-12">
+            <h3 style="padding-bottom: 10px;">서버이름과 호스트명을 입력해주세요</h3>
+         </div>
+
+         <div class="col-lg-12" style="padding-left: 10%; padding-right: 10%;">
+            <div id="nonebox" class="box-placeholder" style="padding-right: 10%; padding-left: 10%;">
+               <div class="textbox">
+                  <label for="server_name">서버이름</label>
+                  <input type="text" id="server_name">
+               </div>
+               <div class="textbox">
+                  <label for="host_name">호스트명</label>
+                  <input type="text" id="host_name">
+               </div>
+            </div>
+         </div>
+     </div>
+   
      <div class="row">
         <div class="col-lg-12">
-           <div class="box-placeholder">.col-md-12 </div>
+            <h3 style="padding-top: 100px;">서버를 생성해서 자신만의 사이트를 운영하세요</h3>
         </div>
+        <div class="col-lg-12">
+         <h5 style="font-size: larger; color: grey; padding-bottom: 30px; ">서버생성 버튼을 누르면 서버가 생성됩니다</p>
+      </div>
      </div>
+
+
+
      <div class="row">
-      <button onclick="return cloud_add.create()"> 클라우드 추가</button>
+      <button onclick="return cloud_add.create()" class="opbtn" style="padding-left: 25px; padding-right: 25px; padding-top: 10px;padding-bottom: 10px; margin-bottom: 50px;"> 서버 생성 </button>
      </div>
     </div>
     
+
     <!-- END Page content-->
     <!-- START Page footer-->
     <footer>&copy; 2014 - Wintermin</footer>
