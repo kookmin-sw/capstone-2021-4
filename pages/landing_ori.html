@@ -9,9 +9,9 @@
    .box-placeholder {
       background-color: white;
       box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-      transition: 0.3s;
       border-radius: 10px;
-      border: none;
+      border-style: none;
+      
    }
    .box-placeholder:hover {
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -26,7 +26,10 @@
    #option_detail{
       color:  #8f8f8f;
    }
-
+   h5{
+      font-size: x-large;
+      font-weight: bolder;
+   }
 </style>
 <head>
    <meta charset="utf-8">
@@ -50,9 +53,79 @@
 </head>
 
 <body>
+   <header class="bg-gray-darker">
+      <div class="container" >
+         <nav class="row" style="margin-top: 50px; margin-bottom: 50px;">
+            <div class="row app-logo" >
+               <a href="#" class="logo-wrapper">
+                  <img src="../app/img/logo.png" alt="App Name" class="img-responsive">
+               </a>
+            </div>
+            <div class="col-md-10">
+               <ul class="list-inline menuapp-buttons">
+                  <li class="mr-lg">
+                     <a href="#">
+                        <strong>Demo</strong>
+                     </a>
+                  </li>
+                  <li class="mr-lg">
+                     <a href="#">
+                        <strong>Features</strong>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="#">
+                        <strong class="text-green">Purchase</strong>
+                     </a>
+                  </li>
+               </ul>
+            </div>
+         </nav>
+         <div class="header-content" style="padding-bottom: 100px;">
+            <div class="row row-flush row-table">
+               
+               <div class="col-xs-12 col-lg-6 align-middle">
+                  <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="0" class="app-presentation" style="margin-right:20px;">
+                     <img src="../app/img/landing/server1.jpg" class="img-responsive" >
+                  </div>
+               </div>
 
-   <section id="testimonial" class="bg-gray-darker">
-      <div class="container">
+               <div class="col-xs-12 col-lg-6 align-middle">
+                  <div class="side-presentation">
+                     <div class="h1 header-title" style="color: white; display: inline; font-style: italic;">사이트 무제한 생성 </div>
+                     <div class="h1 header-title" style="color: #d7d7d7; display: inline; font-style: italic;">  클라우드 웹호스팅</div>
+                     <p class="header-subtitle">사용 여부에 따라 필요한 만큼만  사용하는 방식으로 기존 클라우드 방식 보다 70% 이상 비용 절약 가능</p>
+                     <br>
+                     <div class="header-button">
+                        <a href="#" class="btn btn-green btn-lg btn-fw">
+                           <strong>Discover Now</strong>
+                        </a>
+                     </div>
+                     <br>
+                     <br>
+                     <ul class="list-inline store-list">
+                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+                           <h4>
+                              <span class="point point-primary point-lg"></span>Data Tables</h4>
+                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
+                        </li>
+                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+                           <h4>
+                              <span class="point point-primary point-lg"></span>Data Tables</h4>
+                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </header>
+
+
+
+   <section id="testimonial" class="bg-primary">
+      <div class="row" >
          <div id="carousel-testimonial" data-ride="carousel" class="carousel slide">
             <!-- Indicators -->
             <ol class="carousel-indicators">
@@ -112,142 +185,8 @@
       </div>
    </section>
 
-
-   <section class="bg-gray-darker" style="margin-bottom: 50px;">
-      <div class="container">
-         <div class="h1 header-title" style="font-size: 100px; font-style: italic; margin-bottom: 0; text-align: center;"><b>Some Cloud</b></div>
-         <p class="header-subtitle" style="text-align: center; padding-bottom: 20px;">Easily Develop locally, deploy globally in 17 locations worldwide</p>
-         <br>
-         <!-- <h2 data-toggle="play-animation" data-play="fadeInUp" data-offset="0" class="section-header">Tons of features
-            <br>
-            <small class="text-white text-center">Wintermin comes packed with tons of feature ready to use.</small>
-         </h2> -->
-         <div class="row">
-            <div class="col-lg-3">
-               <ul class="feature-list">
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Data Tables</h4>
-                     <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Form Validation</h4>
-                     <p>Cras dolor ligula, laoreet ac vestibulum sed, molestie id odio. Donec convallis arcu sit amet tortor sagittis in convallis metus facilisis.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Portlets</h4>
-                     <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In ante nisi, mollis nec egestas eget, viverra in mi.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Masonry Grid</h4>
-                     <p>Quisque et nulla in tortor posuere accumsan eget non magna. Vestibulum a ipsum lectus, ac congue sapien.</p>
-                  </li>
-               </ul>
-            </div>
-            <div class="col-lg-6">
-               <img src="../app/img/landing/iphone.png" alt="App Name" class="img-responsive center-block">
-            </div>
-            <div class="col-lg-3">
-               <ul class="feature-list">
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>CSS3 Animations</h4>
-                     <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Charts</h4>
-                     <p>Cras dolor ligula, laoreet ac vestibulum sed, molestie id odio. Donec convallis arcu sit amet tortor sagittis in convallis metus facilisis.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Google Maps</h4>
-                     <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In ante nisi, mollis nec egestas eget, viverra in mi.</p>
-                  </li>
-                  <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                     <h4>
-                        <span class="point point-primary point-lg"></span>Full Calendar</h4>
-                     <p>Quisque et nulla in tortor posuere accumsan eget non magna. Vestibulum a ipsum lectus, ac congue sapien.</p>
-                  </li>
-               </ul>
-            </div>
-         </div>
-      </div>
-   </section>
-
-
-   <header>
-      <div class="container">
-         <!-- <nav class="row">
-            <div class="col-md-2 app-logo">
-               <a href="#" class="logo-wrapper">
-                  <img src="../app/img/logo.png" alt="App Name" class="img-responsive">
-               </a>
-            </div>
-            <div class="col-md-10">
-               <ul class="list-inline menuapp-buttons">
-                  <li class="mr-lg">
-                     <a href="#">
-                        <strong>Demo</strong>
-                     </a>
-                  </li>
-                  <li class="mr-lg">
-                     <a href="#">
-                        <strong>Features</strong>
-                     </a>
-                  </li>
-                  <li>
-                     <a href="#">
-                        <strong class="text-green">Purchase</strong>
-                     </a>
-                  </li>
-               </ul>
-            </div>
-         </nav> -->
-<!-- 
-         <div class="header-content">
-            <div class="row row-flush row-table">
-               <div class="col-xs-12 col-lg-6 align-middle">
-                  <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="0" class="app-presentation">
-                     <img src="../app/img/landing/app-mobile.png" alt="App Name" class="img-responsive">
-                  </div>
-               </div>
-               <div class="col-xs-12 col-lg-6 align-middle">
-                  <div class="side-presentation">
-                     <div class="h1 header-title" style="font-size: 100px; font-style: italic; margin-bottom: 0;"><b>Some Cloud</b></div>
-                     <p class="header-subtitle">Easily Develop locally, deploy globally in 17 locations worldwide</p>
-                     <br>
-                     <div class="header-button">
-                        <a href="#" class="btn btn-primary btn-lg btn-fw">
-                           <strong>Discover Now</strong>
-                        </a>
-                     </div>
-                     <br>
-                     <br>
-                     <p>Available on</p>
-                     <ul class="list-inline store-list">
-                        <li>
-                           <a href="#">
-                              <img src="../app/img/landing/store-apple.png" alt="App Name" class="img-responsive">
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#">
-                              <img src="../app/img/landing/store-google.png" alt="App Name" class="img-responsive">
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </header> -->
    
-   <section class="bg-white">
+   <section class="bg-white" style="padding-top: 100px;">
       <div class="container">
          <div class="row">
             <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="-250" class="col-lg-6">
@@ -268,7 +207,7 @@
          </div>
       </div>
    </section>
-   <section>
+   <section style="padding-bottom: 100px;">
       <div class="container">
          <div class="row">
             <div class="col-lg-6">
@@ -289,72 +228,19 @@
          </div>
       </div>
    </section>
-   <section id="testimonial" class="bg-primary">
-      <div class="container">
-         <div id="carousel-testimonial" data-ride="carousel" class="carousel slide">
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-               <li data-target="#carousel-testimonial" data-slide-to="0" class="active"></li>
-               <li data-target="#carousel-testimonial" data-slide-to="1"></li>
-               <li data-target="#carousel-testimonial" data-slide-to="2"></li>
-            </ol>
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-               <div class="item active">
-                  <div class="row">
-                     <div class="col-xs-8 col-xs-offset-2">
-                        <h4>
-                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
-                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
-                        </h4>
-                        <p>
-                           <strong>- John Titor</strong>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="item">
-                  <div class="row">
-                     <div class="col-xs-8 col-xs-offset-2">
-                        <h4>
-                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
-                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
-                        </h4>
-                        <p>
-                           <strong>- Mary Mayer</strong>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="item">
-                  <div class="row">
-                     <div class="col-xs-8 col-xs-offset-2">
-                        <h4>
-                           <em>Quisque non lacinia lacus. Pellentesque odio purus, egestas ac luctus gravida, rutrum ut quam. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Curabitur nec congue erat. Aliquam erat volutpat. Phasellus
-                              ullamcorper rhoncus sagittis. Sed vestibulum quam ut arcu tempus sed placerat nibh venenatis.</em>
-                        </h4>
-                        <p>
-                           <strong>- John Mayer</strong>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <!-- Controls -->
-            <a href="#carousel-testimonial" data-slide="prev" class="left carousel-control">
-               <em class="fa fa-chevron-circle-left"></em>
-            </a>
-            <a href="#carousel-testimonial" data-slide="next" class="right carousel-control">
-               <em class="fa fa-chevron-circle-right"></em>
-            </a>
-         </div>
-      </div>
-   </section>
-   <section id="clients" class="bg-white">
-      <div class="container">
-         <h2 class="section-header">Working with the best
+
+
+
+
+
+
+   <section id="clients" class="bg-white" style="margin: 50px 0px;">
+      <div class="container" style="text-align: center;">
+         <h2 class="section-header">모든 운영체제를 지원합니다
             <br>
-            <small class="text-muted text-center">Wintermin makes your life easier. The best choice for your next project.</small>
+            <small class="text-muted text-center">여러 운영체제로 사용가능합니다</small>
+         <h2 class="section-header"></h2>
+            <br>
          </h2>
          <div class="row">
             <div class="col-lg-2 col-md-4 col-xs-6">
@@ -379,15 +265,21 @@
       </div>
    </section>
 
-   <section class="bg-white">
-      <div class="container">
+   <section class="bg-white" style="margin: 150px 0px;">
+      <div class="container" style="text-align: center;">
+         <h2 class="section-header">원하는 호스팅을 선택해주세요
+            <br>
+            <small class="text-muted text-center">필요한 서비스를 선택해주세요</small>
+            <br>
+            <br>
+         </h2>
          <div class="col-lg-3">
             <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
                <p id="option">1VCore</p>
                <p id="option_detail">1GB RAM</p>
                <p id="option_detail">30GB SSD</p>
                <p id="option_detail">1TB</p>
-               <a href="#go_plan" class="btn" >select</a>
+               <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
          <div class="col-lg-3">
@@ -396,7 +288,7 @@
                <p id="option_detail">1GB RAM</p>
                <p id="option_detail">30GB SSD</p>
                <p id="option_detail">1TB</p>
-               <a href="#go_plan" class="btn" >select</a>
+               <a href="#go_plan" class="btn btn-success" >select</a>
              </div>
          </div>
          <div class="col-lg-3">
@@ -405,7 +297,7 @@
                <p id="option_detail">1GB RAM</p>
                <p id="option_detail">30GB SSD</p>
                <p id="option_detail">1TB</p>
-               <a href="#go_plan" class="btn" >select</a>
+               <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
          <div class="col-lg-3">
@@ -414,7 +306,7 @@
                <p id="option_detail">1GB RAM</p>
                <p id="option_detail">30GB SSD</p>
                <p id="option_detail">1TB</p>
-               <a href="#go_plan" class="btn">select</a>
+               <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
 
@@ -422,25 +314,29 @@
    </section>
 
 
-   <section id="callout">
+   <section id="callout" style="padding-bottom: 100px;">
       <div data-toggle="play-animation" data-play="fadeInLeftBig" data-offset="-200" class="container text-center">
          <h1>Ready to start? Try this App today</h1>
          <h4>And see why people around the world choose this APP to create great cross-platform websites</h4>
-         
          <p>
             <br>
-            <a href="#" class="btn btn-primary btn-lg btn-oval btn-fw">
+            <a href="#" class="btn btn-green btn-lg btn-oval btn-fw">
                <strong>Join Now!</strong>
             </a>
          </p>
       </div>
    </section>
-   <footer class="footer-1 bg-inverse">
+   
+
+
+
+   <footer class="footer-1 bg-inverse" style="padding: 100px 0px; font-size: larger;" >
       <div class="container">
          <div class="row">
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5>PRODUCT</h5>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">PRODUCT</h5>
                   <ul class="list-unstyled">
                      <li><a href="#">Documentation</a>
                      </li>
@@ -455,7 +351,8 @@
             </div>
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5>CONTACT</h5>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">CONTACT</h5>
                   <ul class="list-unstyled">
                      <li><a href="#">Support</a>
                      </li>
@@ -470,7 +367,8 @@
             </div>
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5>COMPANY</h5>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">COMPANY</h5>
                   <ul class="list-unstyled">
                      <li><a href="#">About</a>
                      </li>
@@ -485,7 +383,8 @@
             </div>
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5>Say HI</h5>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">Information</h5>
                   <ul class="list-unstyled">
                      <li><a href="#">Twitter</a>
                      </li>
@@ -498,44 +397,24 @@
                   </ul>
                </nav>
             </div>
-            <div class="col-lg-4 col-xs-12">
-               <form action="#" method="post">
+            <div class="col-lg-4 col-xs-6">
+               <form action="#" method="post" style="margin-top: 50px; margin-left: 100px;">
                   <h5>SUBSCRIBE TO OUR NEWSLETTER!</h5>
                   <div class="input-group">
                      <input type="email" name="email" placeholder="mail@example.com" required="" class="form-control">
                      <span class="input-group-btn">
-                        <button type="submit" class="btn btn-info">Join</button>
+                        <button type="submit" class="btn btn-green btn-info">Join</button>
                      </span>
                   </div>
-                  <!--/input-group -->
                </form>
-               <p class="text-muted">
-                  <small>We will never send spam and you can unsubscribe any time</small>
-               </p>
             </div>
          </div>
       </div>
    </footer>
-   <footer class="footer-2">
-      <div class="container">
-         <div class="row">
-            <div class="col-lg-4">
-               <p>Copyright 2014 | <a href="#">Terms of Service </a>| <a href="#">Privacy Policy</a>
-               </p>
-            </div>
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">
-               <p>Crafted with
-                  <em class="fa fa-heart text-danger fa-fw"></em>
-                  <span>from BA, Argentina.</span>
-               </p>
-            </div>
-         </div>
-      </div>
-   </footer>
-   <!-- END wrapper-->
-   <!-- START Scripts-->
-   <!-- Main vendor Scripts-->
+   
+   
+
+   
    <script src="../vendor/jquery/jquery.min.js"></script>
    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
    <!-- Animo-->

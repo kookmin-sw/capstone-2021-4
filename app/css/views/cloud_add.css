@@ -1,4 +1,5 @@
-#option{
+
+   #option{
     color: black;
     font-size: 30px;
     font-weight: 600;
@@ -38,12 +39,7 @@
       border-radius: 5px;
    }
    
-   .opbtn{
-      background-color: #31ba85;
-      border: #31ba85 1px solid;
-      color: white;
-      border-radius: 2px;
-   }
+   
 
    .box-placeholder {
       background-color: white;
