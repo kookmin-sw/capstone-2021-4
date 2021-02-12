@@ -3,6 +3,7 @@
 
 캡스톤 팀 생성을 축하합니다.
 
+
 ## 팀소개 및 페이지를 꾸며주세요.
 
 - 프로젝트 소개
@@ -17,6 +18,7 @@
   - Source를 marster branch
   - Theme Chooser에서 태마선택
   - 수정후 팀페이지 확인하여 점검.
+  - test
 
 **팀페이지 주소** -> https://kookmin-sw.github.io/ '{{자신의 리파지토리 아이디}}'
 
