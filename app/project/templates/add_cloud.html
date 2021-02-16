@@ -46,7 +46,7 @@
             {% else %}
             <select class="form-control" name="secgroup" id="">
             {% for o in secgroup %}
-            <option value="{{ o.id }}">{{ o.sec_group_id }}</option>
+            <option value="{{ o.id }}">{{ o.name }}</option>
             {% endfor %}
             </select> 
             {% endif %} 
