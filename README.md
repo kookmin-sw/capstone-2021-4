@@ -1,7 +1,7 @@
 # Somecloud-backend
-- SomeCloudBackend
+- 썸클라우드 백엔드 입니다. 탬플릿 안에 있는 html은 임시로 사용할 프론트엔드 파일이며, 프론트엔드 화면 개발에도 참고할 수 있습니다.
 
-## Usage
+## clone
 ```
 git clone <this repo URL>
 ```
@@ -16,40 +16,46 @@ pip3 install -r requirements.txt
 cp -rf .env.example .env
 ```
 
-## DB Migration (schema construct)
+## .env 작성
+```
+APP_SETTINGS=config.DevelopmentConfig
+SECRET_KEY=<SECRET KEY>
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_DEFAULT_SENDER=
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=465
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+
+# OAUTH
+OAUTH_GOOGLE_CLIENTID=
+OAUTH_GOOGLE_SECRETKEY=
+
+#DB
+SQLALCHEMY_DATABASE_URI=
+```
+
+
+## DB Init / Migration
 ```
 python3 main.py db init
 python3 main.py db migrate 
 python3 main.py db upgrade
+```
+
+## Redis 서버 시작
+```
+redis-server
+```
+## worker 시작
+```
+cd app
+rq worker
 ```
 ## Run (Local)
 ```
 python3 main.py runserver
 ```
 
-## Deploy on Container 
-```
-docker-compose up -d
-```
---
-# Flask App Blueprint: the fast way to start your MVP
-[![CircleCI](https://circleci.com/gh/jelmerdejong/flask-app-blueprint.svg?style=shield)](https://circleci.com/gh/jelmerdejong/flask-app-blueprint)
-
-Flask App Blueprint is a boilerplate / starter project that will help you get started with an easy to learn, yet powerful technology stack. A stack that you can have up and running in less than 25 minutes, so you can focus on making the real thing. Ideal for hackathons, prototypes, MVPs, idea validation, or kickstarting your startup. Including registration, login, insert and retrieve info from a database, email integration, and have it all deployed on Heroku.
-
-Created by [@jelmerdejong](https://twitter.com/jelmerdejong).
-
-## Features
-* User registration (including email confirmation through Mandrill), forgot password
-* User profiles, including change password
-* Admin only pages including statistics and user management
-* Public and member only pages
-* Database setup, including database migrations and CRUD examples
-* Fast deployment on Heroku (including staging and production setup)
-* Powerful stack: back-end based on Python with Flask, front-end is Bootstrap
-* Including basic testing coverage and framework (nose2), and PEP8 check (flake8)
-
-## Documentation
-Find all the documentation in this repository in the [docs folder](docs/README.md).
-
-### [Getting Started](docs/getting-started.md)
+ 
