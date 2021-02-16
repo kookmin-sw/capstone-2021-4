@@ -1,5 +1,5 @@
 # IMPORTS
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
@@ -8,10 +8,13 @@ from flask_mail import Mail
 import os
 from dotenv import load_dotenv 
 load_dotenv(verbose=True)
+from flask.json import JSONEncoder
 
 # CONFIG
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(os.getenv('APP_SETTINGS'))
+
+
 
 import redis
 from rq import Queue
@@ -46,6 +49,7 @@ from project.users.views import users_blueprint
 from project.items.views import items_blueprint
 from project.cloud.views import cloud_blueprint
 from project.keypair.views import keypair_blueprint
+from project.secgroup.views import secgroup_blueprint
 
 # template blueprints
 app.register_blueprint(users_blueprint)
@@ -54,6 +58,7 @@ app.register_blueprint(items_blueprint)
 #custom blueprints
 app.register_blueprint(cloud_blueprint,url_prefix='/cloud')
 app.register_blueprint(keypair_blueprint, url_prefix='/keypair')
+app.register_blueprint(secgroup_blueprint, url_prefix='/secgroup')
 
 # ROUTES
 @app.route('/', methods=['GET', 'POST'])
