@@ -32,7 +32,7 @@ class Config(object):
     
     def __init__(self):
         if os.getenv("SQLALCHEMY_DATABASE_URI") == "sqlite":
-            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + 'test.db')
+            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + 'test.db'
 
 class ProductionConfig(Config):
     DEBUG = False
