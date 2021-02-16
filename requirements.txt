@@ -44,7 +44,6 @@ oauthlib==2.1.0
 packaging==20.8
 pbr==5.5.1
 pep8==1.7.1
-psycopg2==2.8.6
 psycopg2-binary==2.8.6
 pycodestyle==2.6.0
 pycparser==2.20
@@ -67,3 +66,5 @@ zipp==3.4.0
 python-dotenv==0.15.0
 redis==3.5.3
 rq==1.7.0
+dataclasses==0.6
+pyjwt==2.0.1
