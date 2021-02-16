@@ -8,7 +8,7 @@ class Config(object):
     DEBUG = True
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY =   'add-yourf-random-key-here'
+    SECRET_KEY =  os.environ.get("SECRET_KEY")
     BCRYPT_LOG_ROUNDS = 15
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = 465
@@ -32,7 +32,7 @@ class Config(object):
     
     def __init__(self):
         if os.getenv("SQLALCHEMY_DATABASE_URI") == "sqlite":
-            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(tempfile.gettempdir(), 'test.db')
+            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + 'test.db')
 
 class ProductionConfig(Config):
     DEBUG = False
