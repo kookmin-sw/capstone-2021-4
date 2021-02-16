@@ -1,0 +1,2 @@
+id,plan_name,aws_plan,core,ram,traffic,ssd,iops
+1,m1.small,t3.small,1,1024,1,40,4000

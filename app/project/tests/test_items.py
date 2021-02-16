@@ -2,7 +2,7 @@ import unittest
 
 from project import app, db, mail
 from project.models import Items, User
-
+import os
 
 class UserTests(unittest.TestCase):
     # SETUP AND TEARDOWN
@@ -10,7 +10,7 @@ class UserTests(unittest.TestCase):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['DEBUG'] = False
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/test'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join( 'testcode.db')
         self.app = app.test_client()
         db.drop_all()
         db.create_all()
