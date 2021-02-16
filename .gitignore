@@ -80,3 +80,6 @@ Temporary Items
 .apdisk
 
 .env
+#redis rdb
+dump.rdb
+testcode.db
