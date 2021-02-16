@@ -1,7 +1,7 @@
 # project/users/views.py
 
 # IMPORTS
-from flask import render_template, Blueprint, request, redirect, url_for, flash, Markup, abort
+from flask import render_template, Blueprint, request, redirect, url_for, flash, Markup, abort, make_response, jsonify
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, current_user, login_required, logout_user
 from itsdangerous import URLSafeTimedSerializer
@@ -13,7 +13,6 @@ from .forms import RegisterForm, LoginForm, EmailForm, PasswordForm
 from project import app, db, mail
 from project.models import User
 import project.cloud.views as cloud_env
- 
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -78,10 +77,21 @@ def register():
                 db.session.add(new_user)
                 db.session.commit()
                 send_confirmation_email(new_user.email)
+
+                # if request.args("rest") == "true":
+                #     auth_token = new_user.encode_auth_token(user.id)
+                #     responseObject = {
+                #         'status': 'success',
+                #         'message': 'Successfully registered.',
+                #         'auth_token': auth_token.decode()
+                #     }
+                #     return make_response(jsonify(responseObject)), 201
+
                 message = Markup(
                     "<strong>Success!</strong> Thanks for registering. Please check your email to confirm your email address.")
                 flash(message, 'success')
                 return redirect(url_for('home'))
+                
             except IntegrityError:
                 db.session.rollback()
                 message = Markup(
@@ -89,12 +99,43 @@ def register():
                 flash(message, 'danger')
     return render_template('register.html', form=form)
 
-@users_blueprint.route('/auth', methods=["POST"])
-def login_token():
-    if request.method == 'POST':
-        email = request.args.da
-        user = User.query.filter_by(email=form.email.data).first()
-        pass
+@users_blueprint.route('/token', methods=["POST"])
+def token_login():
+    post_data = request.get_json()
+    print(post_data)
+    try:
+        # fetch the user data
+        user = User.query.filter_by(email=post_data.get('email')).first()
+        if user is not None and user.is_correct_password(post_data.get('pass')):
+            if user.is_email_confirmed is not True:
+                user.authenticated = True
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('users.resend_email_confirmation'), )
+            if user.is_email_confirmed is True:
+                auth_token = user.encode_auth_token(user.id)
+                if auth_token:
+                    responseObject = {
+                        'status': 'success',
+                        'message': 'Successfully logged in.',
+                        'auth_token': auth_token.decode()
+                    }
+                    return make_response(jsonify(responseObject)), 200
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'account incorrect',
+            }
+            return make_response(jsonify(responseObject)), 500
+    except Exception as e:
+        print(e)
+        responseObject = {
+            'status': 'fail',
+            'message': 'Try again'
+        }
+        return make_response(jsonify(responseObject)), 500
+     
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -108,14 +149,27 @@ def login():
                     db.session.add(user)
                     db.session.commit()
                     login_user(user)
+                    # responseObject = {
+                    #     'status': 'success',
+                    #     'message': 'Email is not confirmed',
+                    # }
+                    # return make_response(jsonify(responseObject)), 200
                     return redirect(url_for('users.resend_email_confirmation'), )
+
                 if user.is_email_confirmed is True:
+                    auth_token = user.encode_auth_token(user.id)
                     user.authenticated = True
                     user.last_logged_in = user.current_logged_in
                     user.current_logged_in = datetime.now()
                     db.session.add(user)
                     db.session.commit()
                     login_user(user)
+                    # responseObject = {
+                    #     'status': 'success',
+                    #     'message': 'Successfully logged in.',
+                    #     'auth_token': auth_token.decode()
+                    # }
+                    # return make_response(jsonify(responseObject)), 200
                     message = Markup(
                         "<strong>Welcome back!</strong> You are now successfully logged in.")
                     flash(message, 'success')
@@ -160,9 +214,7 @@ def confirm_email(token):
             cloud_env.create_environment(user.id)
         message = Markup(
             "Thank you for confirming your email address!")
-        flash(message, 'success')
-        
-
+        flash(message, 'success') 
     return redirect(url_for('home'))
 
 
@@ -257,6 +309,46 @@ def logout():
     logout_user()
     message = Markup("<strong>Goodbye!</strong> You are now logged out.")
     flash(message, 'info')
+
+    auth_header = request.headers.get('Authorization')
+    # if auth_header:
+    #     auth_token = auth_header.split(" ")[1]
+    # else:
+    #     auth_token = ''
+    # if auth_token:
+    #     resp = User.decode_auth_token(auth_token)
+    #     if not isinstance(resp, str):
+    #         # mark the token as blacklisted
+    #         blacklist_token = BlacklistToken(token=auth_token)
+    #         try:
+    #             # insert the token
+    #             db.session.add(blacklist_token)
+    #             db.session.commit()
+    #             responseObject = {
+    #                 'status': 'success',
+    #                 'message': 'Successfully logged out.'
+    #             }
+    #             return make_response(jsonify(responseObject)), 200
+    #         except Exception as e:
+    #             responseObject = {
+    #                 'status': 'fail',
+    #                 'message': e
+    #             }
+    #             return make_response(jsonify(responseObject)), 200
+    #     else:
+    #         responseObject = {
+    #             'status': 'fail',
+    #             'message': resp
+    #         }
+    #         return make_response(jsonify(responseObject)), 401
+    # else:
+    #     responseObject = {
+    #         'status': 'fail',
+    #         'message': 'Provide a valid auth token.'
+    #     }
+    #     return make_response(jsonify(responseObject)), 403
+
+
     return redirect(url_for('users.login'))
 
 
