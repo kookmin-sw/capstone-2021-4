@@ -1,11 +1,10 @@
-from flask import render_template, Blueprint, request, redirect, url_for,  flash, Markup
-from flask_jsonpify import jsonify
+from flask import render_template, Blueprint, request, redirect, url_for,  flash, Markup, jsonify
 from flask_login import current_user, login_required
 from project import db
 from project import app
 from project import q
 from project import r
-from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityRule, NetInterface
+from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface
 import boto3
 import os
 from .forms import CloudForm, EditCloudForm
@@ -13,31 +12,17 @@ from .utils import *
  
 from sqlalchemy import or_, and_
 from sqlalchemy.ext.declarative import DeclarativeMeta
-from datetime import datetime
+import datetime
 
 import time  
+from dataclasses import dataclass
 # # CONFIG
 cloud_blueprint = Blueprint('cloud', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
  
 import json
 
-
-class AlchemyEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o.__class__, DeclarativeMeta):
-            data = {}
-            fields = o.__json__() if hasattr(o, '__json__') else dir(o)
-            for field in [f for f in fields if not f.startswith('_') and f not in ['metadata', 'query', 'query_class']]:
-                value = o.__getattribute__(field)
-                try:
-                    json.dumps(value)
-                    data[field] = value
-                except TypeError:
-                    data[field] = None
-            return data
-        return json.JSONEncoder.default(self, o)
-
+ 
 
 @cloud_blueprint.route('/list', methods=['GET'])
 @login_required
@@ -45,27 +30,29 @@ def all_clouds():
     # job = q.enqueue(background_task, request.args.get("n"))
     # Check Status, IPAddr, Status
     cloud_lists = db.session.query(Plan, Cloud,Oslist).join(Cloud).filter(Cloud.user_id == current_user.id,Cloud.os == Oslist.id).all()
-    rest = request.args.get("rest") 
-    json_object = json.dumps(cloud_lists, cls=AlchemyEncoder)
-    if rest == "true":
-        return json_object 
+    rest = request.args.get("rest")   
+    if rest == "true":  
+        # json_object = json.dumps(cloud_lists, cls=AlchemyEncoder)
+        return cloud_lists
     else:
         return render_template('all_clouds.html', cloud=cloud_lists)
 
-@cloud_blueprint.route('/reboot/<cloud_id>', methods=['POST'])
+@cloud_blueprint.route('/reboot/<instance_id>', methods=['GET'])
 @login_required
 def reboot_instance(instance_id):
     cloud_with_user = db.session.query(Cloud, User).join(User).filter(and_(
         Cloud.user_id == current_user.id,
-        Cloud.id == cloud_id
+        Cloud.id == instance_id
     )).first()
     if cloud_with_user is not None:
-        try:
-            response = ec2.reboot_instances(InstanceIds=[instance_id], DryRun=False)
-            print('Success', response)
-            return "Success"
-        except ClientError as e:
-            print('Error', e)
+        # try:
+        response = reboot_instances(cloud_with_user.Cloud.aws_instance_id)
+        flash('Rebooted.' , 'success')
+        # except Exception as e: 
+        #     message = Markup("<strong>Error!</strong> Eroror{} ".format(e)) 
+        #     flash(e, 'danger')
+
+    return redirect(url_for('cloud.all_clouds'))
 
 @cloud_blueprint.route('/delete/<instance_id>')
 @login_required
@@ -79,17 +66,21 @@ def delete_cloud(instance_id):
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
             print("[Debug] - {}".format(instance_id))
             response = delete_ec2(cloud_with_user.Cloud.aws_instance_id)
-            now = datetime.now()
+            now = datetime.datetime.now()
             cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
-            cloud.status = "Terminated"
-            cloud.deleted_at = now.strftime("%Y-%m-%d %H:%M:%S")
-            db.session.add(cloud)
+            cloud_id = cloud.id
+            netInterface = NetInterface.query.filter_by(cloud_id=cloud_id).first()
+            if netInterface is not None:
+                netInterface.detached_at = now
+                netInterface.deleted_at = now
+
+            cloud.status = "Terminated" 
+            cloud.deleted_at = now.strftime("%Y-%m-%d %H:%M:%S") 
             db.session.commit()
             flash('{} was Terminated.'.format(cloud.hostname), 'success')
         except Exception as e:
             db.session.rollback()
             message = Markup("<strong>Error!</strong> Eroror{} ".format(e))
-
             flash(message, 'danger')
     
     return redirect(url_for('cloud.all_clouds'))
@@ -123,10 +114,7 @@ def detail(cloud_id):
         message = Markup("<strong>잘못된 접근입니다.</strong>  ")
         flash(message, 'danger')
     
-    return render_template('cloud_detail.html')
-
-
-
+    return redirect(url_for('home'))
 
 @cloud_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -135,14 +123,14 @@ def add_cloud():
     plans = Plan.query.all()
     os_list = Oslist.query.all() 
     keypair_list = db.session.query(Keypair.id, Keypair.name).filter(Keypair.user_id == current_user.id )
-    sec_list = db.session.query(SecurityRule.id,SecurityRule.sec_group_id).filter(SecurityRule.user_id == current_user.id)
+    sec_list = db.session.query(SecurityGroup).filter(SecurityGroup.user_id == current_user.id)
 
     if request.method == 'POST': 
         if form.validate_on_submit(): 
             try:
                 plan_id = form.data["plan"]
                 sec_id = form.data["secgroup"]
-                get_sec_id = db.session.query(SecurityRule.sec_group_id).filter(SecurityRule.id == sec_id).scalar()
+                get_sec_id = db.session.query(SecurityGroup.sec_group_id).filter(SecurityGroup.id == sec_id).scalar()
 
                 get_aws_plan = db.session.query(Plan.aws_plan,Plan.ssd, Plan.iops).filter(Plan.id == plan_id)[0]
                 param_plan = get_aws_plan[0]
@@ -163,12 +151,12 @@ def add_cloud():
                     # new_interface = NetInterface(net_interface_id, vpc_default_subnetid)
                     # db.session.add(new_interface)
                     
-                    
                     # result = back_ec2_create_ec2( )
                     # instance_id = result["Instances"][0]["InstanceId"]
                     new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting")
                     db.session.add(new_cloud) 
-                    db.session.flush() 
+                    db.session.flush()
+                    # new_cloud.apply()
                     db.session.refresh(new_cloud)
                     assigned_id = new_cloud.id
                     db.session.commit()
@@ -177,10 +165,11 @@ def add_cloud():
                         "plan" : param_plan,
                         "iops" : param_iops,
                         "ssd" : param_ssd,
+                        "os" : aws_image_id,
                         "subnetid" : vpc_default_subnetid,
                         "keypair" : keypairname_formatted,
                         "security-group-id" : [get_sec_id],
-                        "cloudid" : assigned_id
+                        "cloudid" : assigned_id,
                     }
                     
                     job = q.enqueue(back_ec2_create_ec2, parameter)
