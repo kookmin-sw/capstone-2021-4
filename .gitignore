@@ -83,3 +83,4 @@ Temporary Items
 #redis rdb
 dump.rdb
 testcode.db
+test.db

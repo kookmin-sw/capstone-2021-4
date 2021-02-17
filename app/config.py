@@ -31,8 +31,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     def __init__(self):
-        if os.getenv("SQLALCHEMY_DATABASE_URI") == "sqlite":
-            self.SQLALCHEMY_DATABASE_URI = 'sqlite:///' + 'test.db'
+        pass
 
 class ProductionConfig(Config):
     DEBUG = False

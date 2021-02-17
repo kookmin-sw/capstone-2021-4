@@ -135,8 +135,7 @@ class Oslist(db.Model): # 제공 os
         return ['id', 'os_name', 'aws_image_id']
 
 
-    def __init__(self, id, os_name,aws_image_id ):
-        self.id = id
+    def __init__(self, os_name,aws_image_id ): 
         self.os_name = os_name
         self.aws_image_id = aws_image_id
     @property
