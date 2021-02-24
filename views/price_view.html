@@ -1,5 +1,357 @@
+<style>
+    /* .btn_group button{ 
+        border: 1px solid #31ba85;
+        background-color: rgba(0,0,0,0); 
+        color: #31ba85;
+        padding: 5px 10px;  
+        outline: none;
+        } */
+    /* .btn_group button:hover{
+        color: white;
+        background-color: #31ba85;
+    } */
+    #groupbtn1{ 
+        border-top-left-radius: 5px; 
+        border-bottom-left-radius: 5px; 
+        margin-right:-4px; 
+    } 
+    #groupbtn2{ 
+        border-top-right-radius: 5px; 
+        border-bottom-right-radius: 5px; 
+        margin-left:-1px; 
+    }
+    .tabContainer{
+        width: 100%;
+        height: 100%;
+    }
+    .tabContainer .btn_group {
+        height: 15%;
+    }
+    .tabContainer .btn_group button {
+        width: 100px;
+        float: left;
+        border: 1px solid #31ba85;
+        outline: none;
+        cursor:pointer; 
+        padding: 5px 15px;
+
+        background-color: white; 
+        color: #31ba85;
+        /* font-size: larger; */
+    }
+    .tabContainer .btn_group button:hover {
+        background-color: #31ba85;
+        color: white;
+    }
+    .tabContainer .tabPanel{
+        height: 85%;
+        background-color: white;
+        text-align: start;
+        padding-top: 105px;
+        box-sizing: border-box;
+        display: none;
+        padding-inline-start: 5px;
+    }
+    .cbox-dropdown {
+        width: 400px;
+    }
+    .cbox-dropdown:hover .cbox-dropdown-list {
+        opacity: 1;
+        visibility: visible;
+    }
+    .cbox-dropdown-select {
+        padding: 10px;
+        border-radius: 4px;
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        background-color: #282a3b;
+        color: white;
+    }
+    .cbox-dropdown-list {
+        top: 110%;
+        left: 0%;
+        right: 0%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s linear, visibility 0.2s linear;
+        border-radius: 4px;
+        background-color: #282a3b;
+        color: white;
+    }
+    .cbox-dropdown-list-item {
+        padding: 1px;
+
+    }
+
+</style>
+
+
+
 <div class="main-content">
-    <p>price view</p>
+    <h1 style="font-weight: lighter;">price view</h1>
+
+
+    <div class="tabContainer">
+        <div class="btn_group">
+            <button id="groupbtn1" onclick="showPanel(0,'#31ba85')">크레딧 충전</button>
+            <button id="groupbtn2" onclick="showPanel(1,'#31ba85')">금액 납부</button>
+        </div>
+
+        
+        <div class="tabPanel">
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+                <div class="col-xs-1">
+                <p>현재 잔액</p>
+                </div>
+                <div class="col-xs-11">
+                    <p style="margin-left: 2px; font-weight: bold; font-size: large; display: inline;">0</p> 
+                    <p style="display: inline;">KRW</p>
+                </div>
+            </div>
+            
+
+                
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+                <div class="col-xs-1">
+                    <p style="display:inline; margin-right: 10px;">예금주</p>
+                </div>
+                <div class="col-xs-11">
+                    <input type="text">
+                </div>
+            </div>
+
+            
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+                <div class="col-xs-1">
+                    <p style="display:inline; margin-right: 10px;">예금주 은행</p>
+                </div>
+                <div class="col-xs-11">
+                    <div class="container">
+                        <div class="select-box">
+                          <div class="options-container">
+                            <div class="option">
+                                <input type="radio" class="radio" id="카카오뱅크" name="category" />
+                                <label for="카카오뱅크">카카오뱅크</label>
+                              </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="신한은행" name="category" />
+                              <label for="신한은행">신한은행</label>
+                            </div>
+        
+                            <div class="option">
+                              <input type="radio" class="radio" id="우리은행" name="category" />
+                              <label for="우리은행">우리은행</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="농협" name="category" />
+                              <label for="농협">농협</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="수협" name="category" />
+                              <label for="수협">수협</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="하나은행" name="category" />
+                              <label for="하나은행">하나은행</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="한국시티은행" name="category" />
+                              <label for="한국시티은행">한국시티은행</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="SC제일은행" name="category" />
+                              <label for="SC제일은행">SC제일은행</label>
+                            </div>
+                          </div>
+                          <div class="selected">
+                            은행 선택
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+              <div class="col-xs-1">
+                  <p style="display:inline; margin-right: 10px;">예금주 은행</p>
+              </div>
+              <div class="col-xs-11">
+                  <div class="container">
+                      <div class="select-box">
+                        <div class="options-container">
+                          <div class="option">
+                              <input type="radio" class="radio" id="카카오뱅크" name="category" />
+                              <label for="카카오뱅크">카카오뱅크</label>
+                            </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="신한은행" name="category" />
+                            <label for="신한은행">신한은행</label>
+                          </div>
+      
+                          <div class="option">
+                            <input type="radio" class="radio" id="우리은행" name="category" />
+                            <label for="우리은행">우리은행</label>
+                          </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="농협" name="category" />
+                            <label for="농협">농협</label>
+                          </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="수협" name="category" />
+                            <label for="수협">수협</label>
+                          </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="하나은행" name="category" />
+                            <label for="하나은행">하나은행</label>
+                          </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="한국시티은행" name="category" />
+                            <label for="한국시티은행">한국시티은행</label>
+                          </div>
+                
+                          <div class="option">
+                            <input type="radio" class="radio" id="SC제일은행" name="category" />
+                            <label for="SC제일은행">SC제일은행</label>
+                          </div>
+                        </div>
+                        <div class="selected">
+                          은행 선택
+                        </div>
+                      </div>
+                    </div>
+              </div>
+          </div>
+          
+
+
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+                <div class="col-xs-1">
+                    <p style="display:inline; margin-right: 10px;">크레딧 선택</p>
+                </div>
+                <div class="col-xs-11">
+                    <div class="container">
+                        <div class="select-box">
+                          <div class="options-container">
+                            <div class="option">
+                                <input type="radio" class="radio" id="5000원" name="category" />
+                                <label for="5000원">5000원</label>
+                              </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="10000원" name="category" />
+                              <label for="10000원">10000원</label>
+                            </div>
+
+                            <div class="option">
+                              <input type="radio" class="radio" id="15000원" name="category" />
+                              <label for="15000원">15000원</label>
+                            </div>
+    
+                            <div class="option">
+                              <input type="radio" class="radio" id="20000원" name="category" />
+                              <label for="20000원">20000원</label>
+                            </div>
+                  
+                            <div class="option">
+                              <input type="radio" class="radio" id="50000원" name="category" />
+                              <label for="50000원">50000원</label>
+                            </div>
+                          </div>
+                          <div class="selected">
+                            충전할 요금을 선택하세요
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+              
+              
+              <div class="container">
+                <button class="mainbtn">크레딧 충전 요청</button>
+              </div>
+            </div>
+
+
+
+        
+         
+            <button class="mainbtn">크레딧 충전 요청</button>
+        </div>
+
+        
+        <div class="tabPanel">
+            <div class="col-lg-3" style="text-align: center;">
+                <p>이번달 사용 비용</p>
+                <p style="font-size: 20px; font-weight: bold;">0원</p>
+            </div>
+            <div class="col-lg-3" style="text-align: center;">
+                <p>총 비용</p>
+                <p style="font-size: 20px; font-weight: bold;">0원</p>
+            </div>
+            
+            <div class="table-responsive" style="margin-top: 150px;">
+                <table class="table table-hover">
+                   <thead>
+                      <tr>
+                         <th>Info</th>
+                         <th>Date</th>
+                         <th>Price</th>
+                         <th>Servers Qty</th>
+                         <th>Summary</th>
+                         <th>Status</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <tr>
+                         <td>Mark</td>
+                         <td>2021-02-06 12:33</td>
+                         <td>$20.00/month</td>
+                         <td>1</td>
+                         <td>$20.00/month</td>
+                         <td>OK</td>
+                      </tr>
+                      <tr>
+                         <td>Otto</td>
+                         <td>45분전</td>
+                         <td>$30.00/month</td>
+                         <td>1</td>
+                         <td>$30.00/month</td>
+                         <td>NOPE</td>
+                      </tr>
+                      <tr>
+                         <td>@mdo</td>
+                         <td>28 days 8 hours</td>
+                         <td>$20.00/month</td>
+                         <td>2</td>
+                         <td>$40.00/month</td>
+                         <td>Ok</td>
+                      </tr>
+                   </tbody>
+                </table>
+             </div>
+        </div>
+    </div>
+
+
+    
+
+
+<!-- 
     <button onclick="price_view.test_function2(4,3)">버튼테스트</button>
-    <button onclick="price_view.move_view()">다른 뷰로 이동해보기 - cloud_list</button> 
+    <button onclick="price_view.move_view()">다른 뷰로 이동해보기 - cloud_list</button>  -->
 </div>
