@@ -30,25 +30,11 @@
       font-size: x-large;
       font-weight: bolder;
    }
-   header {
-  min-height: 100%;
-  padding-bottom: 60px;
-  text-align: center;
-  
-  background-image: url('../app/img/landing/server1.jpg');
-  background-repeat: no-repeat,no-repeat;
-  background-color: #fff;
-  background-attachment: fixed;
-}
-
-header nav {
-  padding: 40px 0;
-  margin-right: 0px;
-}
-header .app-logo a,
-header .menuapp-buttons a {
-  text-decoration: none !important;
-}
+      
+   header .app-logo a,
+   header .menuapp-buttons a {
+   text-decoration: none !important;
+   }
 
 </style>
 <head>
@@ -73,21 +59,22 @@ header .menuapp-buttons a {
 </head>
 
 <body>
+   
 
    <!-- . -->
-   <header class="bg-gray-darker">
+   <header>
       <div class="container">
-         <nav class="row">
+         <nav class="row" style="margin: 20px;">
             <div class="col-md-2 app-logo">
                <a href="#" class="logo-wrapper">
                   <img src="../app/img/logo.png" alt="App Name" class="img-responsive">
                </a>
             </div>
             <div class="col-md-10">
-               <ul class="list-inline menuapp-buttons">
+               <ul class="list-inline menuapp-buttons" style="float: right;">
                   <li class="mr-lg">
                      <a href="#">
-                        <strong>Demo</strong>
+                        <strong class="text-green">HOME</strong>
                      </a>
                   </li>
                   <li class="mr-lg">
@@ -97,7 +84,7 @@ header .menuapp-buttons a {
                   </li>
                   <li>
                      <a href="#">
-                        <strong class="text-green">Purchase</strong>
+                        <strong>Purchase</strong>
                      </a>
                   </li>
                </ul>
@@ -114,8 +101,8 @@ header .menuapp-buttons a {
 
                <div class="col-xs-12 col-lg-6 align-middle">
                   <div class="side-presentation">
-                     <div class="h1 header-title" style="color: white; display: inline; font-style: italic;">사이트 무제한 생성 </div>
-                     <div class="h1 header-title" style="color: #d7d7d7; display: inline; font-style: italic;">  클라우드 웹호스팅</div>
+                     <div class="h1 header-title" style=" display: inline; font-style: italic;">사이트 무제한 생성 </div>
+                     <div class="h1 header-title" style="display: inline; font-style: italic;">  클라우드 웹호스팅</div>
                      <p class="header-subtitle">사용 여부에 따라 필요한 만큼만  사용하는 방식으로 기존 클라우드 방식 보다 70% 이상 비용 절약 가능</p>
                      <br>
                      <div class="header-button">
@@ -126,16 +113,17 @@ header .menuapp-buttons a {
                      <br>
                      <br>
                      <ul class="list-inline store-list">
-                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+                        <!-- <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
                            <h4>
                               <span class="point point-primary point-lg"></span>Data Tables</h4>
                            <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                        </li>
+                        </li> -->
+
                         <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                           <h4>
-                              <span class="point point-primary point-lg"></span>Data Tables</h4>
-                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
+                           <img src="../app/img/server.png" style="width: 600px;">
                         </li>
+                        
+                        
                      </ul>
                   </div>
                </div>
@@ -143,85 +131,6 @@ header .menuapp-buttons a {
          </div>
       </div>
    </header>
-
-
-
-
-   <!-- d -->
-
-   <header class="bg-gray-darker">
-      <div class="container" >
-         <nav class="row" style="margin-top: 50px; margin-bottom: 50px;">
-            <div class="row app-logo" >
-               <a href="#" class="logo-wrapper">
-                  <img src="../app/img/logo.png" alt="App Name" class="img-responsive">
-               </a>
-            </div>
-            <div class="col-md-10">
-               <ul class="list-inline menuapp-buttons">
-                  <li class="mr-lg">
-                     <a href="#">
-                        <strong>Demo</strong>
-                     </a>
-                  </li>
-                  <li class="mr-lg">
-                     <a href="#">
-                        <strong>Features</strong>
-                     </a>
-                  </li>
-                  <li>
-                     <a href="#">
-                        <strong class="text-green">Purchase</strong>
-                     </a>
-                  </li>
-               </ul>
-            </div>
-         </nav>
-         
-         <div class="header-content" style="padding-bottom: 100px;">
-            <div class="row row-flush row-table">
-               
-               <div class="col-xs-12 col-lg-6 align-middle">
-                  <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="0" class="app-presentation" style="margin-right:20px;">
-                     <img src="../app/img/landing/server1.jpg" class="img-responsive" >
-
-
-
-                  </div>
-               </div>
-
-               <div class="col-xs-12 col-lg-6 align-middle">
-                  <div class="side-presentation">
-                     <div class="h1 header-title" style="color: white; display: inline; font-style: italic;">사이트 무제한 생성 </div>
-                     <div class="h1 header-title" style="color: #d7d7d7; display: inline; font-style: italic;">  클라우드 웹호스팅</div>
-                     <p class="header-subtitle">사용 여부에 따라 필요한 만큼만  사용하는 방식으로 기존 클라우드 방식 보다 70% 이상 비용 절약 가능</p>
-                     <br>
-                     <div class="header-button">
-                        <a href="#" class="btn btn-green btn-lg btn-fw">
-                           <strong>Discover Now</strong>
-                        </a>
-                     </div>
-                     <br>
-                     <br>
-                     <ul class="list-inline store-list">
-                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                           <h4>
-                              <span class="point point-primary point-lg"></span>Data Tables</h4>
-                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                        </li>
-                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                           <h4>
-                              <span class="point point-primary point-lg"></span>Data Tables</h4>
-                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </header>
-
 
 
    <section id="testimonial" class="bg-primary">
