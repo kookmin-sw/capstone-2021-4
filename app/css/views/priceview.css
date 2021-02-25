@@ -81,3 +81,95 @@
   .select-box .option .radio {
     display: none;
   }
+
+
+
+  /* 아래부터는 html에 있던 css 갖고온거임 */
+
+
+/* .btn_group button{ 
+        border: 1px solid #31ba85;
+        background-color: rgba(0,0,0,0); 
+        color: #31ba85;
+        padding: 5px 10px;  
+        outline: none;
+        } */
+    /* .btn_group button:hover{
+        color: white;
+        background-color: #31ba85;
+    } */
+    #groupbtn1{ 
+      border-top-left-radius: 5px; 
+      border-bottom-left-radius: 5px; 
+      margin-right:-4px; 
+  } 
+  #groupbtn2{ 
+      border-top-right-radius: 5px; 
+      border-bottom-right-radius: 5px; 
+      margin-left:-1px; 
+  }
+  .tabContainer{
+      width: 100%;
+      height: 100%;
+  }
+  .tabContainer .btn_group {
+      height: 15%;
+  }
+  .tabContainer .btn_group button {
+      width: 100px;
+      float: left;
+      border: 1px solid #31ba85;
+      outline: none;
+      cursor:pointer; 
+      padding: 5px 15px;
+
+      background-color: white; 
+      color: #31ba85;
+      /* font-size: larger; */
+  }
+  .tabContainer .btn_group button:hover {
+      background-color: #31ba85;
+      color: white;
+  }
+  .tabContainer .tabPanel{
+      height: 85%;
+      background-color: white;
+      text-align: start;
+      padding-top: 105px;
+      box-sizing: border-box;
+      display: none;
+      padding-inline-start: 5px;
+  }
+  .cbox-dropdown {
+      width: 400px;
+  }
+  .cbox-dropdown:hover .cbox-dropdown-list {
+      opacity: 1;
+      visibility: visible;
+  }
+  .cbox-dropdown-select {
+      padding: 10px;
+      border-radius: 4px;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background-color: #282a3b;
+      color: white;
+  }
+  .cbox-dropdown-list {
+      top: 110%;
+      left: 0%;
+      right: 0%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s linear, visibility 0.2s linear;
+      border-radius: 4px;
+      background-color: #282a3b;
+      color: white;
+  }
+  .cbox-dropdown-list-item {
+      padding: 1px;
+
+  }

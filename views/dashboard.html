@@ -1,38 +1,64 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
 
-<div class="main-content">
-    <h3>DASHBOARD
-        <br>
-        <small>Subtitle</small>
-    </h3>
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Wintermin - Bootstrap Admin Theme</title> 
+</head>
 
-    <div class="row">
-        <div class="panel-body">
-            <div class="table-responsive">
-               <table class="table table-hover">
-                  <thead>
-                     <tr>
-                        <th>Server Name</th>
-                        <th>Last Changed</th>
-                        <th>Status</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td>No Server</td>
-                     </tr>
-                  </tbody>
-               </table>
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+         <div class="main-content">
+            <h3>DASHBOARD
+                <br>
+                <small>Subtitle</small>
+            </h3>
+         
+            <div class="row">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                       <table class="table table-hover">
+                          <thead>
+                             <tr>
+                                <th>Server Name</th>
+                                <th>Last Changed</th>
+                                <th>Status</th>
+                             </tr>
+                          </thead>
+                          <tbody>
+                             <tr>
+                                <td>No Server</td>
+                             </tr>
+                          </tbody>
+                       </table>
+                    </div>
+                 </div>
             </div>
+         
+            <div class="container">
+              <a href="cloudadd.html" class="mainbtn">add cloud</a>
+         
+            </div>
+         
+         
+            <a href="cloudadd.html" class="mainbtn">add cloud</a>
          </div>
-    </div>
+      </section> 
+   </div> 
+   <script src="/app/js/load.js"></script>
+</body>
 
-    <div class="container">
-      <button onclick="return dashboard.add_cloud()" class="mainbtn">add cloud</button>
-
-    </div>
-
-
-    <a href="#cloudadd" class="mainbtn">add cloud</a>
-</div>
-
-<footer>&copy; 2014 - Wintermin</footer>
+</html>

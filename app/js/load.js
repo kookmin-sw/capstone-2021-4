@@ -1,9 +1,9 @@
 
-function load(url, callback, render_to) { 
+function load(url, callback, renderTo, elementId) { 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
-        callback(xhr.response, render_to); 
+        callback(xhr.response, renderTo, elementId); 
       }
     }
     xhr.onerror = function() {
@@ -13,49 +13,91 @@ function load(url, callback, render_to) {
     xhr.send('');
 }
 
-function render(response, render_to) {
-    var area = document.getElementById(render_to) 
-    area.innerHTML += response
+function render(response, renderTo, elementId) {  
+    document.getElementById(elementId).insertAdjacentHTML(renderTo, response)    
 }
 
-function content_render(response) { // section 부분 렌더링 해줌
-    var area = document.getElementById("content-area")
-    area.innerHTML = response
+function defaultCssLoader(view='default') {
+    document.getElementsByTagName("head")[0].insertAdjacentHTML("beforeend", `<link rel='stylesheet' href='/app/css/views/${view}.css'/>`) 
 }
 
-function route(router_name) {
-    // html 가져오기
-    load(`./views/${router_name}.html`, content_render )
-    // 동적으로 js 와 css를 로딩처리해줌 (모듈화)
-    // js loader (RequireJS)
-    require([router_name])
-    // css loader
-    var cssloader = document.getElementById("dLoaderCSS") 
-    cssloader.setAttribute("href", `app/css/views/${router_name}.css`)
+function renderByTag(response, tag, location) {
+    document.getElementsByTagName(tag)[0].insertAdjacentHTML(location, response) 
 }
-window.onhashchange = function() {
-    if (window.location.hash.indexOf("-") > 0) {
-        // do nothing
-        // cloudadd.html처럼 안에서 a 태그를 통해 section을 이동시키고 싶을 때 go-plan 형식으로 해야하며, '-' 가 반드시 들어가게
-    } else {
-        routing()
-    } 
+ 
+var head = document.head;
+
+function addScript(jsFiles) {
+    // 얘는 배열을 인자로 받는 함수 녀석이다. 순서대로 js를 불러와주도록 하여 오류를 줄여준다.
+    return new Promise((resolve, reject) => {
+        var load = function(i) {
+            var file = jsFiles[i];
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.onload = function() {
+                i++;
+                if(i === jsFiles.length) {
+                    resolve();
+                } else {
+                     load(i);
+                }
+            }
+            script.src = file;
+            head.appendChild(script);
+        };
+        load(0);
+    });
+    
 }
-function routing() {
-    if(window.location.hash) { 
-        var hash = window.location.hash.substring(1); // #asdf 값을 가져온다, asdf
-        route(hash) //hash값이 dashboard이면 route('dashboard') 로 라우팅 시도
-    } else {
-        route('dashboard') // 기본적으로 대시보드가 보이게
-    }  
+
+async function scriptLoader(view='default') {
+    // same as <script src ='... // head
+    // head area
+    // 순서대로 script 실행.. https://developpaper.com/how-to-make-files-execute-sequentially-when-loading-javascript-files-dynamically/
+    await addScript([
+        "/vendor/modernizr/modernizr.js", 
+        "/vendor/fastclick/fastclick.js",
+        "/vendor/jquery/jquery.min.js", 
+        "/vendor/chosen/chosen.jquery.min.js", 
+        "/vendor/bootstrap/js/bootstrap.min.js",
+        "/vendor/slider/js/bootstrap-slider.js", 
+        "/vendor/filestyle/bootstrap-filestyle.min.js",
+        "/vendor/animo/animo.min.js",
+        "/vendor/sparklines/jquery.sparkline.min.js",
+        "/vendor/slimscroll/jquery.slimscroll.min.js",
+        "/vendor/store/store+json2.min.js",
+        "/vendor/classyloader/js/jquery.classyloader.min.js",
+        "/app/js/app.js", 
+        `/app/js/${view}.js`
+    ])  
 }
 
 function init() { // custom init 
-    // 반복적으로 쓰이는것들 매뉴, 왼쪽매뉴같은건 탬플릿화
-    load("./templates/_menu.html", render, "wrapper" )
-    load("./templates/_left-side.html", render, "wrapper")
-    // 내용이 보일 영역처리
-    load("./templates/_content-area.html", render, "wrapper")
-    routing()
+    // 반복적으로 쓰이는것들 매뉴, 왼쪽매뉴같은건 탬플릿화 
+    // Default CSS
+    load('/templates/_head.html', renderByTag, "head", "beforebegin")
+
+    // Default Menu, footer
+    load("/templates/_menu.html", render, "beforebegin" ,"content-area")
+    load("/templates/_left-side.html", render, "beforebegin", 'content-area')
+    load('/templates/_footer.html', render, "beforeend" , 'content-area')  
+
+
+    // View CSS
+    var pathname = window.location.pathname;  
+    if (pathname == "") {
+        console.log ("[console] Main css need to be defined.")
+        // localhost:8080/   뷰가 아무것도 없으면 그냥 default.css, default.js 를 갖고온다.
+        defaultCssLoader()
+        scriptLoader()
+
+    } else {
+        // localhost:8080/{}/dashboard.html 일테고, dashboard 를 가져와서 css, js 를 갖고온다.
+        // 뷰에 해당한 js는 맨 마지막에 호출해야 한다.
+        var filename = pathname.split('.')[0].split('/')
+        var parse_view = filename[filename.length - 1]
+        defaultCssLoader(parse_view)
+        scriptLoader(parse_view)
+    } 
 }
 init() 
