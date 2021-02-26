@@ -31,10 +31,6 @@ function showPanel(panelIndex,colorCode) {
     tabPanels[panelIndex].style.backgroundColor="white";
 }
 
-  
-
-
-
 const selected = document.querySelector(".selected");
 const optionsContainer = document.querySelector(".options-container");
 
@@ -47,6 +43,7 @@ selected.addEventListener("click", () => {
 optionsList.forEach(o => {
   o.addEventListener("click", () => {
     selected.innerHTML = o.querySelector("label").innerHTML;
+
     optionsContainer.classList.remove("active");
   });
 });
