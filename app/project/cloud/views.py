@@ -95,6 +95,8 @@ def update_cloud():
 @cloud_blueprint.route("/detail/<cloud_id>", methods=['GET'])
 @login_required
 def detail(cloud_id):
+ 
+    cwclient = boto3.client(service_name='cloudwatch') 
     cloud_with_user = db.session.query(Cloud, User).join(User).filter(Cloud.id == cloud_id).first()
     if cloud_with_user is not None:
         if current_user.is_authenticated and cloud_with_user.Cloud.user_id == current_user.id:
@@ -106,7 +108,27 @@ def detail(cloud_id):
             screenshot = get_console_screenshot(aws_instance)
             output = get_console_output(aws_instance)
 
-            return render_template('cloud_detail.html', cloud=response, screenshot=screenshot, output=output)
+            response = cwclient.get_metric_statistics(
+                Namespace='AWS/EC2',
+                MetricName='NetworkOut',
+                Dimensions=[
+                    {
+                        'Name': 'InstanceId',
+                        'Value': aws_instance
+                    },
+                ],
+                StartTime=datetime.now() - timedelta(days=30),
+                EndTime=datetime.now(),
+                Period=86400,
+                Statistics=[
+                    'Sum'
+                ],  
+            )
+
+            outbound_traffic = response["Datapoints"][0]["Sum"]
+            
+             
+            return render_template('cloud_detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 
