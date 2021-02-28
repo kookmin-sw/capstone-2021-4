@@ -374,6 +374,9 @@ def back_update_ec2_info(instance_id):
         network = NetInterface(net_interface_id, subnet_id, cloud_id, attached_at)
         db.session.add(network)
         db.session.commit()
+
+
+        
     # except KeyError:
     #     print("[Console] Ec2 Instance Public IP is not assigned, check EC2 Console. Retry after 5 seconds")
     #     # q.enqueue(back_update_ec2_info, instance_id)
@@ -437,10 +440,10 @@ def back_ec2_create_ec2( param):
     )
     cloud_id = param["cloudid"]
     instance_id = instance["Instances"][0]["InstanceId"]
-    cloud = Cloud.query.get(cloud_id)
+    cloud = Cloud.query.filter_by(id=cloud_id).first()
     cloud.aws_instance_id = instance_id
-    cloud.status = "Running"
-    secgroup = SecurityGroup.query.filter_by(sec_group_id=param["security-group-id"]).first()
+    cloud.status = "Running" 
+    secgroup = SecurityGroup.query.filter_by(sec_group_id=param["security-group-id"][0]).first()
     secgroup.associated_to = cloud_id
 
     db.session.add(cloud)
