@@ -7,20 +7,22 @@ import boto3
 import os
 from .forms import KeypairForm, EditKeypairForm
 import base64
+import secrets
 
 keypair_blueprint = Blueprint('keypair', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
 
-def back_ec2_keypair_create(userid, keyname): # 키페어 사용자한테 다운로드 처리 필요!!!!
-    response = ec2.create_key_pair(KeyName="{}_{}".format(userid, keyname))
+def back_ec2_keypair_create(keytoken, keyname): # 키페어 사용자한테 다운로드 처리 필요!!!!
+    
+    response = ec2.create_key_pair(KeyName="{}_{}".format(keytoken, keyname))
     # response["keyMaterial"] -> private key
     # response["KeyPairId"] KeyPairId
     # response["KeyFingerprint"] KeyFingerPrint
     # ResponseMetadata': {'RequestId': '6dfe219f-e9d5-4c60-924e-5ad74a938967', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '6dfe219f-e9d5-4c60-924e-5ad74a938967', 'cache-control': 'no-cache, no-store', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '2090', 'vary': 'accept-encoding', 'date': 'Sat, 30 Jan 2021 06:37:15 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}
     return response
 
-def back_ec2_keypair_remove(userid, keyname):
-    response = ec2.delete_key_pair(KeyName="{}_{}".format(userid, keyname))
+def back_ec2_keypair_remove(keytoken, keyname):
+    response = ec2.delete_key_pair(KeyName="{}_{}".format(keytoken, keyname))
     # 'ResponseMetadata': {'RequestId': '940e2759-8c0a-465a-ba75-1a287263c917', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '940e2759-8c0a-465a-ba75-1a287263c917', 'cache-control': 'no-cache, no-store', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '227', 'date': 'Sat, 30 Jan 2021 06:40:17 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}
     return response 
 
@@ -37,8 +39,11 @@ def add():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                result = back_ec2_keypair_create(current_user.email, form.name.data) 
-                new_keypair = Keypair(form.name.data, result["KeyFingerprint"], result["KeyPairId"], current_user.id)
+                token = secrets.token_hex(nbytes=16)
+                urlsafe = secrets.token_urlsafe(16)
+                keytoken = token+urlsafe
+                result = back_ec2_keypair_create(keytoken, form.name.data) 
+                new_keypair = Keypair(form.name.data, result["KeyFingerprint"], result["KeyPairId"], current_user.id, keytoken)
                 db.session.add(new_keypair)
                 db.session.commit() 
                 # 입출력 처리 / 파일다운로드 / 키파일 삭제 처리 

@@ -10,6 +10,7 @@
       <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
       <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
       <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+      <p>OutboundTraffic Usage :  {{traffic }} </p>
   </div>
   <div class="col-md-12">
       <h2>Console Status</h2>

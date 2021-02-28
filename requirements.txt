@@ -68,3 +68,4 @@ redis==3.5.3
 rq==1.7.0
 dataclasses==0.6
 pyjwt==2.0.1
+hurry.filesize==0.9
