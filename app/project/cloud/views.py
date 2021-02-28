@@ -19,7 +19,7 @@ from dataclasses import dataclass
 # # CONFIG
 cloud_blueprint = Blueprint('cloud', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
- 
+
 import json
 
  
@@ -94,8 +94,7 @@ def update_cloud():
 
 @cloud_blueprint.route("/detail/<cloud_id>", methods=['GET'])
 @login_required
-def detail(cloud_id):
- 
+def detail(cloud_id): 
     cwclient = boto3.client(service_name='cloudwatch') 
     cloud_with_user = db.session.query(Cloud, User).join(User).filter(Cloud.id == cloud_id).first()
     if cloud_with_user is not None:
@@ -107,8 +106,10 @@ def detail(cloud_id):
             response = back_ec2_instance_detail(aws_instance)
             screenshot = get_console_screenshot(aws_instance)
             output = get_console_output(aws_instance)
+            
 
-            response = cwclient.get_metric_statistics(
+            from datetime import datetime, timedelta
+            cw_response = cwclient.get_metric_statistics(
                 Namespace='AWS/EC2',
                 MetricName='NetworkOut',
                 Dimensions=[
@@ -124,9 +125,17 @@ def detail(cloud_id):
                     'Sum'
                 ],  
             )
+            print(cw_response)
 
-            outbound_traffic = response["Datapoints"][0]["Sum"]
-            
+            if len(cw_response["Datapoints"]) > 0:
+                plan_data = db.session.query(Plan).filter(Plan.id == cloud_with_user.Cloud.plan_id).first()
+                total_plan_traffic = plan_data.traffic
+
+                from hurry.filesize import size
+                outbound_traffic = "{} / {} MB".format(size(cw_response["Datapoints"][0]["Sum"]), total_plan_traffic)
+                
+            else:
+                outbound_traffic = "none"
              
             return render_template('cloud_detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic)
         else:
@@ -166,21 +175,18 @@ def add_cloud():
                 keypair_id = form.data["keypair"]
 
                 if check_environment(current_user.id) == True: 
-                    get_keypair = db.session.query(Keypair.name).filter(Keypair.id == keypair_id).scalar()
-                    keypairname_formatted = "{}_{}".format( current_user.email , get_keypair) 
-                    # net_interface = back_ec2_create_net_interface(vpc_default_subnetid) 
-                    # net_interface_id = net_interface["NetworkInterface"]["NetworkInterfaceId"]
-                    # new_interface = NetInterface(net_interface_id, vpc_default_subnetid)
-                    # db.session.add(new_interface)
-                    
-                    # result = back_ec2_create_ec2( )
-                    # instance_id = result["Instances"][0]["InstanceId"]
+                    # 기존 키 페어 찾아서 클라우드에 반영
+                    get_keypair = db.session.query(Keypair.name, Keypair.keytoken).filter(Keypair.id == keypair_id).first()
+                    keypairname_formatted = "{}_{}".format( get_keypair.keytoken , get_keypair.name) 
+
+                    # DB에 기록
                     new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting")
                     db.session.add(new_cloud) 
                     db.session.flush()
-                    # new_cloud.apply()
                     db.session.refresh(new_cloud)
+
                     assigned_id = new_cloud.id
+                    print("AssignedId : {}".format(assigned_id))
                     db.session.commit()
 
                     parameter = {
