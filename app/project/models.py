@@ -308,18 +308,22 @@ class Keypair(db.Model): #for connector
     fingerprint: str
     keyid: str
     user_id: str
+    keytoken: str
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     fingerprint = db.Column(db.String(59), nullable=True)
     keyid = db.Column(db.String(30), nullable=False)
     user_id = db.Column(db.Integer , nullable=False)
+    keytoken = db.Column(db.String(60), nullable=False) 
 
-    def __init__(self, name, fingerprint, keyid, user_id):
+    def __init__(self, name, fingerprint, keyid, user_id, keytoken):
         self.name = name
         self.fingerprint = fingerprint
         self.keyid = keyid
         self.user_id = user_id
+        self.keytoken = keytoken
+
     @property
     def as_dict(self):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
