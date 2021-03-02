@@ -23,10 +23,12 @@
       <section id="content-area">
 
          <div class="main-content">
-            <h3>security_detail
-               <br>
-               <small>Bootstrap Responsive tables</small>
-            </h3>
+            <div style="margin-bottom: 25px;">
+               <h3>SECURITY
+                 <br>
+                 <small>Security Detail</small>
+               </h3>
+             </div>
             
             <div class="row">
                <div class="col-lg-12">
@@ -52,11 +54,26 @@
                                     <th>0.0.0.0/0</th>
                                     <th>SSH 접속</th>
                                     <th>
-                                        <select name="Actions">
-                                            <option value="">Actions</option>
-                                            <option value="Delete">Delete</option>
-                                            <option value="Edit">Edit</option>
-                                        </select>
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행중
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a href="security_edit.html">편집</a>
+                                                   </li>
+                                                   
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                               </ul>
+                                            </div>
+                                         </div>
+                                      </div> 
                                     </th>
                                 </tr>
                                 <tr>
@@ -75,9 +92,9 @@
                                                  <ul class="dropdown-menu pull-left">
                                                     <li><a href="#">Action</a>
                                                     </li>
-                                                    <li><a href="#">Reboot</a>
+                                                    <li><a onclick="return confirm('정말로 재부팅 할까요?')">Reboot</a>
                                                     </li>
-                                                    <li><a href="#">Delete</a>
+                                                    <li><a onclick="return confirm('정말로 삭제 할까요?')">Delete</a>
                                                     </li>
                                                  </ul>
                                               </div>
@@ -92,15 +109,24 @@
                                     <th>0.0.0.0/0</th>
                                     <th>WEB Port</th>
                                     <th>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                              Actions            
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;">Reboot</a> 
-                                              <a class="dropdown-item" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;" onclick="return confirm('정말로 삭제 할까요?')">delete</a> 
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
                                             </div>
-                                          </div> 
+                                         </div>
+                                      </div> 
+                                       
                                     </th>
                                 </tr>
                                 <tr>
@@ -110,15 +136,23 @@
                                     <th>0.0.0.0/0</th>
                                     <th>Web HTTPS port</th>
                                     <th>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                              Actions            
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;">Reboot</a> 
-                                              <a class="dropdown-item" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;" onclick="return confirm('정말로 삭제 할까요?')">delete</a> 
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
                                             </div>
-                                          </div> 
+                                         </div>
+                                      </div> 
                                     </th>
                                 </tr>
                                 <tr>
@@ -128,15 +162,23 @@
                                     <th>0.0.0.0/0</th>
                                     <th>UDP</th>
                                     <th>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                              Actions            
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;">Reboot</a> 
-                                              <a class="dropdown-item" style="display: block; text-decoration: none; font-size: larger; padding-left: 3px;" onclick="return confirm('정말로 삭제 할까요?')">delete</a> 
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
                                             </div>
-                                          </div> 
+                                         </div>
+                                      </div> 
                                     </th>
                                 </tr>
                               </tbody>
