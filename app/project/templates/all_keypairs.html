@@ -13,6 +13,7 @@
       <th class="border-top-0">id</th>
       <th class="border-top-0">keypair_name</th>
       <th class="border-top-0">fingerprint</th> 
+      <th class="border-top-0">Actions</th> 
     </tr>
   </thead>
   <tbody>
@@ -26,10 +27,8 @@
         {{ item.fingerprint}}
       </td> 
       <td>
-        <a href="{{ url_for('keypair.edit', keypair_id=item.id) }}">Edit</a>
         <a href="{{ url_for('keypair.delete', keypair_id=item.id) }}">Delete</a>
-      </td>
-      
+      </td> 
     </tr>
     {% endfor %}
   </tbody>

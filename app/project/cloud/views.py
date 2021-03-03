@@ -22,7 +22,14 @@ ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id
 
 import json
 
- 
+def humansize(nbytes):
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    i = 0
+    while nbytes >= 1024 and i < len(suffixes)-1:
+        nbytes /= 1024.
+        i += 1
+    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (f, suffixes[i])
 
 @cloud_blueprint.route('/list', methods=['GET'])
 @login_required
@@ -66,16 +73,17 @@ def delete_cloud(instance_id):
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
             print("[Debug] - {}".format(instance_id))
             response = delete_ec2(cloud_with_user.Cloud.aws_instance_id)
-            now = datetime.datetime.now()
+            import datetime
             cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
             cloud_id = cloud.id
+            now = datetime.datetime.now()
             netInterface = NetInterface.query.filter_by(cloud_id=cloud_id).first()
             if netInterface is not None:
                 netInterface.detached_at = now
                 netInterface.deleted_at = now
 
             cloud.status = "Terminated" 
-            cloud.deleted_at = now.strftime("%Y-%m-%d %H:%M:%S") 
+            cloud.deleted_at = now
             db.session.commit()
             flash('{} was Terminated.'.format(cloud.hostname), 'success')
         except Exception as e:
@@ -91,6 +99,9 @@ def delete_cloud(instance_id):
 @login_required
 def update_cloud():
     pass
+
+
+
 
 @cloud_blueprint.route("/detail/<cloud_id>", methods=['GET'])
 @login_required
@@ -109,6 +120,8 @@ def detail(cloud_id):
             
 
             from datetime import datetime, timedelta
+            today = datetime.today()
+            datem = datetime(today.year, today.month, 1)  #1일마다 초기화
             cw_response = cwclient.get_metric_statistics(
                 Namespace='AWS/EC2',
                 MetricName='NetworkOut',
@@ -117,22 +130,24 @@ def detail(cloud_id):
                         'Name': 'InstanceId',
                         'Value': aws_instance
                     },
-                ],
-                StartTime=datetime.now() - timedelta(days=30),
+                ],  
+                StartTime=datem,
                 EndTime=datetime.now(),
                 Period=86400,
                 Statistics=[
                     'Sum'
                 ],  
             )
+            print(datem)
+
             print(cw_response)
 
             if len(cw_response["Datapoints"]) > 0:
                 plan_data = db.session.query(Plan).filter(Plan.id == cloud_with_user.Cloud.plan_id).first()
                 total_plan_traffic = plan_data.traffic
-
+                
                 from hurry.filesize import size
-                outbound_traffic = "{} / {} MB".format(size(cw_response["Datapoints"][0]["Sum"]), total_plan_traffic)
+                outbound_traffic = "{} / {} MB".format( humansize(cw_response["Datapoints"][0]["Sum"]) , total_plan_traffic)
                 
             else:
                 outbound_traffic = "none"
