@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Wintermin - Bootstrap Admin Theme</title> 
+</head>
+
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+
+          
+<div class="main-content">
+  <div style="margin-bottom: 10px;">
+    <h3>BILLING
+      <br>
+      <small>Make Payment</small>
+    </h3>
+  </div>
+    
+    <div class="tabContainer">
+        <div class="btn_group">
+            <button id="groupbtn1" onclick="showPanel(0,'#31ba85')">크레딧 충전</button>
+            <button id="groupbtn2" onclick="showPanel(1,'#31ba85')">금액 납부</button>
+        </div>
+
+        <div class="tabPanel">
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+              <fieldset>
+                <div class="form-group">
+                   <label for="input-id-1" class="col-sm-1 control-label">현재잔액</label>
+                   <div class="col-sm-4">
+                    <p style="margin-left: 2px; font-weight: bold; font-size: large; display: inline;">0</p> 
+                    <p style="display: inline;">KRW</p>
+                   </div>
+                </div>
+             </fieldset>
+            </div>
+            
+            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
+              <fieldset>
+                <div class="form-group">
+                   <label for="input-id-1" class="col-sm-1 control-label">예금주</label>
+                   <div class="col-sm-4">
+                      <input id="input-id-1" type="text" class="form-control">
+                   </div>
+                </div>
+             </fieldset>
+            </div>
+
+            <div class="col-xs-12">
+              <fieldset class="last-child">
+                <div class="form-group">
+                   <label class="col-sm-1 control-label">예금주 은행</label>
+                   <div class="col-sm-4">
+                      <select name="account" class="form-control m-b">
+                         <option>카카오뱅크</option>
+                         <option>하나은행</option>
+                         <option>우리은행</option>
+                         <option>수협</option>
+                         <option>농협</option>
+                         <option>한국시티은행</option>
+                         <option>한국투자증권</option>
+                      </select>
+                   </div>
+                </div>
+             </fieldset>
+            </div>
+
+            <div class="col-xs-12">
+              <fieldset class="last-child">
+                <div class="form-group">
+                   <label class="col-sm-1 control-label">크레딧 선택</label>
+                   <div class="col-sm-4">
+                      <select name="account" class="form-control m-b">
+                         <option>5000KRW</option>
+                         <option>10000KRW</option>
+                         <option>15000KRW</option>
+                         <option>50000KRW</option>
+                      </select>
+                   </div>
+                </div>
+             </fieldset>
+            </div>
+
+            
+            
+            
+            
+
+
+            
+            <div class="col-xs-6">
+              <div class="container">
+                <button class="mainbtn">크레딧 충전 요청</button>
+              </div>
+            </div>
+                </div> 
+        
+                
+                <div class="tabPanel">
+                    <div class="col-lg-3" style="text-align: center;">
+                        <p>이번달 사용 비용</p>
+                        <p style="font-size: 20px; font-weight: bold;">0원</p>
+                    </div>
+                    <div class="col-lg-3" style="text-align: center;">
+                        <p>총 비용</p>
+                        <p style="font-size: 20px; font-weight: bold;">0원</p>
+                    </div>
+                    
+                    <div class="table-responsive" style="margin-top: 150px;">
+                        <table class="table table-hover">
+                           <thead>
+                              <tr>
+                                 <th>Info</th>
+                                 <th>Date</th>
+                                 <th>Price</th>
+                                 <th>Servers Qty</th>
+                                 <th>Summary</th>
+                                 <th>Status</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr>
+                                 <td>Mark</td>
+                                 <td>2021-02-06 12:33</td>
+                                 <td>$20.00/month</td>
+                                 <td>1</td>
+                                 <td>$20.00/month</td>
+                                 <td>OK</td>
+                              </tr>
+                              <tr>
+                                 <td>Otto</td>
+                                 <td>45분전</td>
+                                 <td>$30.00/month</td>
+                                 <td>1</td>
+                                 <td>$30.00/month</td>
+                                 <td>NOPE</td>
+                              </tr>
+                              <tr>
+                                 <td>@mdo</td>
+                                 <td>28 days 8 hours</td>
+                                 <td>$20.00/month</td>
+                                 <td>2</td>
+                                 <td>$40.00/month</td>
+                                 <td>Ok</td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                </div>
+            </div>
+        
+        
+            
+        
+        
+        <!-- 
+            <button onclick="priceview.test_function2(4,3)">버튼테스트</button>
+            <button onclick="priceview.move_view()">다른 뷰로 이동해보기 - cloud_list</button>  -->
+        </div>
+        
+      </section> 
+   </div> 
+   <script src="/app/js/load.js"></script>
+</body>
+
+</html>

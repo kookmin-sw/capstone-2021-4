@@ -173,12 +173,12 @@ def login():
                     message = Markup(
                         "<strong>Welcome back!</strong> You are now successfully logged in.")
                     flash(message, 'success')
-                    return redirect(url_for('home'))
+                    return redirect(url_for('cloud.all_clouds'))
             else:
                 message = Markup(
                     "<strong>Error!</strong> Incorrect login credentials.")
                 flash(message, 'danger')
-    return render_template('login.html', form=form)
+    return render_template('new/login.html', form=form)
 
 
 @users_blueprint.route('/user_profile', methods=['GET', 'POST'])

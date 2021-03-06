@@ -60,12 +60,16 @@ app.register_blueprint(cloud_blueprint,url_prefix='/cloud')
 app.register_blueprint(keypair_blueprint, url_prefix='/keypair')
 app.register_blueprint(secgroup_blueprint, url_prefix='/secgroup')
 
+
+@app.route('/', methods=["GET"])
+def landing():
+    return render_template('new/landing_ori.html')
+    
 # ROUTES
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def home():
     """Render homepage"""
-
     all_user_items = Items.query.filter_by(user_id=current_user.id)
     return render_template('home.html', items=all_user_items)
 
