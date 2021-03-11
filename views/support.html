@@ -6,15 +6,16 @@
 <!--[if !IE]><!-->
 <html lang="en" class="no-ie">
 <!--<![endif]-->
-
 <style>
-   a{
-      color: #525252;
-   }
-   a:hover{
-      text-decoration: none;
-      color: black;
-   }
+    #blackA{
+        color: #525252;
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    #whiteA{
+        color: white;
+    }
 </style>
 <head>
    <!-- Meta-->
@@ -33,9 +34,9 @@
       <section id="content-area">
          <div class="main-content">
             <div style="margin-bottom: 25px;">
-               <h3>SECURITY
+               <h3>SUPPORT
                  <br>
-                 <small>Security Group</small>
+                 <small>Support Page</small>
                </h3>
              </div>
             <div class="row">
@@ -45,23 +46,27 @@
                         <table class="table table-hover">
                            <thead>
                               <tr>
-                                 <th>SecurityGroup Name</th>
-                                 <th>Group ID</th>
-                                 <th>Status</th>
+                                 <th>ID</th>
+                                 <th>제목</th>
+                                 <th>날짜</th>
+                                 <th>상태</th>
                               </tr>
                            </thead>
                            <tbody>
-                              
                               <tr  style="font-weight:bolder;">
-                                 <td><a href="security_detail.html">Group 1</a></td>
-                                 <td>hj-23</td>
-                                 <td>None</td>
+                                 <td>1</td>
+                                 <td><a href="supportDetail.html" id="blackA">서버 재부팅 에러 문제</td>
+                                 <td>03월 11일 (목)</td>
+                                 <td>대기 중</td>
                               </tr>
                            </tbody>
                         </table>
                      </div>
                   </div>
                </div>
+               <div class="container">
+                <button type="submit" class="btn btn-sm btn-inverse" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;"><a href="supportAdd.html" id="whiteA">게시글 추가</a></button>
+                </div>
             </div>
          </div>
       </section> 
