@@ -15,6 +15,7 @@
    <meta name="keywords" content="">
    <meta name="author" content="">
    <title>Wintermin - Bootstrap Admin Theme</title> 
+    <link rel="stylesheet" href="/static/app/css/views/cloudlist2.css" type="text/css" />
 </head>
 
 <body>
@@ -22,9 +23,9 @@
    <div id="wrapper" class="wrapper">
       <section id="content-area">
          <div class="main-content">
-            <h3>Server Status (cloud_list)
+            <h3>클라우드 대시보드
                <br>
-               <small>Bootstrap Responsive tables</small>
+               <small>클라우드 리스트</small>
             </h3>
             <!-- START row-->
             <div class="row">
@@ -36,8 +37,14 @@
                               <thead>
                                  <tr>
                                     <th>Server Name</th>
-                                    <th>Last Changed</th>
+                                    <th>Plan</th>
+                                    <th>OS</th>
                                     <th>Status</th>
+                                    <th>IP</th>
+                                    <th>Region</th>
+                                    <th>생성 날짜</th>
+                                    <th>제거 날짜</th>
+                                    <th>작업</th>
                                  </tr>
                               </thead>
                               <tbody>
@@ -109,7 +116,7 @@
             </div>
             <!-- END row-->
             <div class="container">
-               <a href="cloudadd.html" class="mainbtn" style="align-items: center;">클라우드 추가</a>
+               <a href="{{ url_for('cloud.add_cloud') }}" class="mainbtn" style="align-items: center;">클라우드 추가</a>
             </div>
             
 

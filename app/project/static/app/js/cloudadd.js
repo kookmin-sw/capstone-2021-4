@@ -1,3 +1,0 @@
-var cloud_add = {}
- 
-

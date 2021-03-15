@@ -16,7 +16,7 @@ ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id
 @login_required
 def all_secgroup():
     secgroup_list = SecurityGroup.query.filter_by(user_id = current_user.id)
-    return render_template('all_secgroup.html', secgroups=secgroup_list)
+    return render_template('secgroup/list.html', secgroups=secgroup_list)
 
 @secgroup_blueprint.route('/add', methods=['GET', 'POST']) # 보안 그룹을 생성하는것
 @login_required
@@ -74,7 +74,7 @@ def detail(secgroup_id):
             
             # print(response["SecurityGroups"][0])
             # return response["SecurityGroups"][0]
-            return render_template('secgroup_detail.html', detail=rulelist, groupid =secgroup_id) 
+            return render_template('secgroup/detail.html', detail=rulelist, groupid =secgroup_id) 
         else:
             message = Markup("Access Denied 1")
             flash(message, 'danger')

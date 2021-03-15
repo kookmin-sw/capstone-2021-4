@@ -42,7 +42,7 @@ def all_clouds():
         # json_object = json.dumps(cloud_lists, cls=AlchemyEncoder)
         return cloud_lists
     else:
-        return render_template('new2/cloudlist.html', cloud=cloud_lists)
+        return render_template('cloud/list.html', cloud=cloud_lists)
 
 @cloud_blueprint.route('/reboot/<instance_id>', methods=['GET'])
 @login_required
@@ -243,5 +243,5 @@ def add_cloud():
     else:
         print("GET")
     
-    return render_template('add_cloud.html', form=form, planlist = plans, oslist = os_list, keypair = keypair_list, secgroup=sec_list)
+    return render_template('cloud/add.html', form=form, planlist = plans, oslist = os_list, keypair = keypair_list, secgroup=sec_list)
 

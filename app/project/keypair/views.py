@@ -30,7 +30,7 @@ def back_ec2_keypair_remove(keytoken, keyname):
 @login_required
 def all_keypairs():
     keypair_list = Keypair.query.filter_by(user_id = current_user.id)
-    return render_template('all_keypairs.html', keypairs=keypair_list)
+    return render_template('keypair/list.html', keypairs=keypair_list)
 
 @keypair_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required

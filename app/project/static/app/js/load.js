@@ -18,7 +18,7 @@ function render(response, renderTo, elementId) {
 }
 
 function defaultCssLoader(view='default') {
-    document.getElementsByTagName("head")[0].insertAdjacentHTML("beforeend", `<link rel='stylesheet' href='/static/app/css/views/${view}.css'/>`) 
+    document.getElementsByTagName("head")[0].insertAdjacentHTML("beforeend", `<link rel='stylesheet' href='/static/app/css/views${view}.css'/>`) 
 }
 
 function renderByTag(response, tag, location) {
@@ -68,7 +68,7 @@ async function scriptLoader(view='default') {
         "/static/vendor/store/store+json2.min.js",
         "/static/vendor/classyloader/js/jquery.classyloader.min.js",
         "/static/app/js/app.js", 
-        `/static/app/js/${view}.js`
+        `/static/app/js${view}.js`
     ])  
 }
 
@@ -94,10 +94,11 @@ function init() { // custom init
     } else {
         // localhost:8080/{}/dashboard.html 일테고, dashboard 를 가져와서 css, js 를 갖고온다.
         // 뷰에 해당한 js는 맨 마지막에 호출해야 한다.
-        var filename = pathname.split('.')[0].split('/')
-        var parse_view = filename[filename.length - 1]
-        defaultCssLoader(parse_view)
-        scriptLoader(parse_view)
+        // app/css/views/{pathname}
+        // var filename = pathname.split('.')[0].split('/')
+        // var parse_view = filename[filename.length - 1]
+        defaultCssLoader(pathname)
+        scriptLoader(pathname)
     } 
 }
 init() 

@@ -1,24 +1,33 @@
 class EC2Exeption(Exception):
     pass
 
+class VPCException(Exception):
+    
+    def rollback(scope):
+        pass
+    
+    pass
+
 # Create
-class FailToCreateVPCExeption(EC2Exeption):
+class FailToCreateVPCExeption(VPCException):
     pass
 
-class FailToCreateSubnetException(EC2Exeption):
+class FailToCreateSubnetException(VPCException):
+    
     pass
 
-class FailToCreateIntGatewayException(EC2Exeption):
+class FailToCreateIntGatewayException(VPCException):
     pass
 
-class FailToAttachIntGatewayVPC(EC2Exeption):
+class FailToAttachIntGatewayVPC(VPCException):
     pass
 
-class FailToFindRouteTable(EC2Exeption):
+class FailToFindRouteTable(VPCException):
     pass 
 
-class FailToInitRouteTable(EC2Exeption):
+class FailToInitRouteTable(VPCException):
     pass
+
 
 class FailToCreateSecurityGroup(EC2Exeption):
     pass
