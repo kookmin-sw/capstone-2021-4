@@ -73,20 +73,40 @@
             <div class="col-md-10">
                <ul class="list-inline menuapp-buttons" style="float: right;">
                   <li class="mr-lg">
-                     <a href="#">
+                     <a href="/">
                         <strong class="text-green">HOME</strong>
                      </a>
                   </li>
+                  {% if current_user.is_authenticated %}
+                   <li class="mr-lg">
+                     <a href="/cloud/list">
+                        <strong>Go to Dashboard</strong>
+                     </a>
+                  </li>
                   <li class="mr-lg">
-                     <a href="#">
-                        <strong>Features</strong>
+                     <a href="/logout">
+                        <strong>Logout</strong>
+                     </a>
+                  </li>
+                  {% else %}
+                  <li class="mr-lg">
+                     <a href="/login">
+                        <strong>Login</strong>
                      </a>
                   </li>
                   <li>
-                     <a href="#">
-                        <strong>Purchase</strong>
+                     <a href="/register">
+                        <strong>Register</strong>
                      </a>
                   </li>
+                  {% endif %}
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                </ul>
             </div>
          </nav>
