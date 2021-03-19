@@ -7,3 +7,9 @@ services:
     build: ./ 
     volumes:
       - ~/.aws/:/root/.aws
+    depends_on:
+      - redis
+    command:
+      bash -c "sh /start.sh &  rq worker -u redis://redis:6379"
+  redis:
+    image: "redis:alpine" 
