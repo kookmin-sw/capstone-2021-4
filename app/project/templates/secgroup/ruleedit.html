@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
@@ -7,7 +8,7 @@
 <html lang="en" class="no-ie">
 <!--<![endif]-->
 
-
+{% from "_formshelper.html" import render_field %}
 <head>
    <!-- Meta-->
    <meta charset="utf-8">
@@ -29,54 +30,26 @@
                    <div class="panel-heading">Security Rule Detail</div>
                    <div class="panel-body">
         
-                      <form class="form-horizontal">
-                       <fieldset>
-                          <div class="form-group">
-                             <label class="col-sm-2 control-label">Protocol</label>
-                             <div class="col-sm-10">
-                                <label class="radio-inline c-radio">
-                                   <input id="inlineradio10" type="radio" name="i-radio" value="option1" checked>
-                                   <span class="fa fa-check"></span>TCP</label>
-                                <label class="radio-inline c-radio">
-                                   <input id="inlineradio20" type="radio" name="i-radio" value="option2" checked>
-                                   <span class="fa fa-check"></span>UDP</label>
-                             </div>
-                          </div>
-                       </fieldset>
-        
-                       <div class="form-group">
-                          <label for="input-id-1" class="col-sm-2 control-label">FromPort</label>
-                          <div class="col-sm-9">
-                             <input id="input-id-1" type="text" class="form-control">
-                          </div>
-                       </div>
-                       <div class="form-group">
-                          <label for="input-id-1" class="col-sm-2 control-label">ToPort</label>
-                          <div class="col-sm-9">
-                             <input id="input-id-1" type="text" class="form-control">
-                          </div>
-                       </div>
-                         
-                       
-                       <div class="form-group">
-                          <label for="input-id-1" class="col-sm-2 control-label">CIDR</label>
-                          <div class="col-sm-9">
-                             <input id="input-id-1" type="text" class="form-control">
-                          </div>
-                       </div>
-        
-                       <div class="form-group">
-                          <label for="input-id-1" class="col-sm-2 control-label">description</label>
-                          <div class="col-sm-9">
-                             <input id="input-id-1" type="text" class="form-control">
-                          </div>
-                       </div>
-                         <div class="form-group">
-                            <div class="col-lg-offset-6 col-lg-10">
-                               <button type="submit" class="btn btn-sm btn-inverse" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;">Edit</button>
-                            </div>
-                         </div>
-                      </form>
+                      <form action="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=ruleid) }}" method="post" name="edititemsform">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      {{ form.cidr.label }}
+      {{ render_field(form.cidr, class="form-control", value=detail.cidr) }}
+    </div>
+    <div class="form-group">
+      {{ form.protocol.label }}
+      {{ render_field(form.protocol, class="form-control", value=detail.protocol) }}
+    </div>
+    <div class="form-group">
+      {{ form.fromport.label }}
+      {{ render_field(form.fromport, class="form-control", value=detail.fromport) }}
+    </div>
+    <div class="form-group">
+      {{ form.toport.label }}
+      {{ render_field(form.toport, class="form-control", value=detail.toport) }}
+    </div>
+    <input type="submit" value="Edit Item" class="btn btn-lg btn-success">
+</form>
                    </div>
                 </div>
                 <!-- END panel-->
@@ -84,7 +57,7 @@
             
       </section> 
    </div> 
-   <script src="/app/js/load.js"></script>
+   <script src="/static/app/js/load.js"></script>
 </body>
 
 </html>

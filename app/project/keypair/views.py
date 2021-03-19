@@ -57,7 +57,7 @@ def add():
                 message = Markup(
                     "<strong>Oh snap!</strong>! Unable to add item.{} ".format(e))
                 flash(message, 'danger')
-    return render_template('add_keypair.html', form=form)
+    return render_template('keypair/add.html', form=form)
      
 
 @keypair_blueprint.route('/edit', methods=['GET', 'POSST'])

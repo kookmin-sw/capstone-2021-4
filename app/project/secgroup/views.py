@@ -137,7 +137,7 @@ def edit(secgroup_id, ruleid):
 
             return redirect(url_for('secgroup.detail', secgroup_id=secgroup_id))
              
-    return render_template('secgroup_edit.html',detail=rule, form=form, ruleid=ruleid, groupid=secgroup_id)
+    return render_template('secgroup/ruleedit.html',detail=rule, form=form, ruleid=ruleid, groupid=secgroup_id)
   
 
 
@@ -197,6 +197,6 @@ def sec_add(secgroup_id):
     #     ], 
     # )
 
-    return render_template('secgroup_rule_add.html', form=form, groupid=secgroup_id)
+    return render_template('secgroup/ruleadd.html', form=form, groupid=secgroup_id)
 
 
