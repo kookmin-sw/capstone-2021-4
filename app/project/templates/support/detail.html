@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+<style>
+    #blackA{
+        color: #525252;
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    #whiteA{
+        color: white;
+    }
+    .cont textarea{
+        display: block;
+        width: 100%;
+        height: 150px;
+        padding: 15px;
+        box-sizing: border-box;
+        border: 0;
+        resize: vertical;
+        border: 1px #d7d7d7 solid;
+        margin-bottom: 20px;
+    }
+</style>
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Wintermin - Bootstrap Admin Theme</title> 
+</head>
+
+<body>
+
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+         <div class="main-content">
+            <div style="margin-bottom: 25px;">
+               <h3>SUPPORT
+                 <br>
+                 <small>Support Detail</small>
+               </h3>
+             </div>
+            <div class="row">
+                <hr> 
+                <fieldset>
+                    <div class="form-group">
+                       <label for="input-id-1" class="col-sm-1 control-label" style="line-height: 35px;">제목</label>
+                       <div class="col-sm-10">
+                          <input id="input-id-1" type="text" class="form-control" value="서버 재부팅 에러 문제">
+                       </div>
+                    </div>
+                 </fieldset>
+                 
+                 
+                 <div class="col-sm-1"></div>
+                 <div class="col-sm-10">
+                    <div class="cont">
+                     <textarea placeholder="내용입력">
+서포트 디테일 페이지
+                     </textarea>
+                     </div>
+                  </div>
+                  <div class="col-sm-1"></div>
+                 <hr>
+            </div>
+
+            <div class="row">
+               <div class="col-sm-3"></div>
+               <div class="col-sm-3" style="margin-right: 0; padding-right: 0;text-align: right;">
+                     <button type="submit" class="btn btn-sm btn-inverse" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;"><a href="support.html" id="whiteA" onclick="return confirm('정말로 등록하시겠습니까?')">답장</a></button>
+                  </div>
+               <div class="col-sm-3" style="margin-left: 0;">
+                     <button type="submit" class="btn btn-sm btn-default" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;"><a href="support.html" id="blackA" onclick="return confirm('정말로 취소하시겠습니까?')">취소</a></button>
+               </div>
+               <div class="col-sm-3"></div>
+            </div>
+            
+
+
+
+            <div class="row" style="margin-top: 50px; padding: 0;">
+               <div class="col-sm-1"></div>
+               <fieldset style="padding:0; margin: 0;">
+                  <label for="input-id-1" class="col-sm-1 control-label" style="line-height: 14px;">메시지함 (1)</label>
+               </fieldset>   
+            </div> 
+            <hr>
+
+
+            <fieldset style="padding: 0; text-decoration: none;">
+               <div class="col-sm-1"></div>
+               <div class="col-sm-1" style="padding: 0;">
+                  <img src="../app/img/user/09.jpg" >
+               </div>
+               <div class="col-sm-9" style="margin: 15px;">
+                  <div class="media-body">
+                     <div class="pull-right">2021/03/14 19:05:44</div>
+                     <h4 class="media-heading">기술 엔지니어</h4>
+                     <p>
+                        <small>서버관련질문</small>
+                     </p>
+                  </div>
+                  <div>
+                     안녕하세요 JENNY 님. 대시보드 - Cloud list 에서 CentOS 로 재설치해야 할 것 같습니다.
+                  </div>
+               </div>
+            </fieldset>   
+            <fieldset style=" padding: 0; text-decoration: none;">
+               <div class="col-sm-1"></div>
+               <div class="col-sm-1" style="padding: 0;">
+                  <img src="../app/img/user/01.jpg" >
+               </div>
+               <div class="col-sm-9" style="margin: 15px;">
+                  <div class="media-body">
+                     <div class="pull-right">2021/03/14 10:35:14</div>
+                     <h4 class="media-heading">JENNY</h4>
+                     <p>
+                        <small>서버관련질문</small>
+                     </p>
+                  </div>
+                  <div>
+                     리눅스 ls - al 을 입력하는 도중에 command not found 라는 오류가 나타났습니다. 리눅스에 파일이 손상된 거 같습니다. 수정 부탁드립니다.
+                  </div>
+               </div>
+            </fieldset>   
+         </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>
