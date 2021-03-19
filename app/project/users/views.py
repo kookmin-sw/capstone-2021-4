@@ -184,7 +184,7 @@ def login():
 @users_blueprint.route('/user_profile', methods=['GET', 'POST'])
 @login_required
 def user_profile():
-    return render_template('user_profile.html')
+    return render_template('user/profile.html')
 
 
 @users_blueprint.route('/confirm/<token>')
