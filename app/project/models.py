@@ -382,7 +382,14 @@ class Cloud(db.Model):
     def as_dict(self):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
+class Billing(db.Model):
+    __tablename__ = 'billing'
+    id = db.Column(db.Integer, primary_key=True)
+    
 
+
+    
+    
 class BlacklistToken(db.Model):
     """
     Token Model for storing JWT tokens
@@ -402,8 +409,7 @@ class BlacklistToken(db.Model):
 
  
 
-# class Billing(db.Model):
-#     __tablename__ = 'billing'
+
 
 # class ChargeRequest(db.Model):
 #     __tablename__= 'chargerequest'
