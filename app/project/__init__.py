@@ -50,15 +50,21 @@ from project.items.views import items_blueprint
 from project.cloud.views import cloud_blueprint
 from project.keypair.views import keypair_blueprint
 from project.secgroup.views import secgroup_blueprint
+from project.support.views import support_blueprint
+from project.billing.views import billing_blueprint
 
 # template blueprints
 app.register_blueprint(users_blueprint)
 app.register_blueprint(items_blueprint)
 
-#custom blueprints
+# Cloud blueprints
 app.register_blueprint(cloud_blueprint,url_prefix='/cloud')
 app.register_blueprint(keypair_blueprint, url_prefix='/keypair')
 app.register_blueprint(secgroup_blueprint, url_prefix='/secgroup')
+
+# billing, support Blueprint
+app.register_blueprint(support_blueprint, url_prefix='/support')
+app.register_blueprint(billing_blueprint, url_prefix='/billing')
 
 
 @app.route('/', methods=["GET"])
