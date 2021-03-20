@@ -44,6 +44,11 @@
                                  </tr>
                               </thead>
                               <tbody>
+                                 {% if keypairs[0] == NULL %} 
+                                  <tr>
+                                         <td>키페어가 없습니다.</td>
+                                  </tr>
+                                  {% endif %}
                                 {% for item in keypairs %}
                                     <tr>
                                       <td>{{ item.id }}</td>
@@ -54,7 +59,7 @@
                                         {{ item.fingerprint}}
                                       </td> 
                                       <td>
-                                        <a href="{{ url_for('keypair.delete', keypair_id=item.id) }}">Delete</a>
+                                        <a onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('keypair.delete', keypair_id=item.id) }}">Delete</a>
                                       </td> 
                                     </tr>
                                     {% endfor %}
