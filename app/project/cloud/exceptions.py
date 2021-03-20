@@ -57,6 +57,8 @@ class FailToDeleteVPC(EC2Exeption):
 class FailToDeleteSecurityGroup(EC2Exeption):
     pass
 
+class FailToDeleteRouteTable(EC2Exeption):
+    pass
 
 # Detach
 
