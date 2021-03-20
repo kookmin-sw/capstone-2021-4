@@ -21,7 +21,9 @@
 
 <body>
    <div class="row row-table page-wrapper">
+      
       <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
+        {% include "_notifier.html" %} 
          <div data-toggle="play-animation" data-play="fadeIn" data-offset="0" class="panel panel-dark panel-flat">
             <div class="panel-heading text-center">
                <a href="#">
@@ -31,6 +33,7 @@
                   <strong>LOGIN</strong>
                </p>
             </div>
+            
             <div class="panel-body">
                <form action="{{ url_for('users.login') }}" method="post" role="form" class="mb-lg">
                    {{ form.csrf_token }}
