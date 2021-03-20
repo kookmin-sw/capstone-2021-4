@@ -20,8 +20,11 @@ class User(db.Model):
     current_logged_in = db.Column(db.DateTime, nullable=True)
     role = db.Column(db.String(60), default='user')
 
-    items = db.relationship('Items', backref='user', lazy='dynamic')
-    clouds = db.relationship('Cloud', backref='user', lazy='dynamic')
+    items = db.relationship('Items', cascade = "all,delete", backref='user', lazy='dynamic')
+    clouds = db.relationship('Cloud', cascade = "all,delete" ,backref='user')
+    vpc = db.relationship('VPC', cascade = "all, delete", backref="user")
+    keypair = db.relationship('Keypair', cascade = "all, delete", backref="user")
+    
 
     def __json__(self):
         return ['id', 'email', '_password', 'authenticated', 'email_confirmation_sent_on', 
@@ -211,6 +214,10 @@ class VPC(db.Model):
     default_subnet_id = db.Column(db.String(40), nullable=False)
     default_sec_id = db.Column(db.String(40), nullable=False)
     
+    secgroups = db.relationship('SecurityGroup', cascade = "all, delete", backref="VPC")
+    subnets = db.relationship('Subnet', cascade = "all, delete", backref="VPC")
+    
+
     def __init__(self, user_id, vpc_id, inter_gw_id, default_subnet_id, default_sec_id):
         self.user_id = user_id
         self.vpc_id = vpc_id
@@ -242,6 +249,12 @@ class NetInterface(db.Model):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
         
 
+class SecurityGroupAssociated(db.Model):
+    __tablename__ = 'securitygroup_clouds'
+    id = db.Column(db.Integer, primary_key=True)
+    cloud_id = db.Column(db.Integer, nullable=False)
+    sec_group_id = db.Column(db.Integer, nullable=False)
+
 class SecurityGroup(db.Model):
     __tablename__ = 'securitygroup'
     id = db.Column(db.Integer, primary_key=True)
@@ -250,7 +263,9 @@ class SecurityGroup(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     associated_to = db.Column(db.Integer, nullable=True) # cloud.id
     vpc_id = db.Column(db.Integer, db.ForeignKey("user_vpc.id"))
-
+    
+    secgroups = db.relationship('SecurityRule', cascade = "all, delete", backref="SecurityRule")
+    
     def __init__(self, name, sec_group_id, user_id, associated_to, vpc_id):
         self.name = name
         self.sec_group_id = sec_group_id
@@ -291,12 +306,14 @@ class Subnet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subnet_id = db.Column(db.String(30), nullable=False)
     cidr_block_ipv4 = db.Column(db.String(24))
-    
+    vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
     
 
-    def __init__(self, subnet_id, cidr_block_ipv4):
+    def __init__(self, subnet_id, cidr_block_ipv4, vpc_id):
         self.subnet_id = subnet_id
         self.cidr_block_ipv4 = cidr_block_ipv4 
+        self.vpc_id = vpc_id
+        
     @property
     def as_dict(self):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
@@ -382,14 +399,41 @@ class Cloud(db.Model):
     def as_dict(self):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
 
-class Billing(db.Model):
-    __tablename__ = 'billing'
+
+class Credit(db.Model):
+    __tablename__ = 'credit'
     id = db.Column(db.Integer, primary_key=True)
+    deposit_name = db.Column(db.Integer)
+    bank = db.Column(db.String(12), nullable=False)
+    charge_amount = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Boolean, nullable=False)
     
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class Invoice(db.Model):
+    __tablename__ = 'invoice'
+    id = db.Column(db.Integer, primary_key=True)
+    payment_amount = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Boolean,nullable=False)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+class Support(db.Model):
+    __tablename__ = 'support'
+    id = db.Column(db.Integer, primary_key=True)
+    support_type = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(100), primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
-    
-    
+class ReplyTicket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reply_to = db.Column(db.Integer, db.ForeignKey('support.id'))
+    content = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
 class BlacklistToken(db.Model):
     """
     Token Model for storing JWT tokens
