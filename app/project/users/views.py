@@ -208,13 +208,22 @@ def confirm_email(token):
         user.email_confirmed = True
         user.email_confirmed_on = datetime.now()
         db.session.add(user)
-        db.session.commit()
+        
         
         if cloud_env.check_environment(user.id) == False: # cloud env init
-            cloud_env.create_environment(user.id)
-        message = Markup(
-            "Thank you for confirming your email address!")
+            try:
+                cloud_env.create_environment(user.id)
+                message = Markup(
+                    "Thank you for confirming your email address!")
+            except:
+                message = Markup(
+                        "<strong>Error</strong>! 이메일 인증을 다시 시도해 주세요.")
+                flash(message, 'danger')
+                db.session.rollback()
+                return redirect(url_for('home'))
+                
         flash(message, 'success') 
+    db.session.commit()
     return redirect(url_for('home'))
 
 
