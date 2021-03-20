@@ -193,15 +193,15 @@ def back_ec2_delete_security_group(sec_group_id):
         raise FailToDeleteSecurityGroup 
 
 
-def back_ec2_create_security_group(vpc_id):
+def back_ec2_create_security_group(vpc_id, group_name='DefaultRule'):
     try:
         response = ec2.create_security_group(
             Description='string',
-            GroupName='string',
+            GroupName=group_name,
             VpcId=vpc_id,
             TagSpecifications=[
                 {
-                    'ResourceType': 'security-group123',
+                    'ResourceType': 'security-group',
                     'Tags': [
                         {
                             'Key': 'string',
@@ -364,7 +364,7 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
     except FailToCreateSecurityRule:
         print("[Console] Fail to create sec group rule -> Deleting Int GW, VPC, RouteTable, SecGroup, Detach Int GW")
         back_ec2_delete_subnet(subnet_id)
-        delete_security_group(sec_group_id) 
+        back_ec2_delete_security_group(sec_group_id) 
         back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
         detach_internet_gateway(int_gw_id, vpc_id)
         back_ec2_delete_int_gateway(int_gw_id)
