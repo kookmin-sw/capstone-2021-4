@@ -2,12 +2,14 @@ from flask import render_template, Blueprint, request, redirect, url_for, flash,
 from flask_login import current_user, login_required
 from project import db
 from project import app
+
 from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, SecurityRule
 import boto3
 import os
-from .forms import SecurityInputForm,SecurityEditForm, SecurityRuleEditForm, SecurityRuleAddForm
+from .forms import SecurityEditForm, SecurityRuleEditForm, SecurityRuleAddForm,SecGroupForm
 import base64
 
+from project.cloud.utils import *
 secgroup_blueprint = Blueprint('secgroup', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
 
@@ -25,22 +27,28 @@ def add():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                vpc_id = form.vpcid.data
-                result = back_ec2_create_security_group(vpc_id)
-                new_secgroup = SecurityGroup(form.name.data,  result["GroupId"],current_user.id, None ) 
+                # 사용자의 VPC ID Get
+                user_vpc_id = db.session.query(VPC.vpc_id, VPC.id).filter(VPC.user_id == current_user.id).first()
+                # sec group 생성
+                print(user_vpc_id)
+                result = back_ec2_create_security_group(user_vpc_id.vpc_id, form.name.data)
+                sec_group_id = result["GroupId"]
+                new_secgroup = SecurityGroup(form.name.data, sec_group_id ,current_user.id, None , user_vpc_id.id) 
                 db.session.add(new_secgroup)
-                db.session.commit() 
                 # 입출력 처리 / 파일다운로드 / 키파일 삭제 처리 
                 message = Markup(
                     "<strong>보안 그룹 {} 이 생성되었습니다.</strong>".format(result["GroupId"]))
                 flash(message, 'success')
-                return redirect(url_for('securitygroup.all_secgroup'))
+                
             except Exception as e:
+                back_ec2_delete_security_group(sec_group_id) 
                 db.session.rollback()
                 message = Markup(
                     "<strong>Oh snap!</strong>! Unable to add item.{} ".format(e))
-                flash(message, 'danger')
-    return render_template('add_secgroup.html', form=form)
+                flash(message, 'danger') 
+            db.session.commit()
+        return redirect(url_for('secgroup.all_secgroup'))
+    return render_template('secgroup/groupadd.html', form=form)
      
 @secgroup_blueprint.route('/delete/<secgroup_id>', methods=['POST']) # 보안 그룹을 삭제 ( cloud에 할당이 되어있으면 삭제할 수 없음)
 @login_required
@@ -178,25 +186,7 @@ def sec_add(secgroup_id):
             # return response
     else:
         return "denied"
-    # authorize_security_group_ingress
-    # 추가
-    # ec2.authorize_security_group_ingress( 
-    #     GroupId='sg-0aa5b53c90c76a2ac', 
-    #     IpPermissions=[
-    #         {
-    #             'FromPort': 80,
-    #             'IpProtocol': 'tcp',
-    #             'IpRanges': [
-    #                 {
-    #                     'CidrIp': '0.0.0.0/0',
-    #                     'Description': 'http'
-    #                 },
-    #             ],
-    #             'ToPort': 81, 
-    #         },
-    #     ], 
-    # )
-
+  
     return render_template('secgroup/ruleadd.html', form=form, groupid=secgroup_id)
 
 
