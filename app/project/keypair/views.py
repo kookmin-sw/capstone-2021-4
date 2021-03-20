@@ -21,8 +21,8 @@ def back_ec2_keypair_create(keytoken, keyname): # 키페어 사용자한테 다�
     # ResponseMetadata': {'RequestId': '6dfe219f-e9d5-4c60-924e-5ad74a938967', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '6dfe219f-e9d5-4c60-924e-5ad74a938967', 'cache-control': 'no-cache, no-store', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '2090', 'vary': 'accept-encoding', 'date': 'Sat, 30 Jan 2021 06:37:15 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}
     return response
 
-def back_ec2_keypair_remove(keytoken, keyname):
-    response = ec2.delete_key_pair(KeyName="{}_{}".format(keytoken, keyname))
+def back_ec2_keypair_remove(key_id):
+    response = ec2.delete_key_pair(KeyPairId=key_id)
     # 'ResponseMetadata': {'RequestId': '940e2759-8c0a-465a-ba75-1a287263c917', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '940e2759-8c0a-465a-ba75-1a287263c917', 'cache-control': 'no-cache, no-store', 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '227', 'date': 'Sat, 30 Jan 2021 06:40:17 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}
     return response 
 
@@ -93,19 +93,24 @@ def edit():
     # return redirect(url_for('home'))
     pass
 
-@keypair_blueprint.route('/delete/<keypair_id>', methods=['POST'])
+@keypair_blueprint.route('/delete/<keypair_id>', methods=['GET'])
 @login_required
-def delete():
-    # item = Items.query.filter_by(id=items_id).first_or_404()
+def delete(keypair_id):
+    item = Keypair.query.filter_by(id=keypair_id ).first_or_404()
 
-    # if not item.user_id == current_user.id:
-    #     message = Markup(
-    #         "<strong>Error!</strong> Incorrect permissions to delete this item.")
-    #     flash(message, 'danger')
-    #     return redirect(url_for('home'))
+    if not item.user_id == current_user.id:
+        message = Markup(
+            "<strong>Error!</strong> Incorrect permissions to delete this item.")
+        flash(message, 'danger')
+        return redirect(url_for('home'))
 
-    # db.session.delete(item)
-    # db.session.commit()
-    # flash('{} was deleted.'.format(item.name), 'success')
-    # return redirect(url_for('items.all_items'))
-    pass
+    keypair_keyid = item.keyid
+    
+    print(keypair_keyid)
+    back_ec2_keypair_remove(keypair_keyid)
+    db.session.delete(item)
+    db.session.commit()
+    
+    flash('Keypair {} was deleted.'.format(item.name), 'success')
+    return redirect(url_for('keypair.all_keypairs'))
+    
