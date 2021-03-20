@@ -121,8 +121,10 @@ def back_ec2_delete_subnet(subnetid):
         response = ec2.delete_subnet(
             SubnetId=subnetid,
         )
+        print(response)
         return response
-    except:
+    except Exception as e:
+        print(e)
         raise FailToDeleteSubnet
 
 
@@ -151,7 +153,11 @@ def back_ec2_delete_int_gateway(intgatewayid):
             InternetGatewayId=intgatewayid
         )
         return response
-    except:
+    except Exception as e:
+        print ("INTGW")
+        print(intgatewayid)
+        print(e)
+        return response
         raise FailToDeleteIntGateway
 
 def back_ec2_int_gateway_attach_vpc(intgatewayid, vpc_id): 
@@ -195,7 +201,7 @@ def back_ec2_create_security_group(vpc_id):
             VpcId=vpc_id,
             TagSpecifications=[
                 {
-                    'ResourceType': 'security-group',
+                    'ResourceType': 'security-group123',
                     'Tags': [
                         {
                             'Key': 'string',
@@ -205,9 +211,23 @@ def back_ec2_create_security_group(vpc_id):
                 },
             ], 
         )
+        print(response)
         return response
-    except:
+    except Exception as e:
+        print(e)
         raise FailToCreateSecurityGroup
+    
+
+def back_delete_route_table(route_table_id):
+    try:
+        response = ec2.delete_route_table(
+            RouteTableId=route_table_id
+        )
+        print(response)
+        return response 
+    except Exception as e: 
+        print(e)
+        raise FailToDeleteRouteTable
     
 
 def find_route_table(vpc_id,Index=0):
@@ -271,9 +291,8 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
     try:
         print("[Console] Create_env Started")
         vpc_result = back_ec2_create_vpc() 
-        print("[Console] VPC Create")
         vpc_id = vpc_result["Vpc"]["VpcId"]
-        
+        print("[Console] VPC Created {}".format(vpc_id))
         print("[Console] Subnet Create")
         subnet_res = back_ec2_create_subnet(vpc_id)
         subnet_id = subnet_res["Subnet"]["SubnetId"]
@@ -313,23 +332,47 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
         # Apply to DB 
         db.session.commit()  
         print("[Console] created user environment")
-
-    except:
-        print("[Console] Fail to create Sec rule")
-
-        if subnet_id is not None:
-            back_ec2_delete_subnet(subnet_id) 
-        
-        if security_group_id is not None:
-            back_ec2_delete_security_group(security_group_id) 
-
-        if int_gw_id is not None and vpc_id is not None:
-            back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id )
-            back_ec2_delete_int_gateway(int_gw_id)
-            back_delete_vpc(vpc_id)
-         
-        print("DB rollback process..")
+    except FailToCreateSubnetException:
+        print("[Console] Fail to create Subnet -> Deleting VPC")
+        back_delete_vpc(vpc_id)
+    except FailToCreateIntGatewayException:
+        print("[Console] Fail to create intgateway -> Deleting Int GW, VPC")
+        print(back_ec2_delete_subnet(subnet_id))
+        back_delete_vpc(vpc_id)
+    except FailToAttachIntGatewayVPC:
+        print("[Console] Fail to attach gateway -> Deleting Int GW, VPC")
+        back_ec2_delete_subnet(subnet_id)
+        print(back_ec2_delete_int_gateway(int_gw_id))
+        back_delete_vpc(vpc_id)
+    except (FailToFindRouteTable, FailToGetRouteTableID):
+        print("[Console] Fail to create route table -> Deleting Int GW, VPC, Detach Int GW")
+        print(back_ec2_delete_subnet(subnet_id))
+        print(back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id))
+        print(back_ec2_delete_int_gateway(int_gw_id))
+        print(back_delete_vpc(vpc_id))
+    except FailToInitRouteTable:
+        print(back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)) 
+        print(back_ec2_delete_subnet(subnet_id))
+        print(back_ec2_delete_int_gateway(int_gw_id))
+        print(back_delete_vpc(vpc_id))
+    except FailToCreateSecurityGroup:
+        print("[Console] Fail to create sec group -> Deleting Int GW, VPC, RouteTable, Detach Int GW")
+        back_ec2_delete_subnet(subnet_id) 
+        back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
+        back_ec2_delete_int_gateway(int_gw_id)
+        back_delete_vpc(vpc_id) 
+    except FailToCreateSecurityRule:
+        print("[Console] Fail to create sec group rule -> Deleting Int GW, VPC, RouteTable, SecGroup, Detach Int GW")
+        back_ec2_delete_subnet(subnet_id)
+        delete_security_group(sec_group_id) 
+        back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
+        detach_internet_gateway(int_gw_id, vpc_id)
+        back_ec2_delete_int_gateway(int_gw_id)
+        back_delete_vpc(vpc_id) 
+    finally:
+        print("[Exception] DB rollback process..")
         db.session.rollback()
+        
     
 
 def back_delete_vpc(vpc_id):
@@ -337,7 +380,9 @@ def back_delete_vpc(vpc_id):
     try:
         response =ec2.delete_vpc(
             VpcId=vpc_id
-        ) 
+        )
+        print("Delete status")
+        print(response)
         return response
     except:
         raise FailToDeleteVPC 
@@ -393,6 +438,9 @@ def back_update_ec2_info(instance_id):
     
     # q.enqueue(back_update_ec2_info, instance_id)
     # db.session.rollback()
+
+
+ 
 
 def delete_ec2(instance_id):
     response = ec2.terminate_instances(
