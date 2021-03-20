@@ -23,7 +23,7 @@ class User(db.Model):
     items = db.relationship('Items', cascade = "all,delete", backref='user', lazy='dynamic')
     clouds = db.relationship('Cloud', cascade = "all,delete" ,backref='user')
     vpc = db.relationship('VPC', cascade = "all, delete", backref="user")
-    keypair = db.relationship('Keypair', cascade = "all, delete", backref="user")
+    keypairs = db.relationship('Keypair', cascade = "all, delete", backref="user")
     
 
     def __json__(self):
@@ -331,7 +331,7 @@ class Keypair(db.Model): #for connector
     name = db.Column(db.String(30), nullable=False)
     fingerprint = db.Column(db.String(59), nullable=True)
     keyid = db.Column(db.String(30), nullable=False)
-    user_id = db.Column(db.Integer , nullable=False)
+    user_id = db.Column(db.Integer ,db.ForeignKey('users.id'), nullable=False)
     keytoken = db.Column(db.String(60), nullable=False) 
 
     def __init__(self, name, fingerprint, keyid, user_id, keytoken):
