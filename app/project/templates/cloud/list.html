@@ -49,62 +49,68 @@
                                  </tr>
                               </thead>
                               <tbody>
+                                  {% if cloud[0] == NULL %} 
+                                  <tr>
+                                         <td>클라우드가 없습니다.</td>
+                                  </tr>
+                                  {% endif %}
+                                  
                                  {% for item in cloud %}
                               <tr>
-    
-      <td>
-        {% if item.Cloud.status == "Running" %}
-        <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
-        {% else %}
-          {{ item.Cloud.hostname }}
-        {% endif %}
-      </td>
-      <td>
-        {{ item.Plan.plan_name}}
-      </td>
-      <td>
-        {{ item.Oslist.os_name}}
-      </td>
-      
-      <td>
-        {{ item.Cloud.status}}
-      </td>
-      
-      <td>
-        {{ item.Cloud.ip_addr}}
-      </td>
-           
-      <td>
-        {{ item.Cloud.region}}
-      </td> 
-      <td>
-        {{ item.Cloud.created_at}}
-      </td>
-      <td>
-        {{ item.Cloud.deleted_at}}
-      </td> 
-
-
-      <td>
-        
-        {% if item.Cloud.status == "Running" %}
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Actions            
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" href="{{ url_for('cloud.reboot_instance', instance_id=item.Cloud.id) }}">Reboot</a> 
-            <a class="dropdown-item" onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
-          </div>
-        </div>
-        
-        {% else %}
-        <p> 제거됨</p>
-        {% endif %}
-      </td>
-      
-    </tr>
+                                  <td>
+                                    {% if item.Cloud.status == "Running" %}
+                                    <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
+                                    {% else %}
+                                      {{ item.Cloud.hostname }}
+                                    {% endif %}
+                                  </td>
+                                  <td>
+                                    {{ item.Plan.plan_name}}
+                                  </td>
+                                  <td>
+                                    {{ item.Oslist.os_name}}
+                                  </td>
+                                  
+                                  <td>
+                                    {{ item.Cloud.status}}
+                                  </td>
+                                  
+                                  <td>
+                                    {{ item.Cloud.ip_addr}}
+                                  </td>
+                                       
+                                  <td>
+                                    {{ item.Cloud.region}}
+                                  </td> 
+                                  <td>
+                                    {{ item.Cloud.created_at}}
+                                  </td>
+                                  <td>
+                                    {{ item.Cloud.deleted_at}}
+                                  </td> 
+                            
+                            
+                                  <td>
+                                    
+                                    {% if item.Cloud.status == "Running" %}
+                                    <div class="dropdown">
+                                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions            
+                                      </button>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" href="{{ url_for('cloud.reboot_instance', instance_id=item.Cloud.id) }}">Reboot</a> 
+                                        <a class="dropdown-item" onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
+                                      </div>
+                                    </div>
+                                    
+                                    {% else %}
+                                    <p> 제거됨</p>
+                                    {% endif %}
+                                  </td>
+                                  
+                                </tr>
                               {% endfor %}
+                              
                               </tbody>
                               
                               
