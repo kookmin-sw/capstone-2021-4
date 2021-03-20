@@ -3,7 +3,7 @@ from wtforms import TextField, IntegerField
 from wtforms.validators import DataRequired, Length
 
 
-class SecurityInputForm(FlaskForm):
+class SecGroupForm(FlaskForm):
     name = TextField('Name', validators=[DataRequired(),
                                          Length(min=1, max=254)])
 
