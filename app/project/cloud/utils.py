@@ -283,7 +283,6 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
         int_gw_id = int_gateway["InternetGateway"]["InternetGatewayId"]
         print("[Console] VPC-Internet GW Attach")
         back_ec2_int_gateway_attach_vpc(int_gw_id, vpc_id)
-        
         route_table_id = find_route_table(vpc_id)
         print("[Console] RouteTable Init - {}".format(route_table_id))
         router_init = route_table_init(int_gw_id, route_table_id)
@@ -294,16 +293,15 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
         add_default_security_rule(security_group_id) # add port 22
         
         print("[Console] SecurityGroup Default Port 22 added")
-
         print("[Console] DB Record create")
         # Create record structure
-        new_subnet = Subnet(subnet_id, subnet_cidr) 
         new_vpc = VPC(userid, vpc_id, int_gw_id, subnet_id ,security_group_id )
-        db.session.add(new_subnet)
         db.session.add(new_vpc)
         db.session.flush()  
         db.session.refresh(new_vpc)
         vpc_id = new_vpc.id
+        new_subnet = Subnet(subnet_id, subnet_cidr,vpc_id) 
+        db.session.add(new_subnet)
         new_security_group = SecurityGroup("DefaultRule" , security_group_id, userid, None, vpc_id)
         db.session.add(new_security_group)
         db.session.flush()
