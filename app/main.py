@@ -22,5 +22,5 @@ manager.add_command('db', MigrateCommand)
 #         abort(403)  # Forbidden
         
 if __name__ == '__main__':
-    manager.add_command('runserver', Server(host='0.0.0.0', port=8000))
+    manager.add_command('runserver', Server(host='0.0.0.0', port=8000 ,   threaded=True))
     manager.run()
