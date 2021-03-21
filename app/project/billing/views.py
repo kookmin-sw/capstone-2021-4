@@ -136,15 +136,21 @@ def start_transaction(transaction_id, status):
          
             if status == "accept":
                 item.status = True
-            else:
+            elif status == "reject":
+                print("Rejected")
                 item.status = False
-             
+            
+            
             credit_sum = db.session.query(func.sum(Credit.charge_amount).label("amount") ).filter_by(user_id=item_user_id, status=True).scalar() 
+            
+            if credit_sum == None:
+                credit_sum = 0
+                 
             update_balance = db.session.query(Balance).filter_by(user_id = item_user_id).first()
             update_balance.balance = credit_sum
             
-            
             db.session.commit()
+            
             
             message = Markup(
                 "<strong>Good!</strong> Transaction Success")
