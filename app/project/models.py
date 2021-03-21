@@ -406,10 +406,29 @@ class Credit(db.Model):
     deposit_name = db.Column(db.Integer)
     bank = db.Column(db.String(12), nullable=False)
     charge_amount = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.Boolean, nullable=False)
-    
+    status = db.Column(db.Boolean, nullable=False, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    created_at = db.Column(db.DateTime, nullable=True)
+    deleted_at = db.Column(db.DateTime, nullable=True)
+    
+    def __init__(self,deposit_name, bank, charge_amount, myid):
+        self.deposit_name = deposit_name
+        self.bank = bank
+        self.charge_amount = charge_amount 
+        self.status = False
+        self.user_id = myid
 
+class Balance(db.Model):
+    __tablename__ = 'balance'
+    id = db.Column(db.Integer, primary_key=True)
+    balance = db.Column(db.Integer, nullable=False, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    
 class Invoice(db.Model):
     __tablename__ = 'invoice'
     id = db.Column(db.Integer, primary_key=True)

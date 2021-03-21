@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 from .forms import RegisterForm, LoginForm, EmailForm, PasswordForm
 from project import app, db, mail
-from project.models import User
+from project.models import User, Balance
 import project.cloud.views as cloud_env
 
 # CONFIG
@@ -209,6 +209,14 @@ def confirm_email(token):
         user.email_confirmed_on = datetime.now()
         db.session.add(user)
         
+        db.session.flush()  
+        db.session.refresh(user)
+        
+        user_id = user.id
+        
+        
+        new_user_balance = Balance(user_id)
+        db.session.add(new_user_balance)
         
         if cloud_env.check_environment(user.id) == False: # cloud env init
             try:

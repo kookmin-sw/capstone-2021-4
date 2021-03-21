@@ -33,77 +33,14 @@
     
     <div class="tabContainer">
         <div class="btn_group">
-            <button id="groupbtn1" onclick="showPanel(0,'#31ba85')">크레딧 충전</button>
-            <button id="groupbtn2" onclick="showPanel(1,'#31ba85')">금액 납부</button>
+            <button id="groupbtn1" onclick="showPanel(0,'#31ba85')">고객 크레딧 충전 현황</button>
+            <button id="groupbtn2" onclick="showPanel(1,'#31ba85')">고객 납부 현황</button>
         </div>
-        
+
         <div class="tabPanel">
-           {% include "_notifier.html" %}
-            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
-              <fieldset>
-                <div class="form-group">
-                   <label for="input-id-1" class="col-sm-1 control-label">현재잔액</label>
-                   <div class="col-sm-4">
-                    <p style="margin-left: 2px; font-weight: bold; font-size: large; display: inline;">{{ credit_sum }} </p> 
-                    <p style="display: inline;">KRW</p>
-                   </div>
-                </div>
-             </fieldset>
-            </div>
-            <form action="{{ url_for('billing.add_transaction') }}" method="post" name="itemsform">
-            {{ form.csrf_token }}
             
-            <div class="col-xs-12" style="float: left; margin: 10px 0px;">
-              <fieldset>
-                <div class="form-group">
-                   <label for="input-id-1" class="col-sm-1 control-label">예금주</label>
-                   <div class="col-sm-4">
-                      <input name="deposit_name" id="input-id-1" type="text" class="form-control">
-                   </div>
-                </div>
-             </fieldset>
-            </div>
 
-            <div class="col-xs-12">
-              <fieldset class="last-child">
-                <div class="form-group">
-                   <label class="col-sm-1 control-label">예금주 은행</label>
-                   <div class="col-sm-4">
-                      <select name="bank" class="form-control m-b">
-                         <option value="카카오뱅크">카카오뱅크</option>
-                         <option value="하나은행">하나은행</option>
-                         <option value="우리은행">우리은행</option>
-                         <option value="수협">수협</option>
-                         <option value="농협">농협</option>
-                         <option value="한국시티은행">한국시티은행</option>
-                         <option value="한국투자증권">한국투자증권</option>
-                      </select>
-                   </div>
-                </div>
-             </fieldset>
-            </div>
-
-            <div class="col-xs-12">
-              <fieldset class="last-child">
-                <div class="form-group">
-                   <label class="col-sm-1 control-label">크레딧 선택</label>
-                   <div class="col-sm-4">
-                      <select name="amount" class="form-control m-b">
-                         <option value="5000">5000KRW</option>
-                         <option value="10000">10000KRW</option>
-                         <option value="15000">15000KRW</option>
-                         <option value="50000">50000KRW</option>
-                      </select>
-                   </div>
-                </div>
-             </fieldset>
-            </div> 
-            <div class="col-xs-6">
-              <div class="container">
-                <button class="mainbtn">크레딧 충전 요청</button>
-              </div>
-            </div> 
-            </form> 
+   
             <div class="table-responsive" style="margin-top: 150px;">
                         <table class="table table-hover">
                            <thead>
@@ -113,33 +50,42 @@
                                  <th>크레딧 금액</th>
                                  <th>관리자 승인</th>
                                  <th>요청 시간</th>
+                                 <th>작업</th>
                               </tr>
                            </thead>
                            <tbody>
                                {% for item in items %}
-                               <tr>
+                              <tr>
                                  <td>{{ item.deposit_name}} </td> 
                                  <td>{{ item.bank }} </td>
                                  <td>{{ item.charge_amount }}</td>
                                  <td>{{ item.status  }} </td>
                                  <td>{{ item.created_at }}</td>
-                              </tr>  
-                               {% endfor %}
+                                 <td>
+                                 
+                                        <a class="dropdown-item" onclick="return confirm('정말로 수락할까요?')" href="transaction/{{ item.id }}/accept">수락</a> 
+                                        <a class="dropdown-item" onclick="return confirm('정말로 거절할까요?')" href="transaction/{{ item.id }}/reject">거절</a> 
+                                 
+                                </td>
+                              </tr>
                               
+                              {% endfor %}
+                              <!-- <tr>-->
+                              <!--   <td>김누구</td> -->
+                              <!--   <td>신한은행</td>-->
+                              <!--   <td>5900KRW</td>-->
+                              <!--   <td>확인 완료 - 이럴때 현재 잔액에서 5900만큼 추가되어야함</td>-->
+                              <!--   <td>2021-02-06 12:33</td>-->
+                              <!--   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+                              <!--          <a class="dropdown-item" onclick="return confirm('정말로 수락할까요?')" href=" ">수락</a> -->
+                              <!--          <a class="dropdown-item" onclick="return confirm('정말로 거절할까요?')" href=" ">거절</a> -->
+                              <!--        </div>-->
+                              <!--</tr> -->
                            </tbody>
                         </table>
                      </div>
                 </div>  
-                <div class="tabPanel">
-                    <div class="col-lg-3" style="text-align: center;">
-                        <p>이번달 사용 비용</p>
-                        <p style="font-size: 20px; font-weight: bold;">0원</p>
-                    </div>
-                    <div class="col-lg-3" style="text-align: center;">
-                        <p>총 비용</p>
-                        <p style="font-size: 20px; font-weight: bold;">0원</p>
-                    </div>
-                    
+                <div class="tabPanel"> 
                     <div class="table-responsive" style="margin-top: 150px;">
                         <table class="table table-hover">
                            <thead>

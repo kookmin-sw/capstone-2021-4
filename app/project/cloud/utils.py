@@ -369,9 +369,18 @@ def create_environment(userid): # 사용자마다 한번씩만 해주는..
         detach_internet_gateway(int_gw_id, vpc_id)
         back_ec2_delete_int_gateway(int_gw_id)
         back_delete_vpc(vpc_id) 
-    finally:
-        print("[Exception] DB rollback process..")
+    except:
+        print("[Console] 다른 예외 발생")
         db.session.rollback()
+        back_ec2_delete_subnet(subnet_id)
+        back_ec2_delete_security_group(sec_group_id) 
+        back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
+        detach_internet_gateway(int_gw_id, vpc_id)
+        back_ec2_delete_int_gateway(int_gw_id)
+        back_delete_vpc(vpc_id)
+    else:
+        print("[Console] Transaction 처리 성공")
+        db.session.commit()
         
     
 
