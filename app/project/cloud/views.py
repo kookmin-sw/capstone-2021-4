@@ -1,10 +1,10 @@
-from flask import render_template, Blueprint, request, redirect, url_for,  flash, Markup, jsonify
+from flask import render_template, Blueprint, request, redirect, url_for,  flash, Markup, jsonify, abort
 from flask_login import current_user, login_required
 from project import db
 from project import app
 from project import q
 from project import r
-from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface
+from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface, Balance
 import boto3
 import os
 from .forms import CloudForm, EditCloudForm
@@ -170,7 +170,13 @@ def add_cloud():
     os_list = Oslist.query.all() 
     keypair_list = db.session.query(Keypair.id, Keypair.name).filter(Keypair.user_id == current_user.id )
     sec_list = db.session.query(SecurityGroup).filter(SecurityGroup.user_id == current_user.id)
-
+    
+    credit_sum = db.session.query(Balance.balance).filter_by(user_id=current_user.id).scalar()
+    
+    if credit_sum < 1: # 관리자 승인된 크레딧을 1원이라도 충전하지 않았을 경우
+        print("크레딧이 없습니다 같은 메세지")
+        abort(403)
+    
     if request.method == 'POST': 
         if form.validate_on_submit(): 
             try:
