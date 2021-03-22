@@ -71,55 +71,55 @@ def add_transaction():
     return redirect(url_for('billing.all_items'))
 
 
-@billing_blueprint.route('/edit_item/<items_id>', methods=['GET', 'POST'])
-@login_required
-def edit_item(items_id):
-    form = AddCredictForm(request.form)
-    item_with_user = db.session.query(Items, User).join(User).filter(Items.id == items_id).first()
-    if item_with_user is not None:
-        if current_user.is_authenticated and item_with_user.Items.user_id == current_user.id:
-            if request.method == 'POST':
-                if form.validate_on_submit():
-                    try:
-                        item = Items.query.get(items_id)
-                        item.name = form.name.data
-                        item.notes = form.notes.data
-                        db.session.commit()
-                        message = Markup("Item edited successfully!")
-                        flash(message, 'success')
-                        return redirect(url_for('home'))
-                    except:
-                        db.session.rollback()
-                        message = Markup(
-                            "<strong>Error!</strong> Unable to edit item.")
-                        flash(message, 'danger')
-            return render_template('edit_item.html', item=item_with_user, form=form)
-        else:
-            message = Markup(
-                "<strong>Error!</strong> Incorrect permissions to access this item.")
-            flash(message, 'danger')
-    else:
-        message = Markup("<strong>Error!</strong> Item does not exist.")
-        flash(message, 'danger')
-    return redirect(url_for('home'))
+# @billing_blueprint.route('/edit_item/<items_id>', methods=['GET', 'POST'])
+# @login_required
+# def edit_item(items_id):
+#     form = AddCredictForm(request.form)
+#     item_with_user = db.session.query(Items, User).join(User).filter(Items.id == items_id).first()
+#     if item_with_user is not None:
+#         if current_user.is_authenticated and item_with_user.Items.user_id == current_user.id:
+#             if request.method == 'POST':
+#                 if form.validate_on_submit():
+#                     try:
+#                         item = Items.query.get(items_id)
+#                         item.name = form.name.data
+#                         item.notes = form.notes.data
+#                         db.session.commit()
+#                         message = Markup("Item edited successfully!")
+#                         flash(message, 'success')
+#                         return redirect(url_for('home'))
+#                     except:
+#                         db.session.rollback()
+#                         message = Markup(
+#                             "<strong>Error!</strong> Unable to edit item.")
+#                         flash(message, 'danger')
+#             return render_template('edit_item.html', item=item_with_user, form=form)
+#         else:
+#             message = Markup(
+#                 "<strong>Error!</strong> Incorrect permissions to access this item.")
+#             flash(message, 'danger')
+#     else:
+#         message = Markup("<strong>Error!</strong> Item does not exist.")
+#         flash(message, 'danger')
+#     return redirect(url_for('home'))
 
 
 
-@billing_blueprint.route('/delete_item/<items_id>')
-@login_required
-def delete_item(items_id):
-    item = Items.query.filter_by(id=items_id).first_or_404()
+# @billing_blueprint.route('/delete_item/<items_id>')
+# @login_required
+# def delete_item(items_id):
+#     item = Items.query.filter_by(id=items_id).first_or_404()
 
-    if not item.user_id == current_user.id:
-        message = Markup(
-            "<strong>Error!</strong> Incorrect permissions to delete this item.")
-        flash(message, 'danger')
-        return redirect(url_for('home'))
+#     if not item.user_id == current_user.id:
+#         message = Markup(
+#             "<strong>Error!</strong> Incorrect permissions to delete this item.")
+#         flash(message, 'danger')
+#         return redirect(url_for('home'))
 
-    db.session.delete(item)
-    db.session.commit()
-    flash('{} was deleted.'.format(item.name), 'success')
-    return redirect(url_for('items.all_items'))
+#     db.session.delete(item)
+#     db.session.commit()
+#     flash('{} was deleted.'.format(item.name), 'success')
+#     return redirect(url_for('items.all_items'))
 
 
 @billing_blueprint.route('/transaction/<transaction_id>/<status>')
