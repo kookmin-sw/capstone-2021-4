@@ -494,3 +494,7 @@ body {
   padding: 50px 0;
   background-color: #e8ebec;
 }
+
+.login_btn_submit {
+  width: 100%;
+}
