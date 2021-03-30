@@ -1,0 +1,1 @@
+console.log("[Console] Default javascript")

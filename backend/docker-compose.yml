@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  web: 
+    env_file: ./app/.env
+    ports: 
+      - 8080:80  
+    build: ./ 
+    volumes:
+      - ~/.aws/:/root/.aws
+    depends_on:
+      - redis
+    command:
+      bash -c "sh /start.sh &  rq worker -u redis://redis:6379"
+  redis:
+    image: "redis:alpine" 

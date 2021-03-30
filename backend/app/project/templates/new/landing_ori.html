@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="no-ie">
+<style>
+   #testimonial {
+      padding: 20px;
+      text-align: center;
+   }
+   
+   .box-placeholder {
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      border-radius: 10px;
+      border-style: none;
+      
+   }
+   .box-placeholder:hover {
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      background-color: #31ba850e;
+   }
+   #option{
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
+    font-style: italic;
+   } 
+   #option_detail{
+      color:  #8f8f8f;
+   }
+   h5{
+      font-size: x-large;
+      font-weight: bolder;
+   }
+      
+   header .app-logo a,
+   header .menuapp-buttons a {
+   text-decoration: none !important;
+   }
+
+</style>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Wintermin - Bootstrap Admin Theme</title>
+   <link rel="stylesheet" href="/static/app/css/bootstrap.css">
+   <!-- Vendor CSS-->
+   <link rel="stylesheet" href="/static/vendor/fontawesome/css/font-awesome.min.css">
+   <link rel="stylesheet" href="/static/vendor/animo/animate+animo.css">
+   <!-- App CSS-->
+   <link rel="stylesheet" href="/static/app/css/app.css">
+   <link rel="stylesheet" href="/static/app/css/common.css">
+   <!-- Modernizr JS Script-->
+   <script src="/static/vendor/modernizr/modernizr.js" type="application/javascript"></script>
+   <!-- FastClick for mobiles-->
+   <script src="/static/vendor/fastclick/fastclick.js" type="application/javascript"></script>
+   <link rel="stylesheet" href="/static/app/css/landing.css">
+</head>
+
+<body>
+   
+
+   <!-- . -->
+   <header>
+      <div class="container">
+         <nav class="row" style="margin: 20px;">
+            <div class="col-md-2 app-logo">
+               <a href="#" class="logo-wrapper">
+                  <img src="/static/app/img/logo.png" alt="App Name" class="img-responsive">
+               </a>
+            </div>
+            <div class="col-md-10">
+               <ul class="list-inline menuapp-buttons" style="float: right;">
+                  <li class="mr-lg">
+                     <a href="/">
+                        <strong class="text-green">HOME</strong>
+                     </a>
+                  </li>
+                  {% if current_user.is_authenticated %}
+                   <li class="mr-lg">
+                     <a href="/cloud/list">
+                        <strong>Go to Dashboard</strong>
+                     </a>
+                  </li>
+                  <li class="mr-lg">
+                     <a href="/logout">
+                        <strong>Logout</strong>
+                     </a>
+                  </li>
+                  {% else %}
+                  <li class="mr-lg">
+                     <a href="/login">
+                        <strong>Login</strong>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="/register">
+                        <strong>Register</strong>
+                     </a>
+                  </li>
+                  {% endif %}
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+               </ul>
+            </div>
+         </nav>
+         <div class="header-content">
+            <div class="row row-flush row-table">
+               <div class="col-xs-12 col-lg-6 align-middle">
+                  <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="0" class="app-presentation">
+                     <img src="/static/app/img/landing/app-mobile.png" alt="App Name" class="img-responsive">
+
+                  </div>
+               </div>
+
+               <div class="col-xs-12 col-lg-6 align-middle">
+                  <div class="side-presentation">
+                     <div class="h1 header-title" style=" display: inline; font-style: italic;">사이트 무제한 생성 </div>
+                     <div class="h1 header-title" style="display: inline; font-style: italic;">  클라우드 웹호스팅</div>
+                     <p class="header-subtitle">사용 여부에 따라 필요한 만큼만  사용하는 방식으로 기존 클라우드 방식 보다 70% 이상 비용 절약 가능</p>
+                     <br>
+                     <div class="header-button">
+                        <a href="#" class="btn btn-green btn-lg btn-fw">
+                           <strong>Discover Now</strong>
+                        </a>
+                     </div>
+                     <br>
+                     <br>
+                     <ul class="list-inline store-list">
+                        <!-- <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+                           <h4>
+                              <span class="point point-primary point-lg"></span>Data Tables</h4>
+                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
+                        </li> -->
+
+                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+                           <img src="/static/app/img/server.png" style="width: 600px;">
+                        </li>
+                        
+                        
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </header>
+
+
+   <section id="testimonial" class="bg-primary">
+      <div class="row" >
+         <div id="carousel-testimonial" data-ride="carousel" class="carousel slide">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+               <li data-target="#carousel-testimonial" data-slide-to="0" class="active"></li>
+               <li data-target="#carousel-testimonial" data-slide-to="1"></li>
+               <li data-target="#carousel-testimonial" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+               <div class="item active">
+                  <div class="row">
+                     <div class="col-xs-8 col-xs-offset-2">
+                        <h4>
+                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
+                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
+                        </h4>
+                        <p>
+                           <strong>- John Titor</strong>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="item">
+                  <div class="row">
+                     <div class="col-xs-8 col-xs-offset-2">
+                        <h4>
+                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
+                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
+                        </h4>
+                        <p>
+                           <strong>- Mary Mayer</strong>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="item">
+                  <div class="row">
+                     <div class="col-xs-8 col-xs-offset-2">
+                        <h4>
+                           <em>Quisque non lacinia lacus. Pellentesque odio purus, egestas ac luctus gravida, rutrum ut quam. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Curabitur nec congue erat. Aliquam erat volutpat. Phasellus.</em>
+                        </h4>
+                        <p>
+                           <strong>- John Mayer</strong>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Controls -->
+            <a href="#carousel-testimonial" data-slide="prev" class="left carousel-control">
+               <em class="fa fa-chevron-circle-left"></em>
+            </a>
+            <a href="#carousel-testimonial" data-slide="next" class="right carousel-control">
+               <em class="fa fa-chevron-circle-right"></em>
+            </a>
+         </div>
+      </div>
+   </section>
+
+   
+   <section class="bg-white" style="padding-top: 100px;">
+      <div class="container">
+         <div class="row">
+            <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="-250" class="col-lg-6">
+               <img src="/static/app/img/landing/app-chart.png" alt="App Name" class="img-responsive">
+            </div>
+            <div class="col-lg-6">
+               <h2 class="page-header">간결한 서버 운용</h2>
+               <p class="text-md">서버 운용 지식이 없어도 쉽게 사용가능한 방식 </p>
+               <p>생성, 제거를 자유자재로 가능하므로 용량 내에서는 여러 웹사이트 제작 가능</p>
+               <p>안전하고 믿을 만한 단독 서버 사용(dashboard)</p>
+               <br>
+               <p>
+                  <a href="/" class="btn btn-success">
+                     <strong>Start Demo Now</strong>
+                  </a>
+               </p>
+            </div>
+         </div>
+      </div>
+   </section>
+   <section style="padding-bottom: 100px;">
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-6">
+               <h2 class="page-header">한 눈에 보이는 계산 방식</h2>
+               <p>상담을 통해 선정하는 불투명한 산출 방식 대신 정찰제로 운영</p>
+               <p>원하는 크기와 기간에 따른 다양한 선택폭</p>
+               <p>타사보다 80% 정도 저렴한 가격</p>
+               <br>
+               <p>
+                  <a href="../views/price_view.html" class="btn btn-green">
+                     <strong>Watch Now(price_view)</strong>
+                  </a>
+               </p>
+            </div>
+            <div data-toggle="play-animation" data-play="fadeInRight" data-offset="-250" class="col-lg-6">
+               <img src="/static/app/img/landing/app-widget.png" alt="App Name" class="img-responsive">
+            </div>
+         </div>
+      </div>
+   </section>
+
+
+
+
+
+
+   <section id="clients" class="bg-white" style="margin: 50px 0px;">
+      <div class="container" style="text-align: center;">
+         <h2 class="section-header">모든 운영체제를 지원합니다
+            <br>
+            <small class="text-muted text-center">여러 운영체제로 사용가능합니다</small>
+         <h2 class="section-header"></h2>
+            <br>
+         </h2>
+         <div class="row">
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/jquery.png" alt="client" class="img-responsive">
+            </div>
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/node.png" alt="client" class="img-responsive">
+            </div>
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/gulp.png" alt="client" class="img-responsive">
+            </div>
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/jade.png" alt="client" class="img-responsive">
+            </div>
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/less.png" alt="client" class="img-responsive">
+            </div>
+            <div class="col-lg-2 col-md-4 col-xs-6">
+               <img src="/static/app/img/landing/clients/bootstrap.png" alt="client" class="img-responsive">
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <section class="bg-white" style="margin: 150px 0px;">
+      <div class="container" style="text-align: center;">
+         <h2 class="section-header">원하는 호스팅을 선택해주세요
+            <br>
+            <small class="text-muted text-center">필요한 서비스를 선택해주세요</small>
+            <br>
+            <br>
+         </h2>
+         <div class="col-lg-3">
+            <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
+               <p id="option">1VCore</p>
+               <p id="option_detail">1GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn btn-success">select</a>
+             </div>
+         </div>
+         <div class="col-lg-3">
+            <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-100">
+               <p id="option">1VCore</p>
+               <p id="option_detail">1GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn btn-success" >select</a>
+             </div>
+         </div>
+         <div class="col-lg-3">
+            <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-200">
+               <p id="option">1VCore</p>
+               <p id="option_detail">1GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn btn-success">select</a>
+             </div>
+         </div>
+         <div class="col-lg-3">
+            <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-300">
+               <p id="option">1VCore</p>
+               <p id="option_detail">1GB RAM</p>
+               <p id="option_detail">30GB SSD</p>
+               <p id="option_detail">1TB</p>
+               <a href="#go_plan" class="btn btn-success">select</a>
+             </div>
+         </div>
+
+      </div>
+   </section>
+
+
+   <section id="callout" style="padding-bottom: 100px;">
+      <div data-toggle="play-animation" data-play="fadeInLeftBig" data-offset="-200" class="container text-center">
+         <h1>Ready to start? Try this App today</h1>
+         <h4>And see why people around the world choose this APP to create great cross-platform websites</h4>
+         <p>
+            <br>
+            <a href="#" class="btn btn-green btn-lg btn-oval btn-fw">
+               <strong>Join Now!</strong>
+            </a>
+         </p>
+      </div>
+   </section>
+   
+
+
+
+   <footer class="footer-1 bg-inverse" style="padding: 100px 0px; font-size: larger;" >
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-2 col-xs-6">
+               <nav>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">PRODUCT</h5>
+                  <ul class="list-unstyled">
+                     <li><a href="#">Documentation</a>
+                     </li>
+                     <li><a href="#">Customers</a>
+                     </li>
+                     <li><a href="#">Tour</a>
+                     </li>
+                     <li><a href="#">Pricing</a>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
+            <div class="col-sm-2 col-xs-6">
+               <nav>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">CONTACT</h5>
+                  <ul class="list-unstyled">
+                     <li><a href="#">Support</a>
+                     </li>
+                     <li><a href="#">Sales</a>
+                     </li>
+                     <li><a href="#">Forum</a>
+                     </li>
+                     <li><a href="#">Blog</a>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
+            <div class="col-sm-2 col-xs-6">
+               <nav>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">COMPANY</h5>
+                  <ul class="list-unstyled">
+                     <li><a href="#">About</a>
+                     </li>
+                     <li><a href="#">Press Kit</a>
+                     </li>
+                     <li><a href="#">Education</a>
+                     </li>
+                     <li><a href="#">Non-profits</a>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
+            <div class="col-sm-2 col-xs-6">
+               <nav>
+                  <h5 style="font-size: x-large;
+                  font-weight: bolder;">Information</h5>
+                  <ul class="list-unstyled">
+                     <li><a href="#">Twitter</a>
+                     </li>
+                     <li><a href="#">Facebook</a>
+                     </li>
+                     <li><a href="#">Google+</a>
+                     </li>
+                     <li><a href="#">Blog</a>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
+            <div class="col-lg-4 col-xs-6">
+               <form action="#" method="post" style="margin-top: 50px; margin-left: 100px;">
+                  <h5>SUBSCRIBE TO OUR NEWSLETTER!</h5>
+                  <div class="input-group">
+                     <input type="email" name="email" placeholder="mail@example.com" required="" class="form-control">
+                     <span class="input-group-btn">
+                        <button type="submit" class="btn btn-green btn-info">Join</button>
+                     </span>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </footer>
+   
+   
+
+   
+   <script src="/static/vendor/jquery/jquery.min.js"></script>
+   <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+   <!-- Animo-->
+   <script src="/static/vendor/animo/animo.min.js"></script>
+   <!-- Custom script for pages-->
+   <script src="/static/app/js/pages.js"></script>
+   <!-- END Scripts-->
+</body>
+
+</html>
