@@ -444,6 +444,12 @@ class Support(db.Model):
     title = db.Column(db.String(100), primary_key=True)
     content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    def __init__(self, support_type, title, content, author_id):
+        self.support_type = support_type
+        self.title = title
+        self.content = content
+        self.author_id = author_id
 
 
 class ReplyTicket(db.Model):
@@ -470,8 +476,6 @@ class BlacklistToken(db.Model):
     def __repr__(self):
         return '<id: token: {}'.format(self.token)
 
- 
-
 
 
 # class ChargeRequest(db.Model):
@@ -480,8 +484,7 @@ class BlacklistToken(db.Model):
 # class Traffic(db.Model):
 #     __tablename__ = 'traffic'
     
-# class Support(db.Model):
-#     __tablename__ = 'support'
+
 
 # class Invoice(db.Model):
 #     __tablename__ = 'invoice'
