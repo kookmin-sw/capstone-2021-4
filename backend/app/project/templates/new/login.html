@@ -1,0 +1,75 @@
+{% from "_formshelper.html" import render_field %}
+
+<!DOCTYPE html>
+<html lang="en" class="no-ie">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Login</title>
+   <link rel="stylesheet" href="/static/app/css/bootstrap.css">
+   <link rel="stylesheet" href="/static/vendor/fontawesome/css/font-awesome.min.css">
+   <link rel="stylesheet" href="/static/vendor/animo/animate+animo.css">
+   <link rel="stylesheet" href="/static/app/css/app.css">
+   <link rel="stylesheet" href="/static/app/css/common.css">
+   <script src="/static/vendor/modernizr/modernizr.js" type="application/javascript"></script>
+   <script src="/static/vendor/fastclick/fastclick.js" type="application/javascript"></script>
+</head>
+
+<body>
+   <div class="row row-table page-wrapper">
+      
+      <div class="col-lg-3 col-md-6 col-sm-8 col-xs-12 align-middle">
+        {% include "_notifier.html" %} 
+         <div data-toggle="play-animation" data-play="fadeIn" data-offset="0" class="panel panel-dark panel-flat">
+            <div class="panel-heading text-center">
+               <a href="#">
+                  <img src="/static/app/img/logo.png" alt="Image" class="block-center img-rounded">
+               </a>
+               <p class="text-center mt-lg">
+                  <strong>Login</strong>
+               </p>
+            </div>
+            
+            <div class="panel-body">
+               <form action="{{ url_for('users.login') }}" method="post" role="form" class="mb-lg">
+                   {{ form.csrf_token }}
+                  <div class="form-group has-feedback">
+                     {{ form.email.label }}
+                     {{ render_field(form.email, type="email", class="form-control", placeholder="Email address") }}
+                     <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                     {{ render_field(form.password, class="form-control", placeholder="Password") }}
+                     <span class="fa fa-lock form-control-feedback text-muted"></span>
+                  </div>
+                  <div class="clearfix">
+                     <div class="checkbox c-checkbox pull-left mt0">
+                        <label>
+                           <input type="checkbox" value="">
+                           <span class="fa fa-check"></span>Remember Me</label>
+                     </div>
+                     <div class="pull-right"><a href="recover.html" class="text-muted" style="text-decoration: none;">Forgot your password?</a>
+                     </div>
+                  </div>
+                  <input type="submit" value="Log In" class="btn btn-lg btn-success login_btn_submit">
+                  <div style="padding-top: 10px; text-align: center;">
+                     <p style="display: inline;">Don't have an account yet?  </p>
+                     <a href="{{ url_for('users.register') }}">Sign up for free!</a>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+   
+   <script src="/static/vendor/jquery/jquery.min.js"></script>
+   <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+   <script src="/static/vendor/animo/animo.min.js"></script>
+   <script src="/static/app/js/pages.js"></script>
+</body>
+
+</html>

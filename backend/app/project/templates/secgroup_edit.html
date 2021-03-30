@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+{% block title %}Edit securityrule{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<form action="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=ruleid) }}" method="post" name="edititemsform">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      {{ form.cidr.label }}
+      {{ render_field(form.cidr, class="form-control", value=detail.cidr) }}
+    </div>
+    <div class="form-group">
+      {{ form.protocol.label }}
+      {{ render_field(form.protocol, class="form-control", value=detail.protocol) }}
+    </div>
+    <div class="form-group">
+      {{ form.fromport.label }}
+      {{ render_field(form.fromport, class="form-control", value=detail.fromport) }}
+    </div>
+    <div class="form-group">
+      {{ form.toport.label }}
+      {{ render_field(form.toport, class="form-control", value=detail.toport) }}
+    </div>
+    <input type="submit" value="Edit Item" class="btn btn-lg btn-success">
+</form>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "_base.html" %}
+{% block title %}Security Groups{% endblock %}
+{% block content %}
+
+{% if secgroups[0] == NULL %}
+<div class="panel-body">
+  <p>No Cloud are added yet, <a href="{{ url_for('secgroup.add') }}">add a new item</a>.</p>
+</div>
+{% else %}
+<table class="table table-stripe">
+  <thead>
+    <tr> 
+      <th class="border-top-0">이름</th>
+      <th class="border-top-0">그룹 ID</th>
+      <th class="border-top-0">사용중인 인스턴스</th>
+      <th class="border-top-0">VPC ID</th> 
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in secgroups %}
+    <tr>
+    
+      <td>
+        <a href="/secgroup/{{item.id}}/detail">{{ item.name }}</a>
+      </td>
+      <td>
+        {{ item.sec_group_id}}
+      </td>
+      
+      <td>
+        {{ item.associated_to}}
+      </td>
+      
+      <td>
+        {{ item.vpc_id}}
+      </td>
+    
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p>보안 그룹을 더 생성할 수 있습니다.<a href="{{ url_for('secgroup.add') }}">add a new item</a>.</p>
+{% endif %}
+
+{% endblock %}

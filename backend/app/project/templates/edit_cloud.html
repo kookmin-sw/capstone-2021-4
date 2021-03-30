@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% block title %}Edit Item{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<form action="{{ url_for('cloud.edit_cloud', cloud_id=cloud.Cloud.id) }}" method="post" name="editcloudform">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      {{ form.name.label }}
+      {{ render_field(form.name, class="form-control", value=cloud.Cloud.hostname) }}
+    </div> 
+    <input type="submit" value="Edit Item" class="btn btn-lg btn-success">
+</form>
+
+{% endblock %}

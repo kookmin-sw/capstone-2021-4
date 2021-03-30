@@ -1,0 +1,39 @@
+{% extends "_base.html" %}
+{% block title %}Keypairs{% endblock %}
+{% block content %}
+
+{% if keypairs[0] == NULL %}
+<div class="panel-body">
+  <p>No Keypair are added yet, <a href="{{ url_for('keypair.add') }}">add a new kepair</a>.</p>
+</div>
+{% else %}
+<table class="table table-stripe">
+  <thead>
+    <tr>
+      <th class="border-top-0">id</th>
+      <th class="border-top-0">keypair_name</th>
+      <th class="border-top-0">fingerprint</th> 
+      <th class="border-top-0">Actions</th> 
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in keypairs %}
+    <tr>
+      <td>{{ item.id }}</td>
+      <td>
+        {{ item.name }}
+      </td>
+      <td>
+        {{ item.fingerprint}}
+      </td> 
+      <td>
+        <a href="{{ url_for('keypair.delete', keypair_id=item.id) }}">Delete</a>
+      </td> 
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p>클라우드를 더 생성할 수 있습니다.<a href="{{ url_for('keypair.add') }}">add a new keypair</a>.</p>
+{% endif %}
+
+{% endblock %}
