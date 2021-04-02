@@ -1,37 +1,35 @@
-## Welcome to GitHub Pages
+# SomeCloud 4조
 
-You can use the [editor on GitHub](https://github.com/kookmin-sw/capstone-2021-4/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## 프로젝트 소개 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- AWS Lightsail, Linode 와 같은 AWS Ec2 자원을 이용한 클라우드 컴퓨팅 서비스 입니다. 
+- SomeCloud 대시보드 상에서 클라우드 인스턴스를 추가할 수 있고, 키페어를 관리하고, 방화벽을 관리하고, 크레딧을 추가해서 클라우드 사용 요금을 지불하는 시스템 입니다.
+- 사용자는 SomeCloud 를 통해 클라우드 서버를 생성하면 그 서버에 Apache2, Flask, 등을 구동시킬 수 있고, 서버 콘솔 상태를 볼 수 있습니다.
+- 방화벽을 통해 특정 포트를 닫고, 열고가 가능합니다.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Abstract
+- This project is cloud computing service based AWS EC2. on SomeCloud Dashboard, you can create cloud instance, manage keypair, manage firewall, and purchase credit than you pay cloud usage.
+- When user create a cloud server through SomeCloud dashboard, you can operate apache2, flask, other application server.
+- Using firewall manage, you can open / close port.
 
-```markdown
-Syntax highlighted code block
+## 소개 영상
+- Youtube Link will be created 
 
-# Header 1
-## Header 2
-### Header 3
+## 팀 소개 
+- parkhuijoo 
+- kimjayney 
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+## 사용법
+- 회원가입을 하고 이메일 인증을 거칩니다.
+- 로그인을 해서 키페어를 생성하고, 키페어를 다운로드 합니다. 
+- 크레딧을 충전합니다. (최소 5000원) 
+- 충전한 크레딧 5천원에 대해 관리자 승인이 완료되면 5천원 충전이 완료됩니다.
+- Plan, OS, Hostname을 입력하여 클라우드를 생성합니다.
+- 다운로드 받은 키페어를 가지고 Linux Shell 로 서버에 접속합니다.  
+```
+ssh -i id_rsa ubuntu@<Public IP>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kookmin-sw/capstone-2021-4/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## 기타
+- 크레딧 충전 후 관리자 승인을 받아야 크레딧으로 인정됩니다.
