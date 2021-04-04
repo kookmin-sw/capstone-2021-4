@@ -14,7 +14,8 @@
 - Using firewall manage, you can open / close port.
 
 ## 소개 영상
-- Youtube Link will be created 
+[![](http://img.youtube.com/vi/XjVInLwz1MA/0.jpg)](http://www.youtube.com/watch?v=XjVInLwz1MA "")
+
 
 ## 팀 소개 
 - parkhuijoo 
