@@ -33,3 +33,8 @@ ssh -i id_rsa ubuntu@<Public IP>
 
 ## 기타
 - 크레딧 충전 후 관리자 승인을 받아야 크레딧으로 인정됩니다.
+- SomeCloud에서 생성된 인스턴스 자원은 AWS EC2를 사용합니다.
+
+
+
+
