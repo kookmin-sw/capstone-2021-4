@@ -14,7 +14,7 @@
 - Using firewall manage, you can open / close port.
 
 ## 소개 영상
-<iframe width="420" height="315" src="https://www.youtube.com/watch?v=XjVInLwz1MA" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XjVInLwz1MA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## 팀 소개 
 - parkhuijoo 
