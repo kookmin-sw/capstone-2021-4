@@ -38,10 +38,6 @@ def set_permission(secret, action):
         }
     pass
 
-@app.route('/run/upload_file')
-def upload_file():
-    # file upload code
-    pass 
 
 
 def syscommand(shell):
@@ -87,7 +83,6 @@ def index(secret):
         
         return {
             "result" : output,
-            "statuscode" : process.returncode,
             "command" : shell
         }
         
