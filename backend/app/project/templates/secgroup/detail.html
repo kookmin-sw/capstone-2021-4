@@ -65,22 +65,31 @@
                                     {{ item.desc }}
                                 </td>
                                 <td>
-                                  <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Actions            
+
+                                 <div class="btn-group mb-sm open">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle">Actions</button>
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">
+                                       <span class="caret"></span>
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                      <a class="dropdown-item" href="{{ url_for('secgroup.delete', secgroup_id=groupid, ruleid=item.id) }}">삭제</a> 
-                                      <a class="dropdown-item" href="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=item.id) }}">편집</a> 
-                                    </div>
-                                  </div>
+                                    <ul role="menu" class="dropdown-menu">
+                                       <li><a class="dropdown-item" href="{{ url_for('secgroup.delete', secgroup_id=groupid, ruleid=item.id) }}">삭제</a> 
+                                       </li>
+                                       <li><a class="dropdown-item" href="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=item.id) }}">편집</a> 
+                                       </li>
+                                    </ul>
+                                 </div>
+                           
                                 </td>
                                 
                               </tr>
                               {% endfor %}
                             </tbody>
                            </table>
-                           <p>보안 규칙을 더 생성할 수 있습니다.<a href="{{ url_for('secgroup.sec_add', secgroup_id=groupid)}}"> add a new item</a>.</p>
+                           <div class="container">
+                              <br>
+                              <p>보안 그룹을 더 생성할 수 있습니다.</p>
+                              <a href="{{ url_for('secgroup.sec_add', secgroup_id=groupid)}}" class="mb-sm btn btn-default" style="align-items: center;">방화벽 생성</a>
+                           </div>
                         </div>
                      </div>
                   </div>

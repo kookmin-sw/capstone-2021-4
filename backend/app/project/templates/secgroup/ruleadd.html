@@ -27,7 +27,7 @@
          <div class="main-content">
             <div class="row">
                 <div class="panel panel-default">
-                   <div class="panel-heading">Security Rule Add</div>
+                   <div class="panel-heading">Add SecurityRule</div>
                    <div class="panel-body">
         
                       <form action="{{ url_for('secgroup.sec_add', secgroup_id=groupid) }}" method="post" name="itemsform">
@@ -49,7 +49,8 @@
             {{ render_field(form.cidr, class="form-control") }}
           </div> 
 
-        <input type="submit" value="Add Item" class="btn btn-lg btn-success">
+        <input type="submit" value="Add Item" class="mb-sm btn btn-default">
+
     </form>
                    </div>
                 </div>
