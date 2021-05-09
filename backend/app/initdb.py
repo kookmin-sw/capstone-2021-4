@@ -38,5 +38,3 @@ def os_add():
     
     db.session.commit()
 
-
-plan_add()

@@ -25,7 +25,7 @@
          <div class="main-content">
             <h3>방화벽
                <br>
-               <small>방화벽 리스트</small>
+               <small>생성된 방화벽 목록</small>
             </h3>
             <!-- START row-->
             <div class="row">
@@ -47,7 +47,8 @@
                                <tr>
                                
                                  <td>
-                                   <a href="/secgroup/{{item.id}}/detail">{{ item.name }}</a>
+                                 <button type="button" class="btn btn-oval btn-inverse"><a href="/secgroup/{{item.id}}/detail" style="color: white;">{{ item.name }}</a></button>
+                                   <!-- <a href="/secgroup/{{item.id}}/detail">{{ item.name }}</a> -->
                                  </td>
                                  <td>
                                    {{ item.sec_group_id}}
@@ -74,9 +75,12 @@
                 
             </div>
             <!-- END row-->
+            
             <div class="container">
-               <p>보안 그룹을 더 생성할 수 있습니다.<a href="{{ url_for('secgroup.add') }}">add a new security group</a>.</p>
+               <p>보안 그룹을 더 생성할 수 있습니다.</p>
+               <a href="{{ url_for('secgroup.add') }}" class="mb-sm btn btn-default" style="align-items: center;">방화벽 생성</a>
             </div>
+            
             
 
          </div>
