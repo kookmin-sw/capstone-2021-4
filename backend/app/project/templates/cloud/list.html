@@ -24,11 +24,13 @@
    <div id="wrapper" class="wrapper">
       <section id="content-area">
          <div class="main-content">
-         
-            <h3>클라우드 대시보드
-               <br>
-               <small>클라우드 리스트</small>
-            </h3>
+            <div style="margin-bottom: 55px;">
+               <h3>클라우드 대시보드
+                 <br>
+                 <small>클라우드 리스트</small>
+               </h3>
+             </div>
+             
             {% include "_notifier.html" %}
             <!-- START row-->
             <div class="row">
@@ -61,7 +63,8 @@
                               <tr>
                                   <td>
                                     {% if item.Cloud.status == "Running" %}
-                                    <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
+                                    <button type="button" class="btn btn-oval btn-inverse"> <a href="/cloud/detail/{{ item.Cloud.id}}" style="color: white;">{{ item.Cloud.hostname }}</a></button>
+                                   
                                     {% else %}
                                       {{ item.Cloud.hostname }}
                                     {% endif %}
@@ -95,14 +98,18 @@
                                   <td>
                                     
                                     {% if item.Cloud.status == "Running" %}
-                                    <div class="dropdown">
-                                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Actions            
-                                      </button>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" href="{{ url_for('cloud.reboot_instance', instance_id=item.Cloud.id) }}">Reboot</a> 
-                                        <a class="dropdown-item" onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
-                                      </div>
+                                
+                                    <div class="btn-group mb-sm open">
+                                       <button type="button" class="btn btn-secondary dropdown-toggle">Actions</button>
+                                       <button data-toggle="dropdown"data-play="pullDown"  class="btn btn-secondary dropdown-toggle" >
+                                          <span class="caret"></span>
+                                       </button>
+                                       <ul role="menu" class="dropdown-menu">
+                                          <li><a class="dropdown-item" onclick="return confirm('정말로 재부팅 할까요?')" href="{{ url_for('cloud.reboot_instance', instance_id=item.Cloud.id) }}">Reboot</a>
+                                          </li>
+                                          <li><a class="dropdown-item" onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('cloud.delete_cloud', instance_id=item.Cloud.id) }}">Delete</a> 
+                                          </li>
+                                       </ul>
                                     </div>
                                     
                                     {% else %}
