@@ -50,10 +50,11 @@
    }
    .box-placeholder:hover{
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-      background-color: #31ba850e;
+      background-color: rgba(214, 214, 214, 0.342);
+      color: white;
    }
-   .box-placeholder.selected {
-      background-color: #17cc864a;
+   .box-placeholder.selected{
+      background-color: rgba(214, 214, 214, 0.342);
    }
 
    #nonebox {
