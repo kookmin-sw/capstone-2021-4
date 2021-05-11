@@ -61,7 +61,7 @@
                               <tr>
                                   <td>
                                     {% if item.Cloud.status == "Running" %}
-                                    <a href="/cloud/detail/{{ item.Cloud.id}}">{{ item.Cloud.hostname }}</a>
+                                    <a href="/cloud/{{ item.Cloud.id}}/detail">{{ item.Cloud.hostname }}</a>
                                     {% else %}
                                       {{ item.Cloud.hostname }}
                                     {% endif %}

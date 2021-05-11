@@ -220,7 +220,9 @@ def confirm_email(token):
         
         if cloud_env.check_environment(user.id) == False: # cloud env init
             try:
-                cloud_env.create_environment(user.id)
+                print("Start Start user id {} , user email {} ".format(user.id, email))
+                cloud_env.create_environment(user.id, email)
+             
                 message = Markup(
                     "Thank you for confirming your email address!")
             except:

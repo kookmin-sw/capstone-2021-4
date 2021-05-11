@@ -16,6 +16,10 @@ import datetime
 
 import time  
 from dataclasses import dataclass
+
+from flask import send_file
+import io
+
 # # CONFIG
 cloud_blueprint = Blueprint('cloud', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
@@ -31,6 +35,19 @@ def humansize(nbytes):
     f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
 
+# def get_file_list(cloud_id):
+#     pass
+
+# def delete_file(path):
+#     pass
+
+# def update_file(path, to_filename):
+#     pass
+
+
+
+
+
 @cloud_blueprint.route('/list', methods=['GET'])
 @login_required
 def all_clouds():
@@ -43,6 +60,8 @@ def all_clouds():
         return cloud_lists
     else:
         return render_template('cloud/list.html', cloud=cloud_lists)
+
+
 
 @cloud_blueprint.route('/reboot/<instance_id>', methods=['GET'])
 @login_required
@@ -60,6 +79,56 @@ def reboot_instance(instance_id):
         #     flash(e, 'danger')
 
     return redirect(url_for('cloud.all_clouds'))
+
+@cloud_blueprint.route('/deploy/<cloud_id>/<app_id>')
+@login_required
+def deploy_app( cloud_id, app_id ):
+    cloud_with_user = db.session.query(Cloud, User).join(User).filter(and_(
+        Cloud.user_id == current_user.id,
+        Cloud.id == instance_id
+    )).first()
+    app = db.session.query(CloudApp).filter(id == app_id)
+    # phpapp = CloudApp("PHP", "chialab/php", "8080", True, "blue", 1)
+    
+    if cloud_with_user is not None:
+        cloud_secret = cloud_with_user.app_secret_access
+        try:
+            myvpc = db.session.query(VPC).filter(user_id == current_user.id)
+            param = {
+                "cloudid": cloud_with_user.Cloud.id,
+                "appid" : app_id,
+                "secret" : cloud_secret,
+                "action" : "deploy",
+                "lb_subnet" : myvpc.default_subnet_id,
+                "lb_subnet_sub" : myvpc.sub_subnet_id
+            }
+            result = app_commander(param)
+            # newcloud = CloudAppAssigned(cloud_with_user.Cloud.id, app_id )
+            if result == True:
+                    
+                return {
+                    "success" : True
+                }
+            else:
+                return {
+                    "success" : False
+                }
+        except Exception as e:
+            return {
+                "success" : False,
+                "message" : "deploy exception, message: {}".format(e)
+            }
+        
+    else:
+        return {
+            "success" : False,
+            "message" : "cloud owner not matched"
+        }
+    
+    
+    
+    pass
+
 
 @cloud_blueprint.route('/delete/<instance_id>')
 @login_required
@@ -102,8 +171,28 @@ def update_cloud():
 
 
 
+@cloud_blueprint.route("/detail/<cloud_id>/<metrictype>/<hour>", methods=["GET"])
+@login_required # image provider metrics
+def get_metrics(cloud_id, metrictype, hour):
+    cwclient = boto3.client(service_name='cloudwatch') 
+    cloud_with_user = db.session.query(Cloud, User).join(User).filter(Cloud.id == cloud_id).first()
+    if cloud_with_user is not None:
+        # x = '{{"view":"timeSeries","stacked":false,"metrics":[["AWS/EC2","{metricName}"]],"width":1041,"height":250,"start":"-PT3H","end":"P0D"}}'.format(metricName="CPUUtilization")
+        x = '{{"view":"timeSeries","stacked":false,"metrics":[["AWS/EC2","{metricName}", "InstanceId", "{InstanceId}"]],"width":1041,"height":250,"start":"-PT{hour}H","end":"P0D"}}'.format(metricName=metrictype, hour=hour, InstanceId=cloud_with_user.Cloud.aws_instance_id)
+        output = cwclient.get_metric_widget_image(
+            MetricWidget=x
+        )
+        
+        return send_file(io.BytesIO(output["MetricWidgetImage"]),mimetype='image/jpeg') 
+    else:
+        message = Markup("<strong>잘못된 접근입니다.</strong>  ")
+        flash(message, 'danger')
+    
+    return redirect(url_for('home'))
+        
+    
 
-@cloud_blueprint.route("/detail/<cloud_id>", methods=['GET'])
+@cloud_blueprint.route("/<cloud_id>/detail", methods=['GET'])
 @login_required
 def detail(cloud_id): 
     cwclient = boto3.client(service_name='cloudwatch') 
@@ -152,7 +241,7 @@ def detail(cloud_id):
             else:
                 outbound_traffic = "none"
              
-            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic)
+            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 
@@ -161,6 +250,15 @@ def detail(cloud_id):
         flash(message, 'danger')
     
     return redirect(url_for('home'))
+
+@cloud_blueprint.route("/file", methods=["GET", "POST"])
+@login_required
+def file():
+    # upload / create / delete  / view
+    # public_html
+    
+    
+    pass
 
 @cloud_blueprint.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -172,6 +270,7 @@ def add_cloud():
     sec_list = db.session.query(SecurityGroup).filter(SecurityGroup.user_id == current_user.id)
     
     credit_sum = db.session.query(Balance.balance).filter_by(user_id=current_user.id).scalar()
+    app_name = form["appname"]
     
     if credit_sum < 1: # 관리자 승인된 크레딧을 1원이라도 충전하지 않았을 경우
         print("크레딧이 없습니다 같은 메세지")
@@ -189,7 +288,8 @@ def add_cloud():
                 param_ssd = get_aws_plan[1]
                 param_iops = get_aws_plan[2]
                 vpc_info = db.session.query(VPC.vpc_id, VPC.inter_gw_id, VPC.default_subnet_id, VPC.default_sec_id, VPC.id).filter(VPC.user_id == current_user.id)[0]
-                aws_image_id = db.session.query(Oslist.aws_image_id).filter(Oslist.id == form.data["os"]).scalar()
+                aws_image = db.session.query(Oslist.aws_image_id, Oslist.os_name).filter(Oslist.id == form.data["os"])[0]
+                
                 vpc_id = vpc_info[4]
                 vpc_default_subnetid = vpc_info[2]
                 vpc_default_secid = vpc_info[3]
@@ -201,7 +301,7 @@ def add_cloud():
                     keypairname_formatted = "{}_{}".format( get_keypair.keytoken , get_keypair.name) 
 
                     # DB에 기록
-                    new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting")
+                    new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting", "creating")
                     db.session.add(new_cloud) 
                     db.session.flush()
                     db.session.refresh(new_cloud)
@@ -214,11 +314,12 @@ def add_cloud():
                         "plan" : param_plan,
                         "iops" : param_iops,
                         "ssd" : param_ssd,
-                        "os" : aws_image_id,
+                        "os" : aws_image.aws_image_id,
                         "subnetid" : vpc_default_subnetid,
                         "keypair" : keypairname_formatted,
                         "security-group-id" : [get_sec_id],
                         "cloudid" : assigned_id,
+                        "os_name" :  aws_image.os_name
                     }
                     
                     job = q.enqueue(back_ec2_create_ec2, parameter)

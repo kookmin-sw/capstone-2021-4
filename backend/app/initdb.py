@@ -38,3 +38,10 @@ def os_add():
     
     db.session.commit()
 
+
+def add_app_script():
+    php_app_add_script = """
+    docker pull chialab/php
+    """
+    phpapp = CloudApp("PHP", "chialab/php", "8080", True, "blue", 1)
+    pass
