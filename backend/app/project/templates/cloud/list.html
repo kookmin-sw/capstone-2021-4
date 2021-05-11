@@ -98,10 +98,8 @@
                                   <td>
                                     
                                     {% if item.Cloud.status == "Running" %}
-                                
-                                    <div class="btn-group mb-sm open">
-                                       <button type="button" class="btn btn-secondary dropdown-toggle">Actions</button>
-                                       <button data-toggle="dropdown"data-play="pullDown"  class="btn btn-secondary dropdown-toggle" >
+                                    <div class="btn-group mb-sm">
+                                       <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions
                                           <span class="caret"></span>
                                        </button>
                                        <ul role="menu" class="dropdown-menu">
@@ -111,6 +109,7 @@
                                           </li>
                                        </ul>
                                     </div>
+                                   
                                     
                                     {% else %}
                                     <p> 제거됨</p>
