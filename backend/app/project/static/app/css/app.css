@@ -232,7 +232,7 @@ fieldset .form-group {
 }
 .nav.nav-pills > li.active > a {
   color: #fff;
-  background-color: #0094cb !important;
+  background-color: #393C3C !important;
 }
 .dropdown-menu {
   border-radius: 3px;
@@ -715,7 +715,7 @@ body {
 }
 .sidebar .nav > li.active > a > em,
 .sidebar .nav > li:hover > a > em {
-  color: #0094cb;
+  color: #393C3C;
 }
 .sidebar .nav .nav {
   padding-left: 55px;

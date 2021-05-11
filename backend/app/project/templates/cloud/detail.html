@@ -22,61 +22,167 @@
    <!-- START Main wrapper-->
    <div id="wrapper" class="wrapper">
       <section id="content-area">
-         <div class="main-content">
-            <h3>클라우드 대시보드
-               <br>
-               <small>클라우드 detail</small>
-            </h3>
+        <div class="main-content">
+            <div style="margin-bottom: 55px;">
+               <h3>클라우드 대시보드
+                 <br>
+                 <small>클라우드 사용량 / 네트워크 사용량</small>
+               </h3>
+             </div>
+            
+             
             <div class="row">
-          <div class="col-md-12">
-             <h2>Information</h2>
-              <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
-              <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
-              <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
-              <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
-              <p>OutboundTraffic Usage :  {{traffic }} </p>
-          </div>
-          <div class="col-md-12">
-              <h2>Console Status</h2>
-              
-              <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="300" height="300" src="">
-          </div>
-          <div class="col-md-12">
-            <h2>Console Logs</h2>
-            <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
-          </div>
-          <div class="col-md-12">
-              <h2>CPU Usage</h2>
-              <img src="/cloud/detail/{{ cloudid }}/CPUUtilization/1">
-          </div>
-          <div class="col-md-12">
-              <h2>Network Usage (Inbound)</h2>
-              <img src="/cloud/detail/{{ cloudid }}/NetworkIn/1">
-          </div>
-          <div class="col-md-12">
-              <h2>Network Usage (Outbound)</h2>
-              <img src="/cloud/detail/{{ cloudid }}/NetworkOut/1">
-          </div>
-          <div class="col-md-12">
-              <h2>SSD IO Balance</h2>
-              <img src="/cloud/detail/{{ cloudid }}/EBSIOBalance/1">
-          </div>
-          <div class="col-md-12">
-              <h2>App Deploy</h2>
-              
-               <button onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
-                <button onclick="deploy('php', {{  cloudid }} )">Deploy php </button>
+                  <!-- test -->
+                  <fieldset>
+                    <div class="col-md-12">
+                        <!-- START panel-->
+                        <div class="panel panel-default">
+                           <div class="panel-heading"><h4>Cloud Detail</h4></div>
+                           <div class="panel-body">
+                              <!-- Nav tabs -->
+                              <ul class="nav nav-pills">
+                                 <li><a href="#home-pills" data-toggle="tab">Information</a>
+                                 </li>
+                                 <li><a href="#status-pills" data-toggle="tab">Console Status</a>
+                                 </li>
+                                 <li><a href="#Logs-pills" data-toggle="tab">Console Logs</a>
+                                 </li>
+                              </ul>
+                              <!-- Tab panes -->
+                              <div class="tab-content">
+                                <div id="home-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-12">
+                                        <!-- <h4>Information</h4><br> -->
+                                        <br>
+                                        <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
+                                        <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
+                                        <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
+                                        <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+                                        <p>OutboundTraffic Usage :  {{traffic }} </p>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="status-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <!-- <h4>Console Status</h4> -->
+                                        <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="auto" height="auto">
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="Logs-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <!-- <h4>Console Logs</h4> -->
+                                        <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                              </div>
+                           </div>
+                           <!--/.panel-body -->
+                        </div>
+                        <!-- END panel-->
+                     </div>
+                  </fieldset>
+                  
+
+                <!-- <fieldset>
+                    <div class="col-md-12">
+                    <h3>Information</h3>
+                    <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
+                    <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
+                    <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
+                    <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+                    <p>OutboundTraffic Usage :  {{traffic }} </p>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                    <h3>Console Status</h3>
+                    <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="300" height="300">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                    <h3>Console Logs</h3>
+                    <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                        <h3>CPU Usage</h3>
+                        <img src="/cloud/detail/{{ cloudid }}/CPUUtilization/1">
+                    </div>
+                </fieldset> -->
                 
-                <button onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
-                <button onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
-             <h3>Loadbalancer IP : <></h3>
-             <h3>connected_domain : <></h3>
-          </div>
-          <div class="col-md-12">
-              <h2>App Status</h2>
-                 
-          </div>
-         </div>
+                <fieldset>
+                    <div class="col-md-12">
+                        <h4 class="page-header">Network Usage (Inbound)
+                            <small> inbound 네트워크 사용량</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/NetworkIn/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="col-md-12">
+                        <h4 class="page-header">Network Usage (Outbound)
+                            <small> outbound 네트워크 사용량</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/NetworkOut/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+               
+                
+                <fieldset>
+                    <div class="col-md-12" >
+                        <h4 class="page-header">SSD IO Balance
+                            <small>  SSD / ID 성능테스트</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/EBSIOBalance/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+              
+
+                <fieldset>
+                    <div class="col-md-12">
+                        <h3>App Deploy</h3>
+                        <button onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
+                            <button onclick="deploy('php', {{  cloudid }} )">Deploy php </button>å
+                            <button onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
+                            <button onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
+                        <h3>Loadbalancer IP : <></h3>
+                        <h3>connected_domain : <></h3>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                        <h3>App Status</h3>  
+                    </div>
+                </fieldset>
+                
+            </div>
       </section> 
    </div> 
    <script src="/static/app/js/load.js"></script>
