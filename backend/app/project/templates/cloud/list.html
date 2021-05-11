@@ -63,8 +63,10 @@
                               <tr>
                                   <td>
                                     {% if item.Cloud.status == "Running" %}
+
                                     <button type="button" class="btn btn-oval btn-inverse"> <a href="/cloud/detail/{{ item.Cloud.id}}" style="color: white;">{{ item.Cloud.hostname }}</a></button>
                                    
+
                                     {% else %}
                                       {{ item.Cloud.hostname }}
                                     {% endif %}

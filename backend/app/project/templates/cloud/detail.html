@@ -44,7 +44,38 @@
           <div class="col-md-12">
             <h2>Console Logs</h2>
             <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
-        </div>
+          </div>
+          <div class="col-md-12">
+              <h2>CPU Usage</h2>
+              <img src="/cloud/detail/{{ cloudid }}/CPUUtilization/1">
+          </div>
+          <div class="col-md-12">
+              <h2>Network Usage (Inbound)</h2>
+              <img src="/cloud/detail/{{ cloudid }}/NetworkIn/1">
+          </div>
+          <div class="col-md-12">
+              <h2>Network Usage (Outbound)</h2>
+              <img src="/cloud/detail/{{ cloudid }}/NetworkOut/1">
+          </div>
+          <div class="col-md-12">
+              <h2>SSD IO Balance</h2>
+              <img src="/cloud/detail/{{ cloudid }}/EBSIOBalance/1">
+          </div>
+          <div class="col-md-12">
+              <h2>App Deploy</h2>
+              
+               <button onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
+                <button onclick="deploy('php', {{  cloudid }} )">Deploy php </button>
+                
+                <button onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
+                <button onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
+             <h3>Loadbalancer IP : <></h3>
+             <h3>connected_domain : <></h3>
+          </div>
+          <div class="col-md-12">
+              <h2>App Status</h2>
+                 
+          </div>
          </div>
       </section> 
    </div> 
