@@ -25,7 +25,7 @@
          <div class="main-content" style="text-align: center;">
             <form action="{{ url_for('cloud.add_cloud') }}" method="post" name="itemsform">
             {{ form.csrf_token }}
-             <small>cloud_add</small>
+             <br>
              <div class="row" style="text-align: center; padding-bottom: 50px;">
                  <div class="col-lg-12">
                     <h3>필요한 서비스를 선택해주세요</p>
@@ -46,7 +46,7 @@
                       <p id="option_detail">{{ o.ssd }} GB SSD</p>
                       <p id="option_detail">{{ o.traffic }} GB Traffic</p>
                       <br>
-                      <a href="#os_select" onclick="document.getElementById('plan').value='{{  o.id  }}'; cloud_add.selectPlan(this)" class="mainbtn" >select</a>
+                      <a href="#os_select" onclick="document.getElementById('plan').value='{{  o.id  }}'; cloud_add.selectPlan(this)" class="mb-sm btn btn-inverse" >select</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -106,7 +106,7 @@
               </div>
              </div> 
              <div class="row">
-              <input type="submit" value="서버 생성" class="btn btn-lg btn-success opbtn" style="padding-left: 25px; padding-right: 25px; padding-top: 10px;padding-bottom: 10px; margin-bottom: 50px;">
+              <input type="submit" value="서버 생성" class="mb-sm btn btn-inverse" style="padding-left: 25px; padding-right: 25px; padding-top: 10px;padding-bottom: 10px; margin-bottom: 50px;">
              </div>
              </form>
             </div>  

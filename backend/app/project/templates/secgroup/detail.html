@@ -65,10 +65,8 @@
                                     {{ item.desc }}
                                 </td>
                                 <td>
-
-                                 <div class="btn-group mb-sm open">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle">Actions</button>
-                                    <button data-toggle="dropdown"data-play="pullDown"  class="btn btn-secondary dropdown-toggle" >
+                                 <div class="btn-group mb-sm">
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions
                                        <span class="caret"></span>
                                     </button>
                                     <ul role="menu" class="dropdown-menu">
@@ -77,7 +75,8 @@
                                        <li><a class="dropdown-item" href="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=item.id) }}">편집</a> 
                                        </li>
                                     </ul>
-                                 </div>
+                                 </div>  
+
                            
                                 </td>
                                 
