@@ -24,7 +24,7 @@
       <section id="content-area">
         <div class="main-content">
             <div style="margin-bottom: 55px;">
-               <h3>클라우드 대시보드
+               <h3>클라우드 모니터링
                  <br>
                  <small>클라우드 사용량 / 네트워크 사용량</small>
                </h3>
@@ -151,7 +151,7 @@
                 <fieldset>
                     <div class="col-md-12" >
                         <h4 class="page-header">SSD IO Balance
-                            <small>  SSD / ID 성능테스트</small>
+                            <small> I/O 크기 모니터링 </small>
                          </h4>
                         <div class="panel panel-default">
                             <div class="panel-body text-center">
@@ -168,12 +168,12 @@
                 <fieldset>
                     <div class="col-md-12">
                         <h3>App Deploy</h3>
-                        <button onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
-                            <button onclick="deploy('php', {{  cloudid }} )">Deploy php </button>å
-                            <button onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
-                            <button onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
-                        <h3>Loadbalancer IP : <></h3>
-                        <h3>connected_domain : <></h3>
+                        <button class="btn btn-sm btn-inverse" onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
+                        <button class="btn btn-sm btn-inverse" onclick="deploy('php', {{  cloudid }} )">Deploy php </button>
+                        <button class="btn btn-sm btn-inverse" onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
+                        <button class="btn btn-sm btn-inverse" onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
+                        <h3>Loadbalancer IP : ()</h3>
+                        <h3>connected_domain : ()</h3>
                     </div>
                 </fieldset>
                 <fieldset>
