@@ -30,17 +30,79 @@
       <small>Make Payment</small>
     </h3>
   </div>
+
+  <fieldset style="margin-top: 50px;">
+   <p style="font-weight: bold; font-size: large;">고객 크레딧 충전 현황</p>
+   <table class="table table-hover">
+      <thead>
+         <tr>
+            <th>예금주</th>
+            <th>예금주 은행</th>
+            <th>크레딧 금액</th>
+            <th>관리자 승인</th>
+            <th>요청 시간</th>
+            <th>작업</th>
+         </tr>
+      </thead>
+      <tbody>
+          {% for item in items %}
+         <tr>
+            <td>{{ item.deposit_name}} </td> 
+            <td>{{ item.bank }} </td>
+            <td>{{ item.charge_amount }}</td>
+            <td>{{ item.status  }} </td>
+            <td>{{ item.created_at }}</td>
+            <td>
+                  <button type="submit" class="btn btn-sm btn-secondary"><a class="dropdown-item" style="color: black; text-decoration: none;" onclick="return confirm('정말로 수락할까요?')" href="transaction/{{ item.id }}/accept">수락</a> </button>
+                  <button type="submit" class="btn btn-sm btn-inverse"><a class="dropdown-item" style="color: white; text-decoration: none;" onclick="return confirm('정말로 거절할까요?')" href="transaction/{{ item.id }}/reject">거절</a></button>
+           </td>
+         </tr>      
+         {% endfor %}
+      </tbody>
+   </table>
+  </fieldset>
+  <fieldset>
+   <p style="font-weight: bold; font-size: large; margin-top: 15px;">고객 납부 현황</p>
+   <table class="table table-hover">
+      <thead>
+         <tr>
+            <th>인보이스</th>
+            <th>날짜</th>
+            <th>납부금액</th>
+            <th>상태</th> 
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>Invoice 4</td>
+            <td>2021-02-01</td>
+            <td>43000원</td>
+            <td>잔액부족 - 2021-02-05 23:59:59 까지 납부 하여야 함. 오늘날짜+1 00:00:00 에 결제 시도됨. ex 오늘 2021-03-20 01:15:00 일경우, 2021-03-21 00:00:00 에 결제 시도</td> 
+         </tr>  
+         <tr>
+            <td>Invoice 3</td>
+            <td>2021-01-01</td>
+            <td>43000원</td>
+            <td>결제성공 -  크레딧 충전 - 현재 잔액에서 나온 금액에서 43000만큼 빠져야 함</td> 
+         </tr> 
+         <tr>
+            <td>Invoice 2</td>
+            <td>2020-01-01</td>
+            <td>43000원</td>
+            <td>결제성공</td> 
+         </tr> 
+      </tbody>
+   </table>
+  </fieldset>
+
     
-    <div class="tabContainer">
+    <!-- <div class="tabContainer">
+       
         <div class="btn_group">
             <button id="groupbtn1" onclick="showPanel(0,'#31ba85')">고객 크레딧 충전 현황</button>
             <button id="groupbtn2" onclick="showPanel(1,'#31ba85')">고객 납부 현황</button>
         </div>
-
         <div class="tabPanel">
-            
-
-   
             <div class="table-responsive" style="margin-top: 150px;">
                         <table class="table table-hover">
                            <thead>
@@ -62,9 +124,9 @@
                                  <td>{{ item.status  }} </td>
                                  <td>{{ item.created_at }}</td>
                                  <td>
-                                 
-                                        <a class="dropdown-item" onclick="return confirm('정말로 수락할까요?')" href="transaction/{{ item.id }}/accept">수락</a> 
-                                        <a class="dropdown-item" onclick="return confirm('정말로 거절할까요?')" href="transaction/{{ item.id }}/reject">거절</a> 
+                                       <button type="submit" class="btn btn-sm btn-secondary"><a class="dropdown-item" style="color: black; text-decoration: none;" onclick="return confirm('정말로 수락할까요?')" href="transaction/{{ item.id }}/accept">수락</a> </button>
+                                       <button type="submit" class="btn btn-sm btn-inverse"><a class="dropdown-item" style="color: white; text-decoration: none;" onclick="return confirm('정말로 거절할까요?')" href="transaction/{{ item.id }}/reject">거절</a></button>
+                                        
                                  
                                 </td>
                               </tr>
@@ -119,7 +181,7 @@
                         </table>
                      </div>
                 </div>
-            </div> 
+            </div>  -->
         <!-- 
             <button onclick="priceview.test_function2(4,3)">버튼테스트</button>
             <button onclick="priceview.move_view()">다른 뷰로 이동해보기 - cloud_list</button>  -->
