@@ -365,6 +365,7 @@ class Cloud(db.Model):
     aws_instance_id: str
     app_secret_access: str  
     is_lb_env_created: bool
+    certificate_arn : str
     
     id = db.Column(db.Integer, primary_key=True)
     hostname = db.Column(db.String(30), nullable=False)
@@ -381,7 +382,7 @@ class Cloud(db.Model):
     aws_instance_id = db.Column(db.String(30), nullable=False)
     app_secret_access = db.Column(db.String(60), nullable=True) # access code .. 
     is_lb_env_created = db.Column(db.Boolean, nullable=True)
-    
+    certificate_arn = db.Column(db.String(100), nullable=True)
     
     
     
@@ -390,7 +391,7 @@ class Cloud(db.Model):
         'status', 'ip_addr', 'region', 'created_at', 'keypair_id',
         'vpc_id', 'aws_instance_id']
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access,certificate_arn=""):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -403,7 +404,8 @@ class Cloud(db.Model):
         self.vpc_id = vpc_id
         self.aws_instance_id = aws_instance_id
         self.app_secret_access = app_secret_access
-        self.is_lb_env_created = False
+        self.is_lb_env_created = False 
+        self.certificate_arn = ""
 
     
     
@@ -571,8 +573,16 @@ class CloudAppCommand(db.Model):
         self.sequence_num = sequence_num
         self.command_type = command_type
         
+class AppVersions(db.Model):
+    __tablename__ = "appversions"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+    version = db.Column(db.String(10), nullable=True)
+    def __init__(self, appid, version):
+        self.appid = appid
+        self.version = version
         
-    
+        
 # class ChargeRequest(db.Model):
 #     __tablename__= 'chargerequest'
 

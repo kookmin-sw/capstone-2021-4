@@ -8,6 +8,7 @@ from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, Secu
 from project.cloud.exceptions import *
 
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
+
 import time
 import datetime
 import secrets
@@ -48,184 +49,14 @@ def insert_app_command(action, script, app_id, sequence_num):
     db.session.commit()
 
 def create_lb_target_group():
-    elbclient = boto3.client('elbv2')
-    response = elbclient.create_target_group(
-        Name='string',
-        Protocol='HTTP'|'HTTPS'|'TCP'|'TLS'|'UDP'|'TCP_UDP'|'GENEVE',
-        ProtocolVersion='string',
-        Port=123,
-        VpcId='string',
-        HealthCheckProtocol='HTTP'|'HTTPS'|'TCP'|'TLS'|'UDP'|'TCP_UDP'|'GENEVE',
-        HealthCheckPort='string',
-        HealthCheckEnabled=True|False,
-        HealthCheckPath='string',
-        HealthCheckIntervalSeconds=123,
-        HealthCheckTimeoutSeconds=123,
-        HealthyThresholdCount=123,
-        UnhealthyThresholdCount=123,
-        Matcher={
-            'HttpCode': 'string',
-            'GrpcCode': 'string'
-        },
-        TargetType='instance'|'ip'|'lambda',
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ]
-    )
+     
     pass
 
 
 def create_loadbalancer_env(param):
     
-    elbclient = boto3.client('elbv2')
-    #param - loadbalancer - subnet id
-    response = elbclient.create_load_balancer(
-        Name='string',
-        Subnets=[
-            'string',
-        ],
-        SubnetMappings=[
-            {
-                'SubnetId': 'string',
-                'AllocationId': 'string',
-                'PrivateIPv4Address': 'string',
-                'IPv6Address': 'string'
-            },
-        ],
-        SecurityGroups=[
-            'string',
-        ],
-        Scheme='internet-facing'|'internal',
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ],
-        Type='application'|'network'|'gateway',
-        IpAddressType='ipv4'|'dualstack',
-        CustomerOwnedIpv4Pool='string'
-    )
-
-    
-    response = client.create_rule(
-        ListenerArn='string',
-        Conditions=[
-            {
-                'Field': 'string',
-                'Values': [
-                    'string',
-                ],
-                'HostHeaderConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'PathPatternConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'HttpHeaderConfig': {
-                    'HttpHeaderName': 'string',
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'QueryStringConfig': {
-                    'Values': [
-                        {
-                            'Key': 'string',
-                            'Value': 'string'
-                        },
-                    ]
-                },
-                'HttpRequestMethodConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'SourceIpConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                }
-            },
-        ],
-        Priority=123,
-        Actions=[
-            {
-                'Type': 'forward'|'authenticate-oidc'|'authenticate-cognito'|'redirect'|'fixed-response',
-                'TargetGroupArn': 'string',
-                'AuthenticateOidcConfig': {
-                    'Issuer': 'string',
-                    'AuthorizationEndpoint': 'string',
-                    'TokenEndpoint': 'string',
-                    'UserInfoEndpoint': 'string',
-                    'ClientId': 'string',
-                    'ClientSecret': 'string',
-                    'SessionCookieName': 'string',
-                    'Scope': 'string',
-                    'SessionTimeout': 123,
-                    'AuthenticationRequestExtraParams': {
-                        'string': 'string'
-                    },
-                    'OnUnauthenticatedRequest': 'deny'|'allow'|'authenticate',
-                    'UseExistingClientSecret': True|False
-                },
-                'AuthenticateCognitoConfig': {
-                    'UserPoolArn': 'string',
-                    'UserPoolClientId': 'string',
-                    'UserPoolDomain': 'string',
-                    'SessionCookieName': 'string',
-                    'Scope': 'string',
-                    'SessionTimeout': 123,
-                    'AuthenticationRequestExtraParams': {
-                        'string': 'string'
-                    },
-                    'OnUnauthenticatedRequest': 'deny'|'allow'|'authenticate'
-                },
-                'Order': 123,
-                'RedirectConfig': {
-                    'Protocol': 'string',
-                    'Port': 'string',
-                    'Host': 'string',
-                    'Path': 'string',
-                    'Query': 'string',
-                    'StatusCode': 'HTTP_301'|'HTTP_302'
-                },
-                'FixedResponseConfig': {
-                    'MessageBody': 'string',
-                    'StatusCode': 'string',
-                    'ContentType': 'string'
-                },
-                'ForwardConfig': {
-                    'TargetGroups': [
-                        {
-                            'TargetGroupArn': 'string',
-                            'Weight': 123
-                        },
-                    ],
-                    'TargetGroupStickinessConfig': {
-                        'Enabled': True|False,
-                        'DurationSeconds': 123
-                    }
-                }
-            },
-        ],
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ]
-    )
     return response
-    pass
-
+    
 
 def change_target_group_port():
     pass
@@ -735,7 +566,12 @@ def back_update_ec2_info(instance_id):
 
  
 
-def delete_ec2(instance_id):
+def delete_ec2(instance_id, cert_arn):
+    client = boto3.client('acm')
+    response = client.delete_certificate(
+        CertificateArn=cert_arn
+    )
+
     response = ec2.terminate_instances(
         InstanceIds=[
             instance_id,
@@ -746,6 +582,17 @@ def delete_ec2(instance_id):
 
 
 def back_ec2_create_ec2( param):
+    client = boto3.client('acm')
+    
+    response = client.request_certificate(
+        DomainName=param["hostname"] + ".some-cloud.net", # arn:aws:acm:ap-northeast-2:453409655393:certificate/bc65ddcb-9963-4d29-bd9f-f98f9569fcdd
+        ValidationMethod='DNS',   
+        Options={
+            'CertificateTransparencyLoggingPreference':  'DISABLED'
+        },  
+    )
+    cert_arn = response["CertificateArn"]
+    
     secret_key=secrets.token_hex()
     print("secKey: {}".format(secret_key))
     amz_docker_install = """
@@ -825,6 +672,7 @@ def back_ec2_create_ec2( param):
     cloud.aws_instance_id = instance_id
     cloud.status = "Running" 
     cloud.app_secret_access = secret_key
+    cloud.certificate_arn = cert_arn
     secgroup = SecurityGroup.query.filter_by(sec_group_id=param["security-group-id"][0]).first()
     secgroup.associated_to = cloud_id
     

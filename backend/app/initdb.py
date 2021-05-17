@@ -1,5 +1,5 @@
 from project import app,db
-from project.models import Oslist, Plan, User
+from project.models import Oslist, Plan, User, CloudApp
 #plan
 # id: int
 # plan_name: str
@@ -38,10 +38,23 @@ def os_add():
     
     db.session.commit()
 
-
+#flask script
 def add_app_script():
-    php_app_add_script = """
-    docker pull chialab/php
+    pythonapp_script = """
+    mkdir -p /home/ec2-user/public_python
+    docker pull python:3.6.13-slim
+    
     """
-    phpapp = CloudApp("PHP", "chialab/php", "8080", True, "blue", 1)
+    initrun_script = """
+    docker run -itd -v /home/ec2-user/public_python:/app python:3.6.13-slim
+    """
+
+    pythonapp = CloudApp("Python", "python:3.6.13-slim", "8080", 1)
+    db.session.add(pythonapp)
+    db.session.commit()
+    
+    appcommand = CloudAppCommand("init", pythonapp_script, 0, pythonapp.id, "script" )
+    appcommand = CloudAppCommand("init", pythonapp_script, 0, pythonapp.id, "script" )
+    
+
     pass

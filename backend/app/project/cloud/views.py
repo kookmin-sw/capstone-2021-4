@@ -87,6 +87,8 @@ def deploy_app( cloud_id, app_id ):
         Cloud.user_id == current_user.id,
         Cloud.id == instance_id
     )).first()
+    hostname = cloud_with_user.Cloud.hostname
+    
     app = db.session.query(CloudApp).filter(id == app_id)
     # phpapp = CloudApp("PHP", "chialab/php", "8080", True, "blue", 1)
     
@@ -141,7 +143,7 @@ def delete_cloud(instance_id):
         try:
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
             print("[Debug] - {}".format(instance_id))
-            response = delete_ec2(cloud_with_user.Cloud.aws_instance_id)
+            response = delete_ec2(cloud_with_user.Cloud.aws_instance_id, cloud_with_user.Cloud.certificate_arn)
             import datetime
             cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
             cloud_id = cloud.id
@@ -319,7 +321,8 @@ def add_cloud():
                         "keypair" : keypairname_formatted,
                         "security-group-id" : [get_sec_id],
                         "cloudid" : assigned_id,
-                        "os_name" :  aws_image.os_name
+                        "os_name" :  aws_image.os_name,
+                        "hostname" : new_cloud.hostname
                     }
                     
                     job = q.enqueue(back_ec2_create_ec2, parameter)
