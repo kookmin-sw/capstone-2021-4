@@ -40,21 +40,25 @@ def os_add():
 
 #flask script
 def add_app_script():
-    pythonapp_script = """
-    mkdir -p /home/ec2-user/public_python
-    docker pull python:3.6.13-slim
-    
-    """
-    initrun_script = """
-    docker run -itd -v /home/ec2-user/public_python:/app python:3.6.13-slim
-    """
 
+
+    flask_update_script = """
+    cd /home/ec2-user/public_flask
+    git add .
+    git commit -m "Update"
+    docker build -t flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .01; exit}') .
+    docker rm -f green
+    docker run -itd --name green flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .01; exit}')
+    """
+ 
     pythonapp = CloudApp("Python", "python:3.6.13-slim", "8080", 1)
     db.session.add(pythonapp)
     db.session.commit()
     
-    appcommand = CloudAppCommand("init", pythonapp_script, 0, pythonapp.id, "script" )
-    appcommand = CloudAppCommand("init", pythonapp_script, 0, pythonapp.id, "script" )
+    # appcommand = CloudAppCommand("deplo", pythonapp_script, 0, pythonapp.id, "script" )
+    appcommand = CloudAppCommand("deploy", pythonapp_script, 0, pythonapp.id, "script" )
+    appcommand = CloudAppCommand("update", pythonapp_script, 0, pythonapp.id, "script" )
+    appcommand = CloudAppCommand("rollback", pythonapp_script, 0, pythonapp.id, "script" )
     
 
     pass
