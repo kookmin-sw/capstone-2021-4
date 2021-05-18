@@ -601,7 +601,7 @@ def back_update_ec2_info(instance_id):
         certvalidation_value =  response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Value"]
         client = boto3.client('route53')
         response = client.change_resource_record_sets(
-        HostedZoneId="Z01531342TJHRLBMP4RYK", # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+        HostedZoneId=app.config.get('MAIN_DOMAIN_HOSTEDZONEID'), # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
             ChangeBatch={
                 'Comment': '12d12d12d12',
                 'Changes': [
