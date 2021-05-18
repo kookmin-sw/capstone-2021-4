@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 __init__.py
+nohup python3 __init__.py &
