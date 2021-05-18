@@ -62,6 +62,7 @@ def change_target_group_port():
     pass
 
 
+
 def app_commander(param):
     # app command 에 있는거 순서대로 입력해야함
     cloud = Cloud.query.filter_by(id=param["cloudid"]).first()
@@ -69,41 +70,33 @@ def app_commander(param):
     ip_addr = cloud.ip_addr
     aws_instance = cloud.aws_instance_id
     vpc_id = cloud.vpc_id
+    secret = cloud.app_secret_access
     
-    try:
-        for item in command:
-            if item.command_type == "script":
-                response = requests.get("http://{}:61331/run/{}?shell={}".format(ip_addr,secret,item.script))
+    if param["action"] == "rollback":
+        try:
+            pass
+        except Exception as e:
+            return False
+    elif param["action"] == "update":
+        try:
+            for item in command:
+                if item.command_type == "script":
+                    response = requests.get("http://{}:61331/run/{}?shell={}".format(ip_addr,secret,item.script))
+                
+                    if response.status_code == 200:
+                        print(response.content.decode("utf-8")) 
+                    else:
+                        print("Error")
+                elif item.command_type == "api":
+                    eval(item.script)
+               
             
-                if response.status_code == 200:
-                    print(response.content.decode("utf-8")) 
-                else:
-                    print("Error")
-            elif item.command_type == "api":
-                eval(item.script)
-           
-        
-        return True
-    except Exception as e:
-        print(e)
-        return False
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
-def deploy_app(instance_id, app_name):
-    pass
 
-def update_app(instance_id, app_name):
-    pass
-
-def stop_app(instance_id, app_name):
-    pass
-
-def start_app(instance_id, app_name):
-    pass
-
-def rollback_app(instance_id, app_name):
-    #ignore nginx
-    
-    pass 
 
 def reboot_instances(instance_id):
     response = ec2.reboot_instances(InstanceIds=[instance_id], DryRun=False)
@@ -524,7 +517,7 @@ def back_update_ec2_info(instance_id):
     print(ip_addr)
     cloud = Cloud.query.filter_by(aws_instance_id=instance_id).first()
     cloud.ip_addr = ip_addr
-    
+    cloud_vpc = VPC.query.filter_by(id=cloud.vpc_id).first()
     net_interface_id = response["Reservations"][0]["Instances"][0]["NetworkInterfaces"][0]["NetworkInterfaceId"]
     # print(net_interface_id)
     
@@ -533,6 +526,144 @@ def back_update_ec2_info(instance_id):
     subnet_id = subnet.id  
     cloud_id = cloud.id 
     db.session.commit()
+    selected_os = Oslist.query.filter_by(id = cloud.os).first()
+    print("OS : {}".format(selected_os.os_name))
+    print("HostedZoneID {}".format(app.config.get('MAIN_DOMAIN_HOSTEDZONEID')))
+    if selected_os.os_name == "flask":
+        print("LB Deployment started")
+        client = boto3.client('elbv2')
+        tg = client.create_target_group(
+            Name="tg-{}".format(secrets.token_hex(nbytes=5)),
+            Port=8080,
+            Protocol='HTTP',
+            VpcId=cloud_vpc.vpc_id,
+        )
+        time.sleep(10)
+        rp = client.register_targets( 
+            TargetGroupArn= tg["TargetGroups"][0]["TargetGroupArn"], # 위에서 만든 target group arn
+            Targets=[
+                {
+                    'Id': instance_id, #AWS Instance ID
+                    'Port': 8080, 
+                },
+            ]
+        )
+        sel_secgroup = db.session.query(SecurityGroup).filter(SecurityGroup.id == cloud.sec_group_id).first()
+        lb1 = client.create_load_balancer(
+            Name="lb1-{}".format(secrets.token_hex(nbytes=5)),
+            Subnets=[
+                cloud_vpc.default_subnet_id,
+                cloud_vpc.sub_subnet_id
+            ], 
+            SecurityGroups=[
+                sel_secgroup.sec_group_id,
+            ],
+            Scheme='internet-facing',
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ],
+            Type='application' ,
+            IpAddressType='ipv4',
+        )
+        
+        lb_hostname = lb1["LoadBalancers"][0]["DNSName"]
+        client = boto3.client('route53')
+        print(cloud.hostname + ".some-cloud.net DNS Record create process")
+        response = client.change_resource_record_sets(
+        HostedZoneId=app.config.get('MAIN_DOMAIN_HOSTEDZONEID'), # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+            ChangeBatch={
+                'Comment': '12d12d12d12',
+                'Changes': [
+                    {
+                        'Action': 'UPSERT',
+                        'ResourceRecordSet': {
+                            'Name': cloud.hostname + ".some-cloud.net" ,
+                            'Type': 'CNAME',  
+                            'TTL': 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': lb_hostname
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        client = boto3.client('acm')
+        response = client.describe_certificate(
+            CertificateArn=cloud.certificate_arn
+        )
+        certvalidation_domain = response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Name"]
+        certvalidation_value =  response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Value"]
+        client = boto3.client('route53')
+        response = client.change_resource_record_sets(
+        HostedZoneId="Z01531342TJHRLBMP4RYK", # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+            ChangeBatch={
+                'Comment': '12d12d12d12',
+                'Changes': [
+                    {
+                        'Action': 'UPSERT',
+                        'ResourceRecordSet': {
+                            'Name': certvalidation_domain,
+                            'Type': 'CNAME',  
+                            'TTL' : 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': certvalidation_value
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        time.sleep(30)
+        client = boto3.client('elbv2')
+        response = client.create_listener(
+            LoadBalancerArn=lb1["LoadBalancers"][0]["LoadBalancerArn"],
+            Protocol='HTTP',
+            Port=80,  
+            DefaultActions=[
+                {
+                    'Type': 'forward',
+                    'TargetGroupArn': tg["TargetGroups"][0]["TargetGroupArn"],
+                },
+            ], 
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ]
+        )
+        response = client.create_listener(
+            LoadBalancerArn=lb1["LoadBalancers"][0]["LoadBalancerArn"],
+            Protocol='HTTPS',
+            Port=443,  
+             Certificates=[
+                {
+                    'CertificateArn': cloud.certificate_arn, 
+                },
+            ],
+            DefaultActions=[
+                {
+                    'Type': 'forward',
+                    'TargetGroupArn': tg["TargetGroups"][0]["TargetGroupArn"],
+                },
+            ], 
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ]
+        )
+        
+
         
     check = db.session.query(NetInterface).filter(NetInterface.cloud_id == cloud_id).first()
 
@@ -571,6 +702,8 @@ def delete_ec2(instance_id, cert_arn):
     response = client.delete_certificate(
         CertificateArn=cert_arn
     )
+    # dns record delete
+    # 
 
     response = ec2.terminate_instances(
         InstanceIds=[
@@ -592,7 +725,7 @@ def back_ec2_create_ec2( param):
         },  
     )
     cert_arn = response["CertificateArn"]
-    
+
     secret_key=secrets.token_hex()
     print("secKey: {}".format(secret_key))
     amz_docker_install = """
@@ -630,6 +763,11 @@ def back_ec2_create_ec2( param):
         use_userdata = ubuntu_docker_install
     elif param["os_name"] == "amazonLinux":
         use_userdata = amz_docker_install
+        # load balancer create
+        
+        
+        
+
     
     instance = ec2.run_instances(
     BlockDeviceMappings=[ # 이게 기본 부트 볼륨으로 지정이 안됨.. /dev/sda1 같은거로 바꾸고, VolumeType, IOPS 세팅 피룡함

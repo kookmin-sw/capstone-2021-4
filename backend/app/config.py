@@ -27,6 +27,7 @@ class Config(object):
             'mode': 'standard'
         },
     )
+    MAIN_DOMAIN_HOSTEDZONEID = os.getenv("HostedZoneId")
     SQLALCHEMY_DATABASE_URI =  os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     

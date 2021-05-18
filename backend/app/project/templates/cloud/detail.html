@@ -167,13 +167,12 @@
 
                 <fieldset>
                     <div class="col-md-12">
-                        <h3>App Deploy</h3>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('php', {{  cloudid }} )">Deploy php </button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
-                        <h3>Loadbalancer IP : ()</h3>
-                        <h3>connected_domain : ()</h3>
+                        <h3>Actions</h3>
+                         <button class="btn btn-sm btn-inverse" onclick="restart( {{ cloudid }} )">Restart App </button>
+                        <button class="btn btn-sm btn-inverse" onclick="start( {{ cloudid }} )">Start App </button>
+                        <button class="btn btn-sm btn-inverse" onclick="update( {{ cloudid }} )">Update App </button>
+                        <button class="btn btn-sm btn-inverse" onclick="rollback( {{ cloudid }} )">Rollback App </button>
+                        
                     </div>
                 </fieldset>
                 <fieldset>

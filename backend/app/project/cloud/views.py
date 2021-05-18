@@ -80,58 +80,6 @@ def reboot_instance(instance_id):
 
     return redirect(url_for('cloud.all_clouds'))
 
-@cloud_blueprint.route('/deploy/<cloud_id>/<app_id>')
-@login_required
-def deploy_app( cloud_id, app_id ):
-    cloud_with_user = db.session.query(Cloud, User).join(User).filter(and_(
-        Cloud.user_id == current_user.id,
-        Cloud.id == instance_id
-    )).first()
-    hostname = cloud_with_user.Cloud.hostname
-    
-    app = db.session.query(CloudApp).filter(id == app_id)
-    # phpapp = CloudApp("PHP", "chialab/php", "8080", True, "blue", 1)
-    
-    if cloud_with_user is not None:
-        cloud_secret = cloud_with_user.app_secret_access
-        try:
-            myvpc = db.session.query(VPC).filter(user_id == current_user.id)
-            param = {
-                "cloudid": cloud_with_user.Cloud.id,
-                "appid" : app_id,
-                "secret" : cloud_secret,
-                "action" : "deploy",
-                "lb_subnet" : myvpc.default_subnet_id,
-                "lb_subnet_sub" : myvpc.sub_subnet_id
-            }
-            result = app_commander(param)
-            # newcloud = CloudAppAssigned(cloud_with_user.Cloud.id, app_id )
-            if result == True:
-                    
-                return {
-                    "success" : True
-                }
-            else:
-                return {
-                    "success" : False
-                }
-        except Exception as e:
-            return {
-                "success" : False,
-                "message" : "deploy exception, message: {}".format(e)
-            }
-        
-    else:
-        return {
-            "success" : False,
-            "message" : "cloud owner not matched"
-        }
-    
-    
-    
-    pass
-
-
 @cloud_blueprint.route('/delete/<instance_id>')
 @login_required
 def delete_cloud(instance_id):
@@ -166,10 +114,6 @@ def delete_cloud(instance_id):
             
     
 
-@cloud_blueprint.route("/update", methods=['GET', 'POST'])
-@login_required
-def update_cloud():
-    pass
 
 
 
@@ -191,7 +135,55 @@ def get_metrics(cloud_id, metrictype, hour):
         flash(message, 'danger')
     
     return redirect(url_for('home'))
-        
+
+
+@cloud_blueprint.route('/action/<cloud_id>/<action>')
+@login_required
+def action(cloud_id, action):
+    cwclient = boto3.client(service_name='cloudwatch') 
+    cloud_with_user = db.session.query(Cloud, User).join(User).filter(Cloud.id == cloud_id).first()
+    
+    if cloud_with_user is not None:
+        if current_user.is_authenticated and cloud_with_user.Cloud.user_id == current_user.id:
+            cloud_secret = cloud_with_user.app_secret_access
+            myvpc = db.session.query(VPC).filter(user_id == current_user.id)
+            if action == "update":
+                if cloud_with_user.app_status == "blue":
+                    cloud_with_user.app_status = "green"
+                    
+                elif cloud_with_user.app_status == "green":
+                    cloud_with_user.app_status = "blue"
+            
+                param = {
+                    "cloudid": cloud_with_user.Cloud.id, 
+                    "secret" : cloud_secret,
+                    "action" : "update",
+                    "set_target" : cloud_with_user.app_status
+                }
+            elif action == "rollback":
+                if cloud_with_user.app_status == "blue":
+                    cloud_with_user.app_status = "green"
+                elif cloud_with_user.app_status == "green":
+                    cloud_with_user.app_status = "blue"
+                    
+                param = {
+                    "cloudid": cloud_with_user.Cloud.id, 
+                    "secret" : cloud_secret,
+                    "action" : "rollback",
+                    "set_target" : cloud_with_user.app_status
+                }
+            result = app_commander(param)
+            
+            pass
+            
+        else:
+            message = Markup("<strong>인증 문제 입니다.</strong>  ")
+            flash(message, 'danger') 
+    else:
+        message = Markup("<strong>잘못된 접근입니다.</strong>  ")
+        flash(message, 'danger')
+    
+    return redirect(url_for('home'))
     
 
 @cloud_blueprint.route("/<cloud_id>/detail", methods=['GET'])
@@ -303,7 +295,7 @@ def add_cloud():
                     keypairname_formatted = "{}_{}".format( get_keypair.keytoken , get_keypair.name) 
 
                     # DB에 기록
-                    new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting", "creating")
+                    new_cloud = Cloud(form.data["Hostname"], form.data["plan"], current_user.id, form.data["os"], "Queued", "Requesting", "Seoul" , keypair_id , vpc_id, "Requesting", "creating", "", sec_id)
                     db.session.add(new_cloud) 
                     db.session.flush()
                     db.session.refresh(new_cloud)
@@ -322,7 +314,8 @@ def add_cloud():
                         "security-group-id" : [get_sec_id],
                         "cloudid" : assigned_id,
                         "os_name" :  aws_image.os_name,
-                        "hostname" : new_cloud.hostname
+                        "hostname" : new_cloud.hostname,
+                        "vpc_id" : vpc_id 
                     }
                     
                     job = q.enqueue(back_ec2_create_ec2, parameter)

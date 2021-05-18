@@ -366,6 +366,7 @@ class Cloud(db.Model):
     app_secret_access: str  
     is_lb_env_created: bool
     certificate_arn : str
+    sec_group_id : int
     
     id = db.Column(db.Integer, primary_key=True)
     hostname = db.Column(db.String(30), nullable=False)
@@ -383,15 +384,15 @@ class Cloud(db.Model):
     app_secret_access = db.Column(db.String(60), nullable=True) # access code .. 
     is_lb_env_created = db.Column(db.Boolean, nullable=True)
     certificate_arn = db.Column(db.String(100), nullable=True)
-    
-    
-    
+    sec_group_id = db.Column(db.Integer, db.ForeignKey('securitygroup.id'))
+    loadbalancer_arn = db.Column(db.String(70), nullable=True)
+    app_status = db.Column(db.String(6), nullable=True)
     def __json__(self):
         return ['id', 'hostname', 'plan_id', 'user_id', 'os', 
         'status', 'ip_addr', 'region', 'created_at', 'keypair_id',
         'vpc_id', 'aws_instance_id']
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access,certificate_arn=""):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access,certificate_arn, sec_group_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -406,6 +407,9 @@ class Cloud(db.Model):
         self.app_secret_access = app_secret_access
         self.is_lb_env_created = False 
         self.certificate_arn = ""
+        self.sec_group_id = sec_group_id
+        self.loadbalancer_arn=""
+        self.app_status = "blue"
 
     
     

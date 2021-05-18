@@ -1,5 +1,5 @@
 from project import app,db
-from project.models import Oslist, Plan, User, CloudApp
+from project.models import Oslist, Plan, User, CloudApp, CloudAppCommand
 #plan
 # id: int
 # plan_name: str
@@ -32,33 +32,35 @@ def admin_add():
 def os_add():
     sample_os = Oslist('ubuntu20.04', 'ami-067abcae434ee508b')
     sample_os2  = Oslist('amazonLinux', 'ami-09282971cf2faa4c9')
+
     
     db.session.add(sample_os)
     db.session.add(sample_os2)
     
     db.session.commit()
 
+def app_add():
+    flask = Oslist('flask', 'ami-0d7f1f9398fd054f5')
+    db.session.add(flask)
+    db.session.commit()
+    
 #flask script
 def add_app_script():
-
 
     flask_update_script = """
     cd /home/ec2-user/public_flask
     git add .
     git commit -m "Update"
     docker build -t flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .01; exit}') .
-    docker rm -f green
-    docker run -itd --name green flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .01; exit}')
+    docker rm -f {}
+    docker run -itd -p {}:80 --name {} flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .0; exit}')
     """
  
-    pythonapp = CloudApp("Python", "python:3.6.13-slim", "8080", 1)
+    pythonapp = CloudApp("Flask", "tiangolo/uwsgi-nginx-flask:python3.7", "8080", 1)
     db.session.add(pythonapp)
     db.session.commit()
-    
     # appcommand = CloudAppCommand("deplo", pythonapp_script, 0, pythonapp.id, "script" )
-    appcommand = CloudAppCommand("deploy", pythonapp_script, 0, pythonapp.id, "script" )
-    appcommand = CloudAppCommand("update", pythonapp_script, 0, pythonapp.id, "script" )
-    appcommand = CloudAppCommand("rollback", pythonapp_script, 0, pythonapp.id, "script" )
+    appcommand = CloudAppCommand("update", flask_update_script, 0, pythonapp.id, "script" )
+    db.session.add(appcommand)
+    db.session.commit()
     
-
-    pass
