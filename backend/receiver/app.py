@@ -76,7 +76,7 @@ def status(secret, app):
 
    
 @app.route('/run')
-def index(secret):
+def index():
     print(os.environ.get("secret"))
     secret = request.args.get("secret")
     if secret == app.secret_key:

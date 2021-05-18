@@ -834,6 +834,8 @@ def back_ec2_create_ec2( param):
     #!/bin/bash
     echo 'export secret={}' >> /home/ec2-user/.bashrc
     cd /home/ec2-user/.manager/capstone-2021-4/backend
+    git reset --hard
+    git clean -d -f -f
     git pull
     """.format(secret_key)
     
