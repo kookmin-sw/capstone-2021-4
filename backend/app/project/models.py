@@ -385,6 +385,7 @@ class Cloud(db.Model):
     is_lb_env_created = db.Column(db.Boolean, nullable=True)
     certificate_arn = db.Column(db.String(100), nullable=True)
     sec_group_id = db.Column(db.Integer, db.ForeignKey('securitygroup.id'))
+    targetgroup_arn = db.Column(db.String(100), nullable=True)
     loadbalancer_arn = db.Column(db.String(70), nullable=True)
     app_status = db.Column(db.String(6), nullable=True)
     def __json__(self):
@@ -409,6 +410,7 @@ class Cloud(db.Model):
         self.certificate_arn = ""
         self.sec_group_id = sec_group_id
         self.loadbalancer_arn=""
+        self.targetgroup_arn= ""
         self.app_status = "blue"
 
     

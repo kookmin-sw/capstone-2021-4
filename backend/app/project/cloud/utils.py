@@ -65,6 +65,10 @@ def change_target_group_port():
 
 def app_commander(param):
     # app command 에 있는거 순서대로 입력해야함
+    set_port = {
+        "blue": 8080,
+        "green": 8081
+    }
     cloud = Cloud.query.filter_by(id=param["cloudid"]).first()
     command = CloudAppCommand.query.filter_by(app_id = param["appid"], action=param["action"]).order_by(CloudAppCommand.sequence_num.asc())
     ip_addr = cloud.ip_addr
@@ -72,13 +76,49 @@ def app_commander(param):
     vpc_id = cloud.vpc_id
     secret = cloud.app_secret_access
     
+    register_target = param["register_target"]
+    deregister_target = param["deregister_target"]
+    
+    
     if param["action"] == "rollback":
         try:
+            ""
+            reg_target = client.register_targets( 
+                TargetGroupArn= cloud.targetgroup_arn, # 위에서 만든 target group arn
+                Targets=[
+                    {
+                        'Id': aws_instance, #AWS Instance ID
+                        'Port': set_port[register_target], 
+                    },
+                ]
+            )
+            print(reg_target)
+            
+            dreg_target = client.deregister_targets(
+                TargetGroupArn=cloud.targetgroup_arn,
+                Targets=[
+                    {
+                        'Id': aws_instance,
+                        'Port': set_port[deregister_target]
+                    },
+                ]
+            )
+            
+            print(dreg_target)
+            # 바로 로드벨런서 register -> deregister 순으로 처리
+            return {
+                "success" : True,
+                "message" : "Rollback process completed"
+            }
             pass
+        
         except Exception as e:
             return False
     elif param["action"] == "update":
         try:
+
+            # 스크립트 수행 후 register -> deregister 순으로 처리
+            # 스크립트 -> docker build  ... docker rm -f register_target_port -> docker run -itd register_target:80 register_target_name
             for item in command:
                 if item.command_type == "script":
                     response = requests.get("http://{}:61331/run/{}?shell={}".format(ip_addr,secret,item.script))
@@ -90,6 +130,7 @@ def app_commander(param):
                 elif item.command_type == "api":
                     eval(item.script)
                
+            
             
             return True
         except Exception as e:
@@ -528,7 +569,8 @@ def back_update_ec2_info(instance_id):
     db.session.commit()
     selected_os = Oslist.query.filter_by(id = cloud.os).first()
     print("OS : {}".format(selected_os.os_name))
-    print("HostedZoneID {}".format(app.config.get('MAIN_DOMAIN_HOSTEDZONEID')))
+    print("HostedZoneID {}".format(os.getenv("HOSTED_ZONE_ID")))
+    hosted_zone_id = os.getenv("HOSTED_ZONE_ID")
     if selected_os.os_name == "flask":
         print("LB Deployment started")
         client = boto3.client('elbv2')
@@ -538,6 +580,9 @@ def back_update_ec2_info(instance_id):
             Protocol='HTTP',
             VpcId=cloud_vpc.vpc_id,
         )
+        cloud.targetgroup_arn = tg["TargetGroups"][0]["TargetGroupArn"]
+        db.session.commit()
+        print("wait for 10 sec for instance state running")
         time.sleep(10)
         rp = client.register_targets( 
             TargetGroupArn= tg["TargetGroups"][0]["TargetGroupArn"], # 위에서 만든 target group arn
@@ -573,7 +618,7 @@ def back_update_ec2_info(instance_id):
         client = boto3.client('route53')
         print(cloud.hostname + ".some-cloud.net DNS Record create process")
         response = client.change_resource_record_sets(
-        HostedZoneId=app.config.get('MAIN_DOMAIN_HOSTEDZONEID'), # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+        HostedZoneId=hosted_zone_id, # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
             ChangeBatch={
                 'Comment': '12d12d12d12',
                 'Changes': [
@@ -601,7 +646,7 @@ def back_update_ec2_info(instance_id):
         certvalidation_value =  response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Value"]
         client = boto3.client('route53')
         response = client.change_resource_record_sets(
-        HostedZoneId=app.config.get('MAIN_DOMAIN_HOSTEDZONEID'), # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+        HostedZoneId=hosted_zone_id, # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
             ChangeBatch={
                 'Comment': '12d12d12d12',
                 'Changes': [

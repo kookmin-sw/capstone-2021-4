@@ -10,3 +10,14 @@ function deploy(name, cloudid){
         }
     })
 }
+function rollback(cloudid) {
+    call(`/action/${cloudid}/rollback')`, function(response) {
+        var response = JSON.parse(response)
+        console.log(response)
+        if (response.success == true) {
+            alert('deploy request success  ')
+        } else {
+            alert(' other error ')
+        }
+    })
+}

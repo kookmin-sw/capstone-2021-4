@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from flask import send_file
 import io
 
+
 # # CONFIG
 cloud_blueprint = Blueprint('cloud', __name__, template_folder='templates')
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
@@ -53,6 +54,7 @@ def humansize(nbytes):
 def all_clouds():
     # job = q.enqueue(background_task, request.args.get("n"))
     # Check Status, IPAddr, Status
+    
     cloud_lists = db.session.query(Plan, Cloud,Oslist).join(Cloud).filter(Cloud.user_id == current_user.id,Cloud.os == Oslist.id).all()
     rest = request.args.get("rest")   
     if rest == "true":  
@@ -148,17 +150,21 @@ def action(cloud_id, action):
             cloud_secret = cloud_with_user.app_secret_access
             myvpc = db.session.query(VPC).filter(user_id == current_user.id)
             if action == "update":
+                deregister_target = ""
                 if cloud_with_user.app_status == "blue":
+                    deregister_target = "blue"
                     cloud_with_user.app_status = "green"
                     
                 elif cloud_with_user.app_status == "green":
+                    deregister_target = "green"
                     cloud_with_user.app_status = "blue"
             
                 param = {
                     "cloudid": cloud_with_user.Cloud.id, 
                     "secret" : cloud_secret,
                     "action" : "update",
-                    "set_target" : cloud_with_user.app_status
+                    "deregister_target" : deregister_target,
+                    "register_target" : cloud_with_user.app_status
                 }
             elif action == "rollback":
                 if cloud_with_user.app_status == "blue":
@@ -170,7 +176,8 @@ def action(cloud_id, action):
                     "cloudid": cloud_with_user.Cloud.id, 
                     "secret" : cloud_secret,
                     "action" : "rollback",
-                    "set_target" : cloud_with_user.app_status
+                    "deregister_target" : deregister_target,
+                    "register_target" : cloud_with_user.app_status
                 }
             result = app_commander(param)
             
