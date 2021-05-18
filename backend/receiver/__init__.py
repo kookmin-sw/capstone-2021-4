@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask import request
+from flask_script import Manager,Server
 import logging
 import json
 
@@ -91,3 +92,11 @@ def index(secret):
             
         }
         
+# migrate = Migrate(app, db)
+manager = Manager(app)
+
+# manager.add_command('db', MigrateCommand)
+
+if __name__ == '__main__':
+    manager.add_command('runserver', Server(host='0.0.0.0', port=61331 ,   threaded=True))
+    manager.run()
