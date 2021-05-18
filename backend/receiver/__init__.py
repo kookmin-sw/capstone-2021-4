@@ -4,10 +4,13 @@ from flask import request
 from flask_script import Manager,Server
 import logging
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.debug = True
-app.secret_key = os.environ.get("secret")
+app.secret_key = os.getenv("secret")
 
 actions_permission = {
     "upload" : False,
@@ -77,7 +80,7 @@ def status(secret, app):
    
 @app.route('/run/<secret>/')
 def index(secret):
-    print(os.environ.get("secret"))
+    print(app.secret_key)
     if secret == app.secret_key:
         shell = request.args.get('shell')
         output = syscommand(shell)
@@ -94,8 +97,6 @@ def index(secret):
         
 # migrate = Migrate(app, db)
 manager = Manager(app)
-
-# manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
     manager.add_command('runserver', Server(host='0.0.0.0', port=61331 ,   threaded=True))
