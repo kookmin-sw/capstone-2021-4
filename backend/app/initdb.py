@@ -1,5 +1,5 @@
 from project import app,db
-from project.models import Oslist, Plan, User, CloudApp, CloudAppCommand
+from project.models import Oslist, Plan, User, CloudAppCommand
 #plan
 # id: int
 # plan_name: str
@@ -40,7 +40,7 @@ def os_add():
     db.session.commit()
 
 def app_add():
-    flask = Oslist('flask', 'ami-0d7f1f9398fd054f5')
+    flask = Oslist('flask', 'ami-04f79737f53352f18')
     db.session.add(flask)
     db.session.commit()
     
@@ -49,18 +49,27 @@ def add_app_script():
 
     flask_update_script = """
     cd /home/ec2-user/public_flask
-    git add .
-    git commit -m "Update"
-    docker build -t flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .01; exit}') .
-    docker rm -f {}
-    docker run -itd -p {}:80 --name {} flaskapp:$(docker images | awk '($1 == "flaskapp") {print $2 += .0; exit}')
     """
- 
-    pythonapp = CloudApp("Flask", "tiangolo/uwsgi-nginx-flask:python3.7", "8080", 1)
-    db.session.add(pythonapp)
-    db.session.commit()
-    # appcommand = CloudAppCommand("deplo", pythonapp_script, 0, pythonapp.id, "script" )
-    appcommand = CloudAppCommand("update", flask_update_script, 0, pythonapp.id, "script" )
-    db.session.add(appcommand)
+    appcommand1 = CloudAppCommand("update", flask_update_script, 1, 1, "script" )
+    flask_update_script2 = """
+    docker build -t flaskapp:$(docker images | awk '($1 == "flaskapp") {{print $2 += .01; exit}}') .
+    """
+    appcommand2 = CloudAppCommand("update", flask_update_script2, 1, 2, "script" )
+    
+    flask_update_script3 = """
+    docker rm -f {app_register}
+    """
+    appcommand3 = CloudAppCommand("update", flask_update_script3, 1, 3, "script" )
+    
+    flask_update_script4 = """
+    docker run -itd -p {app_port}:80 --name {app_register} flaskapp:$(docker images | awk '($1 == "flaskapp") {{print $2 += .0; exit}}')
+    """
+    appcommand4 = CloudAppCommand("update", flask_update_script4, 1, 4, "script" )
+    
+    
+    db.session.add(appcommand1)
+    db.session.add(appcommand2)
+    db.session.add(appcommand3)
+    db.session.add(appcommand4)
     db.session.commit()
     

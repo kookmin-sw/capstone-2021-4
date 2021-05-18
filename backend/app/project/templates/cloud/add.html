@@ -57,7 +57,7 @@
                   <select name="os" class="chosen-select input-md form-control">
                      <optgroup label="Keypair">
                           {% for o in oslist %}
-                            <option value="{{ o.id }}">{{ o.os_name}}</option>
+                            <option value="{{ o.id }}">{{ o.os_name }} ( {{ o.aws_image_id }} )</option>
                         {% endfor %}
                      </optgroup>
                   </select>

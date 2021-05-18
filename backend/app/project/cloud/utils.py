@@ -4,7 +4,7 @@ import boto3
 from project import db
 from project import q
 from project import r
-from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface, SecurityRule, CloudApp,CloudAppCommand
+from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface, SecurityRule,CloudAppCommand
 from project.cloud.exceptions import *
 
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
@@ -79,10 +79,10 @@ def app_commander(param):
     register_target = param["register_target"]
     deregister_target = param["deregister_target"]
     
-    
+    client = boto3.client('elbv2')
     if param["action"] == "rollback":
         try:
-            ""
+            
             reg_target = client.register_targets( 
                 TargetGroupArn= cloud.targetgroup_arn, # 위에서 만든 target group arn
                 Targets=[
@@ -113,29 +113,55 @@ def app_commander(param):
             pass
         
         except Exception as e:
-            return False
+            return e
     elif param["action"] == "update":
         try:
 
             # 스크립트 수행 후 register -> deregister 순으로 처리
             # 스크립트 -> docker build  ... docker rm -f register_target_port -> docker run -itd register_target:80 register_target_name
             for item in command:
+                
                 if item.command_type == "script":
-                    response = requests.get("http://{}:61331/run/{}?shell={}".format(ip_addr,secret,item.script))
+                    
+                    script_formatted = item.script.format(app_register=register_target, app_port = set_port[register_target] )
+                    print(script_formatted)
+                    req_url = "http://{}:61331/run?secret={}&shell={}".format(ip_addr,secret,item.script)
+                    response = requests.get(req_url)
+                    print("formatURL: {} ".format(req_url))
                 
                     if response.status_code == 200:
                         print(response.content.decode("utf-8")) 
                     else:
                         print("Error")
+                        print(response.content)
                 elif item.command_type == "api":
                     eval(item.script)
-               
+            print("End commend process")
+            reg_target = client.register_targets( 
+                TargetGroupArn= cloud.targetgroup_arn, # 위에서 만든 target group arn
+                Targets=[
+                    {
+                        'Id': aws_instance, #AWS Instance ID
+                        'Port': set_port[register_target], 
+                    },
+                ]
+            )
+            print(reg_target)
+            
+            dreg_target = client.deregister_targets(
+                TargetGroupArn=cloud.targetgroup_arn,
+                Targets=[
+                    {
+                        'Id': aws_instance,
+                        'Port': set_port[deregister_target]
+                    },
+                ]
+            )
             
             
             return True
         except Exception as e:
             print(e)
-            return False
 
 
 
@@ -744,12 +770,14 @@ def back_update_ec2_info(instance_id):
 
 def delete_ec2(instance_id, cert_arn):
     client = boto3.client('acm')
-    response = client.delete_certificate(
-        CertificateArn=cert_arn
-    )
+    # -> flask app 이면 로드벨런서 삭제 후 cert 삭제..!
+    # 그게 아니면 cert삭제
+    # response = client.delete_certificate(
+    #     CertificateArn=cert_arn
+    # )
     # dns record delete
     # 
-
+    
     response = ec2.terminate_instances(
         InstanceIds=[
             instance_id,
@@ -802,6 +830,12 @@ def back_ec2_create_ec2( param):
     sudo usermod -a -G docker ubuntu \n
     sudo systemctl enable docker \n
     """
+    flask_install = """
+    #!/bin/bash
+    echo 'export secret={}' >> /home/ec2-user/.bashrc
+    cd /home/ec2-user/.manager/capstone-2021-4/backend
+    git pull
+    """.format(secret_key)
     
     use_userdata = ""
     if param["os_name"] == "ubuntu20.04":
@@ -809,7 +843,9 @@ def back_ec2_create_ec2( param):
     elif param["os_name"] == "amazonLinux":
         use_userdata = amz_docker_install
         # load balancer create
-        
+    elif param["os_name"] == "flask":
+        print("secret install : {} ".format(flask_install) )
+        use_userdata = flask_install
         
         
 

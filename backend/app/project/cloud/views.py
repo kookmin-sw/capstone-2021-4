@@ -92,7 +92,7 @@ def delete_cloud(instance_id):
     if cloud_with_user is not None:
         try:
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
-            print("[Debug] - {}".format(instance_id))
+            print("[Debug] - {}".format(aws_instance_id))
             response = delete_ec2(cloud_with_user.Cloud.aws_instance_id, cloud_with_user.Cloud.certificate_arn)
             import datetime
             cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
@@ -147,41 +147,54 @@ def action(cloud_id, action):
     
     if cloud_with_user is not None:
         if current_user.is_authenticated and cloud_with_user.Cloud.user_id == current_user.id:
-            cloud_secret = cloud_with_user.app_secret_access
-            myvpc = db.session.query(VPC).filter(user_id == current_user.id)
+            cloud_secret = cloud_with_user.Cloud.app_secret_access
+            myvpc = db.session.query(VPC).filter(VPC.user_id == current_user.id)
             if action == "update":
                 deregister_target = ""
-                if cloud_with_user.app_status == "blue":
+                if cloud_with_user.Cloud.app_status == "blue":
                     deregister_target = "blue"
-                    cloud_with_user.app_status = "green"
+                    cloud_with_user.Cloud.app_status = "green"
+                    db.session.commit()
                     
-                elif cloud_with_user.app_status == "green":
+                elif cloud_with_user.Cloud.app_status == "green":
                     deregister_target = "green"
-                    cloud_with_user.app_status = "blue"
+                    cloud_with_user.Cloud.app_status = "blue"
+                    db.session.commit()
             
                 param = {
                     "cloudid": cloud_with_user.Cloud.id, 
                     "secret" : cloud_secret,
                     "action" : "update",
                     "deregister_target" : deregister_target,
-                    "register_target" : cloud_with_user.app_status
+                    "register_target" : cloud_with_user.Cloud.app_status,
+                    "appid" : cloud_with_user.Cloud.os
                 }
+                
             elif action == "rollback":
-                if cloud_with_user.app_status == "blue":
-                    cloud_with_user.app_status = "green"
-                elif cloud_with_user.app_status == "green":
-                    cloud_with_user.app_status = "blue"
+                deregister_target = ""
+                if cloud_with_user.Cloud.app_status == "blue":
+                    deregister_target = "blue"
+                    cloud_with_user.Cloud.app_status = "green"
+                    db.session.commit()
+                elif cloud_with_user.Cloud.app_status == "green":
+                    deregister_target = "green"
+                    cloud_with_user.Cloud.app_status = "blue"
+                    db.session.commit()
                     
                 param = {
                     "cloudid": cloud_with_user.Cloud.id, 
                     "secret" : cloud_secret,
                     "action" : "rollback",
                     "deregister_target" : deregister_target,
-                    "register_target" : cloud_with_user.app_status
+                    "register_target" : cloud_with_user.Cloud.app_status,
+                    "appid" : cloud_with_user.Cloud.os
                 }
             result = app_commander(param)
-            
-            pass
+            print(result)
+            return {
+                "success" : True,
+                "message" : "request success"
+            }
             
         else:
             message = Markup("<strong>인증 문제 입니다.</strong>  ")
@@ -208,6 +221,7 @@ def detail(cloud_id):
             screenshot = get_console_screenshot(aws_instance)
             output = get_console_output(aws_instance)
             
+            app_status = cloud_with_user.Cloud.app_status
 
             from datetime import datetime, timedelta
             today = datetime.today()
@@ -242,7 +256,7 @@ def detail(cloud_id):
             else:
                 outbound_traffic = "none"
              
-            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id)
+            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id, app_status=app_status)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 

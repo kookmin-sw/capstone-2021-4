@@ -524,41 +524,41 @@ class AppVersions(db.Column):
         
     
     
-class CloudApp(db.Model):
-    __tablename__ = "apps"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(10), nullable=False)
-    image_source = db.Column(db.String(200), nullable=False) # Docker Image Id
-    bind_port = db.Column(db.Integer, nullable=False) # container's Port, main docker webserver must 80, 443
+# class CloudApp(db.Model):
+#     __tablename__ = "apps"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     name = db.Column(db.String(10), nullable=False)
+#     image_source = db.Column(db.String(200), nullable=False) # Docker Image Id
+#     bind_port = db.Column(db.Integer, nullable=False) # container's Port, main docker webserver must 80, 443
 
     
-    def __init__(self, name, image_source, bind_port, internal_api_version):
-        self.name = name
-        self.image_source = image_source
-        self.bind_port = bind_port # docker continaer port 
-        self.internal_api_version = internal_api_version
+#     def __init__(self, name, image_source, bind_port, internal_api_version):
+#         self.name = name
+#         self.image_source = image_source
+#         self.bind_port = bind_port # docker continaer port 
+#         self.internal_api_version = internal_api_version
         
 
-        pass
+#         pass
 
-class CloudAppAssigned(db.Model):
-    __tablename__ = "cloudappassign"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    cloudid = db.Column(db.Integer, db.ForeignKey("cloud.id"))
-    appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
-    lb_instance_id = db.Column(db.String(20), nullable=True)
-    blue_port = db.Column(db.Integer, default=8080)
-    green_port = db.Column(db.Integer, default=8081)
-    status = db.Column(db.String(10), nullable=True, default="blue") # green / blue status
-    created_at = db.Column(db.DateTime, nullable=True)
+# class CloudAppAssigned(db.Model):
+#     __tablename__ = "cloudappassign"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     cloudid = db.Column(db.Integer, db.ForeignKey("cloud.id"))
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     lb_instance_id = db.Column(db.String(20), nullable=True)
+#     blue_port = db.Column(db.Integer, default=8080)
+#     green_port = db.Column(db.Integer, default=8081)
+#     status = db.Column(db.String(10), nullable=True, default="blue") # green / blue status
+#     created_at = db.Column(db.DateTime, nullable=True)
     
-    def __init__(self, cloudid, appid, lb_instance_id, blue_port=8080, green_port=8081):
-        self.cloudid = cloudid
-        self.appid = appid
-        self.lb_instance_id = lbInstance_id
-        self.blue_port = blue_port
-        self.green_port = green_port
-        self.created_at = datetime.datetime.now()
+#     def __init__(self, cloudid, appid, lb_instance_id, blue_port=8080, green_port=8081):
+#         self.cloudid = cloudid
+#         self.appid = appid
+#         self.lb_instance_id = lbInstance_id
+#         self.blue_port = blue_port
+#         self.green_port = green_port
+#         self.created_at = datetime.datetime.now()
         
     
 
@@ -567,7 +567,7 @@ class CloudAppCommand(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     action = db.Column(db.String(10), nullable=False) # deploy , update , rollback
     script = db.Column(db.Text, nullable=False)
-    app_id = db.Column(db.Integer, db.ForeignKey('apps.id'))
+    app_id = db.Column(db.Integer, db.ForeignKey('oslist.id'))
     sequence_num = db.Column(db.Integer, nullable=False)
     command_type = db.Column(db.String(10), nullable=True) # script / api , api -> somecloud  internal API 
     
@@ -579,14 +579,14 @@ class CloudAppCommand(db.Model):
         self.sequence_num = sequence_num
         self.command_type = command_type
         
-class AppVersions(db.Model):
-    __tablename__ = "appversions"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
-    version = db.Column(db.String(10), nullable=True)
-    def __init__(self, appid, version):
-        self.appid = appid
-        self.version = version
+# class AppVersions(db.Model):
+#     __tablename__ = "appversions"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     version = db.Column(db.String(10), nullable=True)
+#     def __init__(self, appid, version):
+#         self.appid = appid
+#         self.version = version
         
         
 # class ChargeRequest(db.Model):
