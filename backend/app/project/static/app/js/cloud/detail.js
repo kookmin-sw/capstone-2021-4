@@ -10,7 +10,10 @@
 //         }
 //     })
 // }
-
+function refreshIframe() {
+    var ifr = document.getElementsByName('preview_web')[0];
+    ifr.src = ifr.src;
+}
 
 function rollback(cloudid) {
     call(`/cloud/action/${cloudid}/rollback`, function(response) {
