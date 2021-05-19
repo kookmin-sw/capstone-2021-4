@@ -4,10 +4,11 @@ import boto3
 from project import db
 from project import q
 from project import r
-from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface, SecurityRule, CloudApp,CloudAppCommand
+from project.models import User, Cloud, Plan, Oslist, VPC, Subnet, Keypair, SecurityGroup, NetInterface, SecurityRule,CloudAppCommand
 from project.cloud.exceptions import *
 
 ec2 = boto3.client('ec2', config=app.config.get('AWS_CONFIG'), aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key= os.environ.get("AWS_SECRET_ACCESS_KEY")) 
+
 import time
 import datetime
 import secrets
@@ -26,6 +27,7 @@ default_sec_rule = {
     'ToPort': 22,
 }
 
+
 somecloud_app_rule = {
     'FromPort': 61331,
     'IpProtocol': 'tcp',
@@ -38,6 +40,59 @@ somecloud_app_rule = {
     'ToPort': 61331,
 }
 
+web_sec_rule_blue = {
+    'FromPort': 8080,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 8080 ',
+        },
+    ],
+    'ToPort': 8080,
+}
+web_sec_rule_green = {
+    'FromPort': 8081,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 8081',
+        },
+    ],
+    'ToPort': 8081,
+}
+
+
+
+# for lb
+
+web_sec_rule = {
+    'FromPort': 80,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 80port',
+        },
+    ],
+    'ToPort': 80,
+}
+web_sec_rule_https = {
+    'FromPort': 443,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 443 ',
+        },
+    ],
+    'ToPort': 443,
+}
+
+
+
+
 def insert_app(app_name, soruce, port, rollback ):
     capp = CloudApp(app_name, source, port, rollback)
     db.session.add(capp)
@@ -48,231 +103,121 @@ def insert_app_command(action, script, app_id, sequence_num):
     db.session.commit()
 
 def create_lb_target_group():
-    elbclient = boto3.client('elbv2')
-    response = elbclient.create_target_group(
-        Name='string',
-        Protocol='HTTP'|'HTTPS'|'TCP'|'TLS'|'UDP'|'TCP_UDP'|'GENEVE',
-        ProtocolVersion='string',
-        Port=123,
-        VpcId='string',
-        HealthCheckProtocol='HTTP'|'HTTPS'|'TCP'|'TLS'|'UDP'|'TCP_UDP'|'GENEVE',
-        HealthCheckPort='string',
-        HealthCheckEnabled=True|False,
-        HealthCheckPath='string',
-        HealthCheckIntervalSeconds=123,
-        HealthCheckTimeoutSeconds=123,
-        HealthyThresholdCount=123,
-        UnhealthyThresholdCount=123,
-        Matcher={
-            'HttpCode': 'string',
-            'GrpcCode': 'string'
-        },
-        TargetType='instance'|'ip'|'lambda',
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ]
-    )
+     
     pass
 
 
 def create_loadbalancer_env(param):
     
-    elbclient = boto3.client('elbv2')
-    #param - loadbalancer - subnet id
-    response = elbclient.create_load_balancer(
-        Name='string',
-        Subnets=[
-            'string',
-        ],
-        SubnetMappings=[
-            {
-                'SubnetId': 'string',
-                'AllocationId': 'string',
-                'PrivateIPv4Address': 'string',
-                'IPv6Address': 'string'
-            },
-        ],
-        SecurityGroups=[
-            'string',
-        ],
-        Scheme='internet-facing'|'internal',
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ],
-        Type='application'|'network'|'gateway',
-        IpAddressType='ipv4'|'dualstack',
-        CustomerOwnedIpv4Pool='string'
-    )
-
-    
-    response = client.create_rule(
-        ListenerArn='string',
-        Conditions=[
-            {
-                'Field': 'string',
-                'Values': [
-                    'string',
-                ],
-                'HostHeaderConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'PathPatternConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'HttpHeaderConfig': {
-                    'HttpHeaderName': 'string',
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'QueryStringConfig': {
-                    'Values': [
-                        {
-                            'Key': 'string',
-                            'Value': 'string'
-                        },
-                    ]
-                },
-                'HttpRequestMethodConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                },
-                'SourceIpConfig': {
-                    'Values': [
-                        'string',
-                    ]
-                }
-            },
-        ],
-        Priority=123,
-        Actions=[
-            {
-                'Type': 'forward'|'authenticate-oidc'|'authenticate-cognito'|'redirect'|'fixed-response',
-                'TargetGroupArn': 'string',
-                'AuthenticateOidcConfig': {
-                    'Issuer': 'string',
-                    'AuthorizationEndpoint': 'string',
-                    'TokenEndpoint': 'string',
-                    'UserInfoEndpoint': 'string',
-                    'ClientId': 'string',
-                    'ClientSecret': 'string',
-                    'SessionCookieName': 'string',
-                    'Scope': 'string',
-                    'SessionTimeout': 123,
-                    'AuthenticationRequestExtraParams': {
-                        'string': 'string'
-                    },
-                    'OnUnauthenticatedRequest': 'deny'|'allow'|'authenticate',
-                    'UseExistingClientSecret': True|False
-                },
-                'AuthenticateCognitoConfig': {
-                    'UserPoolArn': 'string',
-                    'UserPoolClientId': 'string',
-                    'UserPoolDomain': 'string',
-                    'SessionCookieName': 'string',
-                    'Scope': 'string',
-                    'SessionTimeout': 123,
-                    'AuthenticationRequestExtraParams': {
-                        'string': 'string'
-                    },
-                    'OnUnauthenticatedRequest': 'deny'|'allow'|'authenticate'
-                },
-                'Order': 123,
-                'RedirectConfig': {
-                    'Protocol': 'string',
-                    'Port': 'string',
-                    'Host': 'string',
-                    'Path': 'string',
-                    'Query': 'string',
-                    'StatusCode': 'HTTP_301'|'HTTP_302'
-                },
-                'FixedResponseConfig': {
-                    'MessageBody': 'string',
-                    'StatusCode': 'string',
-                    'ContentType': 'string'
-                },
-                'ForwardConfig': {
-                    'TargetGroups': [
-                        {
-                            'TargetGroupArn': 'string',
-                            'Weight': 123
-                        },
-                    ],
-                    'TargetGroupStickinessConfig': {
-                        'Enabled': True|False,
-                        'DurationSeconds': 123
-                    }
-                }
-            },
-        ],
-        Tags=[
-            {
-                'Key': 'string',
-                'Value': 'string'
-            },
-        ]
-    )
     return response
-    pass
-
+    
 
 def change_target_group_port():
     pass
 
 
+
 def app_commander(param):
     # app command 에 있는거 순서대로 입력해야함
+    set_port = {
+        "blue": 8080,
+        "green": 8081
+    }
     cloud = Cloud.query.filter_by(id=param["cloudid"]).first()
     command = CloudAppCommand.query.filter_by(app_id = param["appid"], action=param["action"]).order_by(CloudAppCommand.sequence_num.asc())
     ip_addr = cloud.ip_addr
     aws_instance = cloud.aws_instance_id
     vpc_id = cloud.vpc_id
+    secret = cloud.app_secret_access
     
-    try:
-        for item in command:
-            if item.command_type == "script":
-                response = requests.get("http://{}:61331/run/{}?shell={}".format(ip_addr,secret,item.script))
+    register_target = param["register_target"]
+    deregister_target = param["deregister_target"]
+    
+    client = boto3.client('elbv2')
+    if param["action"] == "rollback":
+        try:
             
-                if response.status_code == 200:
-                    print(response.content.decode("utf-8")) 
-                else:
-                    print("Error")
-            elif item.command_type == "api":
-                eval(item.script)
-           
+            reg_target = client.register_targets( 
+                TargetGroupArn= cloud.targetgroup_arn, # 위에서 만든 target group arn
+                Targets=[
+                    {
+                        'Id': aws_instance, #AWS Instance ID
+                        'Port': set_port[register_target], 
+                    },
+                ]
+            )
+            print(reg_target)
+            
+            dreg_target = client.deregister_targets(
+                TargetGroupArn=cloud.targetgroup_arn,
+                Targets=[
+                    {
+                        'Id': aws_instance,
+                        'Port': set_port[deregister_target]
+                    },
+                ]
+            )
+            
+            print(dreg_target)
+            # 바로 로드벨런서 register -> deregister 순으로 처리
+            return {
+                "success" : True,
+                "message" : "Rollback process completed"
+            }
+            pass
         
-        return True
-    except Exception as e:
-        print(e)
-        return False
+        except Exception as e:
+            return e
+    elif param["action"] == "update":
+        try:
 
-def deploy_app(instance_id, app_name):
-    pass
+            # 스크립트 수행 후 register -> deregister 순으로 처리
+            # 스크립트 -> docker build  ... docker rm -f register_target_port -> docker run -itd register_target:80 register_target_name
+            for item in command:
+                
+                if item.command_type == "script":
+                    
+                    script_formatted = item.script.format(app_register=register_target, app_port = set_port[register_target] )
+                    print(script_formatted)
+                    req_url = "http://{}:61331/run?secret={}&shell={}".format(ip_addr,secret,script_formatted)
+                    response = requests.get(req_url)
+                    print("formatURL: {} ".format(req_url))
+                
+                    if response.status_code == 200:
+                        print(response.content.decode("utf-8")) 
+                    else:
+                        print("Error")
+                        print(response.content)
+                elif item.command_type == "api":
+                    eval(item.script)
+            print("End commend process")
+            reg_target = client.register_targets( 
+                TargetGroupArn= cloud.targetgroup_arn, # 위에서 만든 target group arn
+                Targets=[
+                    {
+                        'Id': aws_instance, #AWS Instance ID
+                        'Port': set_port[register_target], 
+                    },
+                ]
+            )
+            print(reg_target)
+            
+            dreg_target = client.deregister_targets(
+                TargetGroupArn=cloud.targetgroup_arn,
+                Targets=[
+                    {
+                        'Id': aws_instance,
+                        'Port': set_port[deregister_target]
+                    },
+                ]
+            )
+            
+            
+            return True
+        except Exception as e:
+            print(e)
 
-def update_app(instance_id, app_name):
-    pass
 
-def stop_app(instance_id, app_name):
-    pass
-
-def start_app(instance_id, app_name):
-    pass
-
-def rollback_app(instance_id, app_name):
-    #ignore nginx
-    
-    pass 
 
 def reboot_instances(instance_id):
     response = ec2.reboot_instances(InstanceIds=[instance_id], DryRun=False)
@@ -541,18 +486,43 @@ def check_environment(userid):
             return True
     except:
         raise FailToCheckEnvironment
-
+        
+def add_lb_secruity_rule(sec_group_id):
+    try:
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule],
+        )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_https],
+        )
+        
+    except Exception as e:
+        print(e)
+        raise FailToCreateSecurityRule
+    pass
+    
 def add_default_security_rule(sec_group_id):
     try:
         ec2.authorize_security_group_ingress(
             GroupId=sec_group_id,
-            IpPermissions=[default_sec_rule],
+            IpPermissions=[default_sec_rule],  #ssh
         )
         
         ec2.authorize_security_group_ingress(
             GroupId=sec_group_id,
             IpPermissions=[somecloud_app_rule],
         )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_blue],
+        )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_green],
+        )
+        
         
         return True 
     except:
@@ -584,10 +554,13 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         router_init = route_table_init(int_gw_id, route_table_id)
         print("[Console] SecurityGroup Create")
         security_group = back_ec2_create_security_group(vpc_id)   
+        print("[Console] SecurityGroup Create(LB)")
+        security_group_for_lb = back_ec2_create_security_group(vpc_id, "DefaultRuleLb")   
         security_group_id = security_group["GroupId"] 
         print("[Console] SecurityGroup {} created".format(security_group_id))
+        print("[Console] SecurityGroup LB {} created".format(security_group_for_lb["GroupId"]))
         add_default_security_rule(security_group_id) # add port 22
-        
+        add_lb_secruity_rule(security_group_for_lb["GroupId"])
         print("[Console] SecurityGroup Default Port 22 added")
         print("[Console] DB Record create")
         # Create record structure
@@ -601,14 +574,16 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         new_subnet = Subnet(subnet_id, subnet_cidr,vpc_id) 
         db.session.add(new_subnet)
         print("[Console] Security record create")
-        new_security_group = SecurityGroup("DefaultRule" , security_group_id, userid, None, vpc_id)
+        new_security_group = SecurityGroup("DefaultRule" , security_group_id, userid, None, vpc_id )
+        new_security_group.lb_sec_group_id = security_group_for_lb["GroupId"]
         db.session.add(new_security_group)
         db.session.flush()
         db.session.refresh(new_security_group)
         sec_group_id = new_security_group.id 
         print("[Console] Sec rule Create")
-        new_security_rule = SecurityRule("tcp", "22","22", "0.0.0.0/0", "ssh", sec_group_id)
-        db.session.add(new_security_rule)
+        db.session.add(SecurityRule("tcp", "22","22", "0.0.0.0/0", "ssh", sec_group_id))
+        db.session.add(SecurityRule("tcp", "8080","8080", "0.0.0.0/0", "for ", sec_group_id))
+        db.session.add(SecurityRule("tcp", "8081","8081", "0.0.0.0/0", "for lb", sec_group_id))
         
     except FailToCreateSubnetException:
         print("[Console] Fail to create Subnet -> Deleting VPC")
@@ -643,6 +618,7 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         print("[Console] Fail to create sec group rule -> Deleting Int GW, VPC, RouteTable, SecGroup, Detach Int GW")
         back_ec2_delete_subnet(subnet_id)
         back_ec2_delete_security_group(sec_group_id) 
+        back_ec2_delete_security_group(security_group_for_lb["GroupId"]) 
         back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
         detach_internet_gateway(int_gw_id, vpc_id)
         back_ec2_delete_int_gateway(int_gw_id)
@@ -693,7 +669,7 @@ def back_update_ec2_info(instance_id):
     print(ip_addr)
     cloud = Cloud.query.filter_by(aws_instance_id=instance_id).first()
     cloud.ip_addr = ip_addr
-    
+    cloud_vpc = VPC.query.filter_by(id=cloud.vpc_id).first()
     net_interface_id = response["Reservations"][0]["Instances"][0]["NetworkInterfaces"][0]["NetworkInterfaceId"]
     # print(net_interface_id)
     
@@ -702,6 +678,148 @@ def back_update_ec2_info(instance_id):
     subnet_id = subnet.id  
     cloud_id = cloud.id 
     db.session.commit()
+    selected_os = Oslist.query.filter_by(id = cloud.os).first()
+    print("OS : {}".format(selected_os.os_name))
+    print("HostedZoneID {}".format(os.getenv("HOSTED_ZONE_ID")))
+    hosted_zone_id = os.getenv("HOSTED_ZONE_ID")
+    if selected_os.os_name == "flask":
+        print("LB Deployment started")
+        client = boto3.client('elbv2')
+        tg = client.create_target_group(
+            Name="tg-{}".format(secrets.token_hex(nbytes=5)),
+            Port=8080,
+            Protocol='HTTP',
+            VpcId=cloud_vpc.vpc_id,
+        )
+        cloud.targetgroup_arn = tg["TargetGroups"][0]["TargetGroupArn"]
+        db.session.commit()
+        print("wait for 10 sec for instance state running")
+        time.sleep(10)
+        rp = client.register_targets( 
+            TargetGroupArn= tg["TargetGroups"][0]["TargetGroupArn"], # 위에서 만든 target group arn
+            Targets=[
+                {
+                    'Id': instance_id, #AWS Instance ID
+                    'Port': 8080, 
+                },
+            ]
+        )
+        sel_secgroup = db.session.query(SecurityGroup).filter(SecurityGroup.id == cloud.sec_group_id).first()
+        lb1 = client.create_load_balancer(
+            Name="lb1-{}".format(secrets.token_hex(nbytes=5)),
+            Subnets=[
+                cloud_vpc.default_subnet_id,
+                cloud_vpc.sub_subnet_id
+            ], 
+            SecurityGroups=[
+                sel_secgroup.lb_sec_group_id,
+            ],
+            Scheme='internet-facing',
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ],
+            Type='application' ,
+            IpAddressType='ipv4',
+        )
+        
+        lb_hostname = lb1["LoadBalancers"][0]["DNSName"]
+        client = boto3.client('route53')
+        print(cloud.hostname + ".some-cloud.net DNS Record create process")
+        response = client.change_resource_record_sets(
+        HostedZoneId=hosted_zone_id, # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+            ChangeBatch={
+                'Comment': '12d12d12d12',
+                'Changes': [
+                    {
+                        'Action': 'UPSERT',
+                        'ResourceRecordSet': {
+                            'Name': cloud.hostname + ".some-cloud.net" ,
+                            'Type': 'CNAME',  
+                            'TTL': 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': lb_hostname
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        client = boto3.client('acm')
+        response = client.describe_certificate(
+            CertificateArn=cloud.certificate_arn
+        )
+        certvalidation_domain = response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Name"]
+        certvalidation_value =  response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Value"]
+        client = boto3.client('route53')
+        response = client.change_resource_record_sets(
+        HostedZoneId=hosted_zone_id, # 이건 Static 한 값이 되겠다.. 고객별로 도메인을 등록하는것까지 할 수 있겠지만 ,, cost 가 늘어난다... ㅜ ㅜ 
+            ChangeBatch={
+                'Comment': '12d12d12d12',
+                'Changes': [
+                    {
+                        'Action': 'UPSERT',
+                        'ResourceRecordSet': {
+                            'Name': certvalidation_domain,
+                            'Type': 'CNAME',  
+                            'TTL' : 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': certvalidation_value
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        time.sleep(30)
+        client = boto3.client('elbv2')
+        response = client.create_listener(
+            LoadBalancerArn=lb1["LoadBalancers"][0]["LoadBalancerArn"],
+            Protocol='HTTP',
+            Port=80,  
+            DefaultActions=[
+                {
+                    'Type': 'forward',
+                    'TargetGroupArn': tg["TargetGroups"][0]["TargetGroupArn"],
+                },
+            ], 
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ]
+        )
+        response = client.create_listener(
+            LoadBalancerArn=lb1["LoadBalancers"][0]["LoadBalancerArn"],
+            Protocol='HTTPS',
+            Port=443,  
+             Certificates=[
+                {
+                    'CertificateArn': cloud.certificate_arn, 
+                },
+            ],
+            DefaultActions=[
+                {
+                    'Type': 'forward',
+                    'TargetGroupArn': tg["TargetGroups"][0]["TargetGroupArn"],
+                },
+            ], 
+            Tags=[
+                {
+                    'Key': 'string',
+                    'Value': 'string'
+                },
+            ]
+        )
+        
+
         
     check = db.session.query(NetInterface).filter(NetInterface.cloud_id == cloud_id).first()
 
@@ -735,7 +853,16 @@ def back_update_ec2_info(instance_id):
 
  
 
-def delete_ec2(instance_id):
+def delete_ec2(instance_id, cert_arn):
+    client = boto3.client('acm')
+    # -> flask app 이면 로드벨런서 삭제 후 cert 삭제..!
+    # 그게 아니면 cert삭제
+    # response = client.delete_certificate(
+    #     CertificateArn=cert_arn
+    # )
+    # dns record delete
+    # 
+    
     response = ec2.terminate_instances(
         InstanceIds=[
             instance_id,
@@ -746,6 +873,17 @@ def delete_ec2(instance_id):
 
 
 def back_ec2_create_ec2( param):
+    client = boto3.client('acm')
+    
+    response = client.request_certificate(
+        DomainName=param["hostname"] + ".some-cloud.net", # arn:aws:acm:ap-northeast-2:453409655393:certificate/bc65ddcb-9963-4d29-bd9f-f98f9569fcdd
+        ValidationMethod='DNS',   
+        Options={
+            'CertificateTransparencyLoggingPreference':  'DISABLED'
+        },  
+    )
+    cert_arn = response["CertificateArn"]
+
     secret_key=secrets.token_hex()
     print("secKey: {}".format(secret_key))
     amz_docker_install = """
@@ -777,12 +915,30 @@ def back_ec2_create_ec2( param):
     sudo usermod -a -G docker ubuntu \n
     sudo systemctl enable docker \n
     """
+    flask_install = """
+    #!/bin/bash
+    sudo service supervisord stop
+    cd /home/ec2-user/.manager/capstone-2021-4/backend
+    git reset --hard
+    git clean -d -f -f
+    git pull
+    cp -rf /home/ec2-user/.manager/capstone-2021-4/backend/receiver/flask.ini /etc/supervisord.d/
+    echo 'environment=secret={}' >> /etc/supervisord.d/flask.ini
+    sudo service supervisord start
+    """.format(secret_key)
     
     use_userdata = ""
     if param["os_name"] == "ubuntu20.04":
         use_userdata = ubuntu_docker_install
     elif param["os_name"] == "amazonLinux":
         use_userdata = amz_docker_install
+        # load balancer create
+    elif param["os_name"] == "flask":
+        print("secret install : {} ".format(flask_install) )
+        use_userdata = flask_install
+        
+        
+
     
     instance = ec2.run_instances(
     BlockDeviceMappings=[ # 이게 기본 부트 볼륨으로 지정이 안됨.. /dev/sda1 같은거로 바꾸고, VolumeType, IOPS 세팅 피룡함
@@ -825,6 +981,7 @@ def back_ec2_create_ec2( param):
     cloud.aws_instance_id = instance_id
     cloud.status = "Running" 
     cloud.app_secret_access = secret_key
+    cloud.certificate_arn = cert_arn
     secgroup = SecurityGroup.query.filter_by(sec_group_id=param["security-group-id"][0]).first()
     secgroup.associated_to = cloud_id
     

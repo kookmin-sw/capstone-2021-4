@@ -1301,7 +1301,7 @@ fieldset[disabled] .btn-pink.active {
 }
 .panel-dark > .panel-heading {
   color: #ffffff;
-  background-color: #35394b;
+  background-color: #393C3C;
   border-color: #35394b;
 }
 .panel-dark > .panel-heading + .panel-collapse > .panel-body {
@@ -5196,4 +5196,5 @@ fieldset[disabled] .fc-button.active {
     overflow: hidden !important;
   }
 }
+
 

@@ -97,7 +97,7 @@ def register():
                 message = Markup(
                     "<strong>Error!</strong> Unable to process registration.")
                 flash(message, 'danger')
-    return render_template('register.html', form=form)
+    return render_template('new/signup.html', form=form)
 
 @users_blueprint.route('/token', methods=["POST"])
 def token_login():
@@ -139,6 +139,7 @@ def token_login():
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    print("Login")
     form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():

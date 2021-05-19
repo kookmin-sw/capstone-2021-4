@@ -7,7 +7,7 @@ from flask import abort, request
 
 
 app.config.from_object(os.getenv('APP_SETTINGS'))
-
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 migrate = Migrate(app, db)
 manager = Manager(app)
