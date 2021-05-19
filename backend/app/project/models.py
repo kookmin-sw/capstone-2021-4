@@ -381,7 +381,7 @@ class Cloud(db.Model):
     keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
     vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
     aws_instance_id = db.Column(db.String(30), nullable=False)
-    app_secret_access = db.Column(db.String(60), nullable=True) # access code .. 
+    app_secret_access = db.Column(db.String(80), nullable=True) # access code .. 
     is_lb_env_created = db.Column(db.Boolean, nullable=True)
     certificate_arn = db.Column(db.String(100), nullable=True)
     sec_group_id = db.Column(db.Integer, db.ForeignKey('securitygroup.id'))
@@ -511,17 +511,7 @@ class SystemApi(db.Column):
         self.version = version
         
     
-    
-class AppVersions(db.Column):
-    __tablename__ = 'apiupdate'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    app_id = db.Column(db.Integer, db.ForeignKey("apps.id"))
-    version = db.Column(db.String)
-    
-    def __init__(self, app_id, version):
-        self.app_id = app_id
-        self.version = version
-        
+ 
     
     
 # class CloudApp(db.Model):
