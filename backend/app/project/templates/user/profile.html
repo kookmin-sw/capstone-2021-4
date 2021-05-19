@@ -31,15 +31,7 @@
                </h3>
              </div>
 
-             <fieldset>
-                <div class="col-md-6">
-                  <div class="form-group">
-                     <label>Name</label>
-                     <input type="text" name="name" placeholder="희주" class="form-control">
-                  </div>
-               </div>
-             </fieldset>
-
+             
              <fieldset>
               <div class="col-md-6">
                    <div class="form-group">
@@ -51,14 +43,7 @@
                 </div>
             </fieldset>
 
-             <fieldset>
-              <div class="col-md-6">
-                <div class="form-group">
-                   <label>Phone Number</label>
-                   <input type="text" name="Phone" placeholder="010-1234-5678" class="form-control">
-                </div>
-             </div>
-             </fieldset>
+             
 
              <fieldset>
               <div class="col-md-6">
@@ -75,7 +60,7 @@
                 <div class="form-group">
                   <br>
                   <label>Statistics</label>
-                  <br>
+                  <br><br>
                   <p class="card-text">Member since: {{ current_user.registered_on.strftime("%A %B %d, %Y") }}</a></p>
                   {% if current_user.last_logged_in != None %}
                   <p class="card-text">Last Logged In: {{ current_user.last_logged_in.strftime("%A %B %d, %Y") }}</p>
