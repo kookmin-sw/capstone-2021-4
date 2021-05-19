@@ -27,6 +27,7 @@ def admin_add(email, adminpw):
     new_user.role ='admin'
     
     db.session.add(new_user)
+    db.sesion.commit()
 
 def os_add():
     sample_os = Oslist('ubuntu20.04', 'ami-067abcae434ee508b')
