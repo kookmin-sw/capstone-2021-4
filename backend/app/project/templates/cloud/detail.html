@@ -47,6 +47,8 @@
                                  </li>
                                  <li><a href="#Logs-pills" data-toggle="tab">Console Logs</a>
                                  </li>
+                                 <li><a href="#preview-pills" data-toggle="tab">Preview</a>
+                                 </li>
                               </ul>
                               <!-- Tab panes -->
                               <div class="tab-content">
@@ -77,6 +79,16 @@
                                         <div class="col-md-6">
                                         <!-- <h4>Console Logs</h4> -->
                                         <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="preview-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <iframe name="preview_web" src="http://{{hostname}}.some-cloud.net"></iframe>
+                                        <br>
+                                        <button class="btn btn-sm btn-inverse" onclick="refreshIframe()">reload</button>
+                        
                                         </div>
                                     </fieldset>
                                  </div>
