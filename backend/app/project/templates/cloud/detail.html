@@ -47,6 +47,8 @@
                                  </li>
                                  <li><a href="#Logs-pills" data-toggle="tab">Console Logs</a>
                                  </li>
+                                 <li><a href="#preview-pills" data-toggle="tab">Preview</a>
+                                 </li>
                               </ul>
                               <!-- Tab panes -->
                               <div class="tab-content">
@@ -55,6 +57,7 @@
                                         <div class="col-md-12">
                                         <!-- <h4>Information</h4><br> -->
                                         <br>
+                                        <p>Hostname : {{ hostname }}.some-cloud.net</p>
                                         <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
                                         <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
                                         <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
@@ -76,6 +79,16 @@
                                         <div class="col-md-6">
                                         <!-- <h4>Console Logs</h4> -->
                                         <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="preview-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <iframe name="preview_web" src="http://{{hostname}}.some-cloud.net"></iframe>
+                                        <br>
+                                        <button class="btn btn-sm btn-inverse" onclick="refreshIframe()">reload</button>
+                        
                                         </div>
                                     </fieldset>
                                  </div>
@@ -167,18 +180,16 @@
 
                 <fieldset>
                     <div class="col-md-12">
-                        <h3>App Deploy</h3>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('magento', {{ cloudid}} ) ;delete(this)">Deploy magento</button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('php', {{  cloudid }} )">Deploy php </button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('python' , {{ cloudid}} )">Deploy python</button>
-                        <button class="btn btn-sm btn-inverse" onclick="deploy('ruby' , {{ cloudid }} )">Deploy php </button>
-                        <h3>Loadbalancer IP : ()</h3>
-                        <h3>connected_domain : ()</h3>
+                        <h3>Actions</h3>
+                        <button class="btn btn-sm btn-inverse" onclick="update( {{ cloudid }} )">Update App </button>
+                        <button class="btn btn-sm btn-inverse" onclick="rollback( {{ cloudid }} )">Rollback App </button>
+                        
                     </div>
                 </fieldset>
                 <fieldset>
                     <div class="col-md-12">
                         <h3>App Status</h3>  
+                        {{ app_status }}
                     </div>
                 </fieldset>
                 

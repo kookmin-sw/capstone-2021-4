@@ -1,3 +1,4 @@
+{% from "_formshelper.html" import render_field %}
 <!DOCTYPE html>
 <html lang="en" class="no-ie">
 <head>
@@ -6,16 +7,15 @@
    <meta name="description" content="">
    <meta name="keywords" content="">
    <meta name="author" content="">
-   <title>Somecloud</title>
+   <title>Wintermin - Bootstrap Admin Theme</title>
    
-   <link rel="stylesheet" href="../app/css/bootstrap.css">
-   <link rel="stylesheet" href="../vendor/fontawesome/css/font-awesome.min.css">
-   <link rel="stylesheet" href="../vendor/animo/animate+animo.css">
-   <link rel="stylesheet" href="../app/css/app.css">
-   <link rel="stylesheet" href="../app/css/common.css">
-   <link rel="stylesheet" href="../app/css/global.css">
-   <script src="../vendor/modernizr/modernizr.js" type="application/javascript"></script>
-   <script src="../vendor/fastclick/fastclick.js" type="application/javascript"></script>
+   <link rel="stylesheet" href="/static/app/css/bootstrap.css">
+   <link rel="stylesheet" href="/static/vendor/fontawesome/css/font-awesome.min.css">
+   <link rel="stylesheet" href="/static/vendor/animo/animate+animo.css">
+   <link rel="stylesheet" href="/static/app/css/app.css">
+   <link rel="stylesheet" href="/static/app/css/common.css">
+   <script src="/static/vendor/modernizr/modernizr.js" type="application/javascript"></script>
+   <script src="/static/vendor/fastclick/fastclick.js" type="application/javascript"></script>
 </head>
 
 <body>
@@ -26,39 +26,30 @@
          <div data-toggle="play-animation" data-play="fadeIn" data-offset="0" class="panel panel-dark panel-flat">
             <div class="panel-heading text-center mb-lg">
                <a href="#">
-                  <img src="../app/img/logo.png" alt="Image" class="block-center img-rounded">
+                  <img src="/static/app/img/cloudlogo.png" alt="Image" class="block-center img-rounded">
                </a>
                <p class="text-center mt-lg">
-                  <strong>SIGNUP TO GET INSTANT ACCESS.</strong>
+                  <strong>Register</strong>
                </p>
             </div>
             <div class="panel-body">
-               <form role="form">
-                  <div class="form-group has-feedback">
-                     <label for="signupInputEmail1" class="text-muted">Email address</label>
-                     <input id="signupInputEmail1" type="email" placeholder="Enter email" class="form-control">
-                     <span class="fa fa-envelope form-control-feedback text-muted"></span>
-                  </div>
-                  <div class="form-group has-feedback">
-                     <label for="signupInputPassword1" class="text-muted">Password</label>
-                     <input id="signupInputPassword1" type="password" placeholder="Password" class="form-control">
-                     <span class="fa fa-lock form-control-feedback text-muted"></span>
-                  </div>
-                  <div class="form-group has-feedback">
-                     <label for="signupInputRePassword1" class="text-muted">Retype Password</label>
-                     <input id="signupInputRePassword1" type="password" placeholder="Retype Password" class="form-control">
-                     <span class="fa fa-lock form-control-feedback text-muted"></span>
-                  </div>
-                  <div class="clearfix">
-                     <div class="checkbox c-checkbox pull-left mt0">
-                        <label>
-                           <input type="checkbox" value="">
-                           <span class="fa fa-check"></span>I agree with the <a href="#" style="color: #0094cb;">terms</a>
-                        </label>
-                     </div>
-                  </div>
-                  <button type="submit" class="btn btn-block btn-green" style="margin-top: 20px; margin-bottom: 10px;">Register</button>
-               </form>
+               <form action="{{ url_for('users.register') }}" method="post">
+                 {{ form.csrf_token }}
+                 <div class="form-group">
+                   {{ form.email.label }}
+                   {{ render_field(form.email, class="form-control", placeholder="Email address") }}
+                 </div>
+                 <div class="form-group">
+                   {{ form.password.label }}
+                   {{ render_field(form.password, class="form-control", placeholder="Password") }}
+                 </div>
+                 <div class="form-group">
+                   {{ form.confirm.label }}
+                   {{ render_field(form.confirm, class="form-control", placeholder="Confirm password") }}
+                 </div>
+                 <input type="submit" value="Get Started!" class="btn btn-lg btn-success">
+             </form>
+               
             </div>
          </div>
          <!-- END panel-->
@@ -67,12 +58,12 @@
    <!-- END wrapper-->
    <!-- START Scripts-->
    <!-- Main vendor Scripts-->
-   <script src="../vendor/jquery/jquery.min.js"></script>
-   <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+   <script src="/static/vendor/jquery/jquery.min.js"></script>
+   <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
    <!-- Animo-->
-   <script src="../vendor/animo/animo.min.js"></script>
+   <script src="/static/vendor/animo/animo.min.js"></script>
    <!-- Custom script for pages-->
-   <script src="../app/js/pages.js"></script>
+   <script src="/static/app/js/pages.js"></script>
    <!-- END Scripts-->
 </body>
 

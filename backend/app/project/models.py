@@ -265,6 +265,7 @@ class SecurityGroup(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     associated_to = db.Column(db.Integer, nullable=True) # cloud.id
     vpc_id = db.Column(db.Integer, db.ForeignKey("user_vpc.id"))
+    lb_sec_group_id = db.Column(db.String(30), nullable=True)
     
     secgroups = db.relationship('SecurityRule', cascade = "all, delete", backref="SecurityRule")
     
@@ -365,6 +366,8 @@ class Cloud(db.Model):
     aws_instance_id: str
     app_secret_access: str  
     is_lb_env_created: bool
+    certificate_arn : str
+    sec_group_id : int
     
     id = db.Column(db.Integer, primary_key=True)
     hostname = db.Column(db.String(30), nullable=False)
@@ -379,18 +382,19 @@ class Cloud(db.Model):
     keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
     vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
     aws_instance_id = db.Column(db.String(30), nullable=False)
-    app_secret_access = db.Column(db.String(60), nullable=True) # access code .. 
+    app_secret_access = db.Column(db.String(80), nullable=True) # access code .. 
     is_lb_env_created = db.Column(db.Boolean, nullable=True)
-    
-    
-    
-    
+    certificate_arn = db.Column(db.String(100), nullable=True)
+    sec_group_id = db.Column(db.Integer, db.ForeignKey('securitygroup.id'))
+    targetgroup_arn = db.Column(db.String(100), nullable=True)
+    loadbalancer_arn = db.Column(db.String(70), nullable=True)
+    app_status = db.Column(db.String(6), nullable=True)
     def __json__(self):
         return ['id', 'hostname', 'plan_id', 'user_id', 'os', 
         'status', 'ip_addr', 'region', 'created_at', 'keypair_id',
         'vpc_id', 'aws_instance_id']
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access,certificate_arn, sec_group_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -403,7 +407,12 @@ class Cloud(db.Model):
         self.vpc_id = vpc_id
         self.aws_instance_id = aws_instance_id
         self.app_secret_access = app_secret_access
-        self.is_lb_env_created = False
+        self.is_lb_env_created = False 
+        self.certificate_arn = ""
+        self.sec_group_id = sec_group_id
+        self.loadbalancer_arn=""
+        self.targetgroup_arn= ""
+        self.app_status = "blue"
 
     
     
@@ -503,54 +512,44 @@ class SystemApi(db.Column):
         self.version = version
         
     
-    
-class AppVersions(db.Column):
-    __tablename__ = 'apiupdate'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    app_id = db.Column(db.Integer, db.ForeignKey("apps.id"))
-    version = db.Column(db.String)
-    
-    def __init__(self, app_id, version):
-        self.app_id = app_id
-        self.version = version
-        
+ 
     
     
-class CloudApp(db.Model):
-    __tablename__ = "apps"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(10), nullable=False)
-    image_source = db.Column(db.String(200), nullable=False) # Docker Image Id
-    bind_port = db.Column(db.Integer, nullable=False) # container's Port, main docker webserver must 80, 443
+# class CloudApp(db.Model):
+#     __tablename__ = "apps"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     name = db.Column(db.String(10), nullable=False)
+#     image_source = db.Column(db.String(200), nullable=False) # Docker Image Id
+#     bind_port = db.Column(db.Integer, nullable=False) # container's Port, main docker webserver must 80, 443
 
     
-    def __init__(self, name, image_source, bind_port, internal_api_version):
-        self.name = name
-        self.image_source = image_source
-        self.bind_port = bind_port # docker continaer port 
-        self.internal_api_version = internal_api_version
+#     def __init__(self, name, image_source, bind_port, internal_api_version):
+#         self.name = name
+#         self.image_source = image_source
+#         self.bind_port = bind_port # docker continaer port 
+#         self.internal_api_version = internal_api_version
         
 
-        pass
+#         pass
 
-class CloudAppAssigned(db.Model):
-    __tablename__ = "cloudappassign"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    cloudid = db.Column(db.Integer, db.ForeignKey("cloud.id"))
-    appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
-    lb_instance_id = db.Column(db.String(20), nullable=True)
-    blue_port = db.Column(db.Integer, default=8080)
-    green_port = db.Column(db.Integer, default=8081)
-    status = db.Column(db.String(10), nullable=True, default="blue") # green / blue status
-    created_at = db.Column(db.DateTime, nullable=True)
+# class CloudAppAssigned(db.Model):
+#     __tablename__ = "cloudappassign"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     cloudid = db.Column(db.Integer, db.ForeignKey("cloud.id"))
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     lb_instance_id = db.Column(db.String(20), nullable=True)
+#     blue_port = db.Column(db.Integer, default=8080)
+#     green_port = db.Column(db.Integer, default=8081)
+#     status = db.Column(db.String(10), nullable=True, default="blue") # green / blue status
+#     created_at = db.Column(db.DateTime, nullable=True)
     
-    def __init__(self, cloudid, appid, lb_instance_id, blue_port=8080, green_port=8081):
-        self.cloudid = cloudid
-        self.appid = appid
-        self.lb_instance_id = lbInstance_id
-        self.blue_port = blue_port
-        self.green_port = green_port
-        self.created_at = datetime.datetime.now()
+#     def __init__(self, cloudid, appid, lb_instance_id, blue_port=8080, green_port=8081):
+#         self.cloudid = cloudid
+#         self.appid = appid
+#         self.lb_instance_id = lbInstance_id
+#         self.blue_port = blue_port
+#         self.green_port = green_port
+#         self.created_at = datetime.datetime.now()
         
     
 
@@ -559,7 +558,7 @@ class CloudAppCommand(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     action = db.Column(db.String(10), nullable=False) # deploy , update , rollback
     script = db.Column(db.Text, nullable=False)
-    app_id = db.Column(db.Integer, db.ForeignKey('apps.id'))
+    app_id = db.Column(db.Integer, db.ForeignKey('oslist.id'))
     sequence_num = db.Column(db.Integer, nullable=False)
     command_type = db.Column(db.String(10), nullable=True) # script / api , api -> somecloud  internal API 
     
@@ -571,8 +570,16 @@ class CloudAppCommand(db.Model):
         self.sequence_num = sequence_num
         self.command_type = command_type
         
+# class AppVersions(db.Model):
+#     __tablename__ = "appversions"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     version = db.Column(db.String(10), nullable=True)
+#     def __init__(self, appid, version):
+#         self.appid = appid
+#         self.version = version
         
-    
+        
 # class ChargeRequest(db.Model):
 #     __tablename__= 'chargerequest'
 
