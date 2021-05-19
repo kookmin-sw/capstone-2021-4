@@ -21,10 +21,9 @@ def plan_add():
     db.session.commit()
 
 
-def admin_add():
+def admin_add(email, adminpw):
 # Admin User ad
-    new_user = User('admin@testtest.com', '123!asdf')
-    new_user.authenticated = True
+    new_user = User(email, adminpw)
     new_user.role ='admin'
     
     db.session.add(new_user)
@@ -40,13 +39,14 @@ def os_add():
     db.session.commit()
 
 def app_add():
-    flask = Oslist('flask', 'ami-04f79737f53352f18')
+    flask = Oslist('flask', 'ami-0ee56963557a8a3e1')
     db.session.add(flask)
     db.session.commit()
     
 #flask script
 def add_app_script():
-
+    # 밑에 (1,1) , (1,2), (1,3)  => 각 첫번쨰 1 => os id, 두번째 1 => 명령어 실행될 순서
+    
     flask_update_script = """
     cd /home/ec2-user/public_flask
     """
