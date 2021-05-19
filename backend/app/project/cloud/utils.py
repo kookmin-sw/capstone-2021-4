@@ -27,6 +27,7 @@ default_sec_rule = {
     'ToPort': 22,
 }
 
+
 somecloud_app_rule = {
     'FromPort': 61331,
     'IpProtocol': 'tcp',
@@ -38,6 +39,59 @@ somecloud_app_rule = {
     ],
     'ToPort': 61331,
 }
+
+web_sec_rule_blue = {
+    'FromPort': 8080,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 8080 ',
+        },
+    ],
+    'ToPort': 8080,
+}
+web_sec_rule_green = {
+    'FromPort': 8081,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 8081',
+        },
+    ],
+    'ToPort': 8081,
+}
+
+
+
+# for lb
+
+web_sec_rule = {
+    'FromPort': 80,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 80port',
+        },
+    ],
+    'ToPort': 80,
+}
+web_sec_rule_https = {
+    'FromPort': 443,
+    'IpProtocol': 'tcp',
+    'IpRanges': [
+        {
+            'CidrIp': '0.0.0.0/0',
+            'Description': 'SomeCloud Default Security rule 443 ',
+        },
+    ],
+    'ToPort': 443,
+}
+
+
+
 
 def insert_app(app_name, soruce, port, rollback ):
     capp = CloudApp(app_name, source, port, rollback)
@@ -432,18 +486,43 @@ def check_environment(userid):
             return True
     except:
         raise FailToCheckEnvironment
-
+        
+def add_lb_secruity_rule(sec_group_id):
+    try:
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule],
+        )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_https],
+        )
+        
+    except Exception as e:
+        print(e)
+        raise FailToCreateSecurityRule
+    pass
+    
 def add_default_security_rule(sec_group_id):
     try:
         ec2.authorize_security_group_ingress(
             GroupId=sec_group_id,
-            IpPermissions=[default_sec_rule],
+            IpPermissions=[default_sec_rule],  #ssh
         )
         
         ec2.authorize_security_group_ingress(
             GroupId=sec_group_id,
             IpPermissions=[somecloud_app_rule],
         )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_blue],
+        )
+        ec2.authorize_security_group_ingress(
+            GroupId=sec_group_id,
+            IpPermissions=[web_sec_rule_green],
+        )
+        
         
         return True 
     except:
@@ -475,10 +554,13 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         router_init = route_table_init(int_gw_id, route_table_id)
         print("[Console] SecurityGroup Create")
         security_group = back_ec2_create_security_group(vpc_id)   
+        print("[Console] SecurityGroup Create(LB)")
+        security_group_for_lb = back_ec2_create_security_group(vpc_id, "DefaultRuleLb")   
         security_group_id = security_group["GroupId"] 
         print("[Console] SecurityGroup {} created".format(security_group_id))
+        print("[Console] SecurityGroup LB {} created".format(security_group_for_lb["GroupId"]))
         add_default_security_rule(security_group_id) # add port 22
-        
+        add_lb_secruity_rule(security_group_for_lb["GroupId"])
         print("[Console] SecurityGroup Default Port 22 added")
         print("[Console] DB Record create")
         # Create record structure
@@ -492,14 +574,16 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         new_subnet = Subnet(subnet_id, subnet_cidr,vpc_id) 
         db.session.add(new_subnet)
         print("[Console] Security record create")
-        new_security_group = SecurityGroup("DefaultRule" , security_group_id, userid, None, vpc_id)
+        new_security_group = SecurityGroup("DefaultRule" , security_group_id, userid, None, vpc_id )
+        new_security_group.lb_sec_group_id = security_group_for_lb["GroupId"]
         db.session.add(new_security_group)
         db.session.flush()
         db.session.refresh(new_security_group)
         sec_group_id = new_security_group.id 
         print("[Console] Sec rule Create")
-        new_security_rule = SecurityRule("tcp", "22","22", "0.0.0.0/0", "ssh", sec_group_id)
-        db.session.add(new_security_rule)
+        db.session.add(SecurityRule("tcp", "22","22", "0.0.0.0/0", "ssh", sec_group_id))
+        db.session.add(SecurityRule("tcp", "8080","8080", "0.0.0.0/0", "for ", sec_group_id))
+        db.session.add(SecurityRule("tcp", "8081","8081", "0.0.0.0/0", "for lb", sec_group_id))
         
     except FailToCreateSubnetException:
         print("[Console] Fail to create Subnet -> Deleting VPC")
@@ -534,6 +618,7 @@ def create_environment(userid, email): # 사용자마다 한번씩만 해주는.
         print("[Console] Fail to create sec group rule -> Deleting Int GW, VPC, RouteTable, SecGroup, Detach Int GW")
         back_ec2_delete_subnet(subnet_id)
         back_ec2_delete_security_group(sec_group_id) 
+        back_ec2_delete_security_group(security_group_for_lb["GroupId"]) 
         back_ec2_int_gateway_detach_vpc(int_gw_id, vpc_id)
         detach_internet_gateway(int_gw_id, vpc_id)
         back_ec2_delete_int_gateway(int_gw_id)
@@ -627,7 +712,7 @@ def back_update_ec2_info(instance_id):
                 cloud_vpc.sub_subnet_id
             ], 
             SecurityGroups=[
-                sel_secgroup.sec_group_id,
+                sel_secgroup.lb_sec_group_id,
             ],
             Scheme='internet-facing',
             Tags=[
@@ -832,13 +917,15 @@ def back_ec2_create_ec2( param):
     """
     flask_install = """
     #!/bin/bash
-    echo 'export secret={}' >> /home/ec2-user/.bashrc
-    echo 'export secret={}' >> /root/.bashrc
+    sudo service supervisord stop
     cd /home/ec2-user/.manager/capstone-2021-4/backend
     git reset --hard
     git clean -d -f -f
     git pull
-    """.format(secret_key, secret_key)
+    cp -rf /home/ec2-user/.manager/capstone-2021-4/backend/receiver/flask.ini /etc/supervisord.d/
+    echo 'environment=secret={}' >> /etc/supervisord.d/flask.ini
+    sudo service supervisord start
+    """.format(secret_key)
     
     use_userdata = ""
     if param["os_name"] == "ubuntu20.04":

@@ -55,6 +55,7 @@
                                         <div class="col-md-12">
                                         <!-- <h4>Information</h4><br> -->
                                         <br>
+                                        <p>Hostname : {{ hostname }}.some-cloud.net</p>
                                         <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
                                         <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
                                         <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>

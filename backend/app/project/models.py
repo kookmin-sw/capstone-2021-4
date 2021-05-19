@@ -265,6 +265,7 @@ class SecurityGroup(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     associated_to = db.Column(db.Integer, nullable=True) # cloud.id
     vpc_id = db.Column(db.Integer, db.ForeignKey("user_vpc.id"))
+    lb_sec_group_id = db.Column(db.String(30), nullable=True)
     
     secgroups = db.relationship('SecurityRule', cascade = "all, delete", backref="SecurityRule")
     

@@ -220,8 +220,10 @@ def detail(cloud_id):
             response = back_ec2_instance_detail(aws_instance)
             screenshot = get_console_screenshot(aws_instance)
             output = get_console_output(aws_instance)
+        
             
             app_status = cloud_with_user.Cloud.app_status
+            hostname = cloud_with_user.Cloud.hostname
 
             from datetime import datetime, timedelta
             today = datetime.today()
@@ -256,7 +258,7 @@ def detail(cloud_id):
             else:
                 outbound_traffic = "none"
              
-            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id, app_status=app_status)
+            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id, app_status=app_status , hostname = hostname)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 

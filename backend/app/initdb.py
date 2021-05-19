@@ -46,23 +46,23 @@ def app_add():
 #flask script
 def add_app_script():
     # 밑에 (1,1) , (1,2), (1,3)  => 각 첫번쨰 1 => os id, 두번째 1 => 명령어 실행될 순서
-    
+    flask_app_id = db.session.query(Oslist.id).filter(Oslist.os_name == "flask").scalar()
     flask_update_script = """
     cd /home/ec2-user/public_flask
     """
-    appcommand1 = CloudAppCommand("update", flask_update_script, 1, 1, "script" )
+    appcommand1 = CloudAppCommand("update", flask_update_script, 3, 1, "script" )
     flask_update_script2 = """
     docker+build+-t+flaskapp%3A%24%28docker+images+%7C+awk+%27%28%241+%3D%3D+%22flaskapp%22%29+%7Bprint+%242+%2B%3D+.01%3B+exit%7D%27%29+%2Fhome%2Fec2-user%2Fpublic_flask%2F
     """
-    appcommand2 = CloudAppCommand("update", flask_update_script2, 1, 2, "script" )
+    appcommand2 = CloudAppCommand("update", flask_update_script2, 3, 2, "script" )
     
     flask_update_script3 = """
     docker rm -f {app_register}
     """
-    appcommand3 = CloudAppCommand("update", flask_update_script3, 1, 3, "script" )
+    appcommand3 = CloudAppCommand("update", flask_update_script3, 3, 3, "script" )
     
     flask_update_script4 = """docker+run+-itd+-p+{app_port}%3A80+--name+{app_register}+flaskapp%3A%24%28docker+images+%7C+awk+%27%28%241+%3D%3D+%22flaskapp%22%29+%7Bprint+%242+%2B%3D+.0%3B+exit%7D%27%29"""
-    appcommand4 = CloudAppCommand("update", flask_update_script4, 1, 4, "script" )
+    appcommand4 = CloudAppCommand("update", flask_update_script4, 3, 4, "script" )
     
     
     db.session.add(appcommand1)
