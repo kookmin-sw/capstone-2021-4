@@ -52,7 +52,7 @@ def add_app_script():
     """
     appcommand1 = CloudAppCommand("update", flask_update_script, 1, 1, "script" )
     flask_update_script2 = """
-    docker build -t flaskapp:$(docker images | awk '($1 == "flaskapp") {{print $2 += .01; exit}}') .
+    docker+build+-t+flaskapp%3A%24%28docker+images+%7C+awk+%27%28%241+%3D%3D+%22flaskapp%22%29+%7Bprint+%242+%2B%3D+.01%3B+exit%7D%27%29+%2Fhome%2Fec2-user%2Fpublic_flask%2F
     """
     appcommand2 = CloudAppCommand("update", flask_update_script2, 1, 2, "script" )
     
@@ -61,9 +61,7 @@ def add_app_script():
     """
     appcommand3 = CloudAppCommand("update", flask_update_script3, 1, 3, "script" )
     
-    flask_update_script4 = """
-    docker run -itd -p {app_port}:80 --name {app_register} flaskapp:$(docker images | awk '($1 == "flaskapp") {{print $2 += .0; exit}}')
-    """
+    flask_update_script4 = """docker+run+-itd+-p+{app_port}%3A80+--name+{app_register}+flaskapp%3A%24%28docker+images+%7C+awk+%27%28%241+%3D%3D+%22flaskapp%22%29+%7Bprint+%242+%2B%3D+.0%3B+exit%7D%27%29"""
     appcommand4 = CloudAppCommand("update", flask_update_script4, 1, 4, "script" )
     
     

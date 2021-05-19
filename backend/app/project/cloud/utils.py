@@ -125,7 +125,7 @@ def app_commander(param):
                     
                     script_formatted = item.script.format(app_register=register_target, app_port = set_port[register_target] )
                     print(script_formatted)
-                    req_url = "http://{}:61331/run?secret={}&shell={}".format(ip_addr,secret,item.script)
+                    req_url = "http://{}:61331/run?secret={}&shell={}".format(ip_addr,secret,script_formatted)
                     response = requests.get(req_url)
                     print("formatURL: {} ".format(req_url))
                 
@@ -833,11 +833,12 @@ def back_ec2_create_ec2( param):
     flask_install = """
     #!/bin/bash
     echo 'export secret={}' >> /home/ec2-user/.bashrc
+    echo 'export secret={}' >> /root/.bashrc
     cd /home/ec2-user/.manager/capstone-2021-4/backend
     git reset --hard
     git clean -d -f -f
     git pull
-    """.format(secret_key)
+    """.format(secret_key, secret_key)
     
     use_userdata = ""
     if param["os_name"] == "ubuntu20.04":
