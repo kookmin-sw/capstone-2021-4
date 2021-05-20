@@ -94,6 +94,7 @@ def delete_cloud(instance_id):
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
             print("[Debug] - {}".format(aws_instance_id))
             response = delete_ec2(cloud_with_user.Cloud.aws_instance_id, cloud_with_user.Cloud.certificate_arn)
+            
             import datetime
             cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
             cloud_id = cloud.id

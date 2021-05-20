@@ -30,6 +30,7 @@ class Config(object):
     HOSTED_ZONE_ID = os.getenv("HOSTED_ZONE_ID")
     SQLALCHEMY_DATABASE_URI =  os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    PUBLIC_IP_ADDR= os.getenv("PUBLIC_IP_ADDR")
     
     def __init__(self):
         pass

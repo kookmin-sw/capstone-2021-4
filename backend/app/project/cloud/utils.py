@@ -33,7 +33,7 @@ somecloud_app_rule = {
     'IpProtocol': 'tcp',
     'IpRanges': [
         {
-            'CidrIp': '152.67.199.23/32',
+            'CidrIp': "{}/32".format(app.config.get("PUBLIC_IP_ADDR")),
             'Description': 'SomeCloud App Security rule',
         },
     ],
