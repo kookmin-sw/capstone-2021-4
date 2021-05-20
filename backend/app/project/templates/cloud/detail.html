@@ -47,8 +47,10 @@
                                  </li>
                                  <li><a href="#Logs-pills" data-toggle="tab">Console Logs</a>
                                  </li>
+                                 {% if cloudinfo.is_lb_env_created == True %} 
                                  <li><a href="#preview-pills" data-toggle="tab">Preview</a>
                                  </li>
+                                 {% endif %}
                               </ul>
                               <!-- Tab panes -->
                               <div class="tab-content">
