@@ -692,7 +692,6 @@ def back_update_ec2_info(instance_id):
             VpcId=cloud_vpc.vpc_id,
         )
         cloud.targetgroup_arn = tg["TargetGroups"][0]["TargetGroupArn"]
-        db.session.commit()
         print("wait for 10 sec for instance state running")
         time.sleep(10)
         rp = client.register_targets( 
@@ -724,7 +723,8 @@ def back_update_ec2_info(instance_id):
             Type='application' ,
             IpAddressType='ipv4',
         )
-        
+        cloud.loadbalancer_arn = lb1["LoadBalancers"][0]["LoadBalancerArn"]
+        db.session.commit()
         lb_hostname = lb1["LoadBalancers"][0]["DNSName"]
         client = boto3.client('route53')
         print(cloud.hostname + ".some-cloud.net DNS Record create process")
@@ -853,21 +853,122 @@ def back_update_ec2_info(instance_id):
 
  
 
-def delete_ec2(instance_id, cert_arn):
+def delete_ec2(param):
     client = boto3.client('acm')
     # -> flask app 이면 로드벨런서 삭제 후 cert 삭제..!
     # 그게 아니면 cert삭제
-    # response = client.delete_certificate(
-    #     CertificateArn=cert_arn
-    # )
+    cloud = db.session.query(Cloud).filter(Cloud.aws_instance_id == param["instance_id"]).first()
+    os = db.session.query(Oslist).filter(Oslist.id == cloud.os).first()
+    
+    if os.os_name == "flask":
+        
+        client = boto3.client('acm')    
+        
+        response = client.describe_certificate(
+            CertificateArn=cloud.certificate_arn
+        )
+        
+        hosted_zone_id = app.config.get('HOSTED_ZONE_ID')
+        print("zone: {}".format(hosted_zone_id))
+        domainname = response["Certificate"]["DomainValidationOptions"][0]["DomainName"]
+        record = response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Name"]
+        recordvalue = response["Certificate"]["DomainValidationOptions"][0]["ResourceRecord"]["Value"]
+        client = boto3.client('route53')
+        
+        response = client.change_resource_record_sets(
+        HostedZoneId=hosted_zone_id,
+            ChangeBatch={
+                'Changes': [
+                    {
+                        'Action': 'DELETE',
+                        'ResourceRecordSet': {
+                            'Name': record,
+                            'Type': 'CNAME',  
+                            'TTL': 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': recordvalue
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        
+        client = boto3.client("elbv2")
+        #GET LB DNS..
+        response = client.describe_load_balancers(
+            LoadBalancerArns=[
+                cloud.loadbalancer_arn,
+            ], 
+        )
+        recordvalue = response["LoadBalancers"][0]["DNSName"] # LB Name
+        client = boto3.client("route53")
+        response = client.change_resource_record_sets(
+        HostedZoneId=hosted_zone_id,
+            ChangeBatch={
+                'Changes': [
+                    {
+                        'Action': 'DELETE',
+                        'ResourceRecordSet': {
+                            'Name': domainname,
+                            'Type': 'CNAME',  
+                            'TTL': 300,
+                            'ResourceRecords': [
+                                {
+                                    'Value': recordvalue
+                                },
+                            ],  
+                        }
+                    },
+                ]
+            }
+        )
+        
+        
+        client = boto3.client('elbv2')
+        print("cloud.loadbalancer_arn {} 5".format(cloud.loadbalancer_arn))
+        response = client.delete_load_balancer(
+            LoadBalancerArn=cloud.loadbalancer_arn,
+        )
+        time.sleep(10)
+        response = client.delete_target_group(
+            TargetGroupArn=cloud.targetgroup_arn
+        )
+        
+        # 로드벨런서를 먼저 삭제해주고, 그다음에 인증서를 삭제한다. 안그럼 인증서 삭제가 안됨
+        client = boto3.client('acm')
+        response = client.delete_certificate( 
+            CertificateArn=cloud.certificate_arn
+        )
+    else:
+        # if not app just remove certificate..
+        client = boto3.client('acm')
+        response = client.delete_certificate(
+            CertificateArn=cloud.certificate_arn
+        )
     # dns record delete
     # 
     
     response = ec2.terminate_instances(
         InstanceIds=[
-            instance_id,
+            param["instance_id"],
         ] 
     )
+    
+    import datetime
+    cloud = Cloud.query.filter_by(aws_instance_id=param["instance_id"],).first()
+    cloud_id = cloud.id
+    now = datetime.datetime.now()
+    netInterface = NetInterface.query.filter_by(cloud_id=cloud_id).first()
+    if netInterface is not None:
+        netInterface.detached_at = now
+        netInterface.deleted_at = now
+
+    cloud.status = "Terminated" 
+    cloud.deleted_at = now
+    db.session.commit()
     return response
 
 

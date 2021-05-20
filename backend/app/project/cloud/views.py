@@ -93,20 +93,12 @@ def delete_cloud(instance_id):
         try:
             aws_instance_id = cloud_with_user.Cloud.aws_instance_id
             print("[Debug] - {}".format(aws_instance_id))
-            response = delete_ec2(cloud_with_user.Cloud.aws_instance_id, cloud_with_user.Cloud.certificate_arn)
+            parameter = {
+                "instance_id" : cloud_with_user.Cloud.aws_instance_id,
+            }
+            job = q.enqueue(delete_ec2, parameter)
             
-            import datetime
-            cloud = Cloud.query.filter_by(aws_instance_id=aws_instance_id).first()
-            cloud_id = cloud.id
-            now = datetime.datetime.now()
-            netInterface = NetInterface.query.filter_by(cloud_id=cloud_id).first()
-            if netInterface is not None:
-                netInterface.detached_at = now
-                netInterface.deleted_at = now
-
-            cloud.status = "Terminated" 
-            cloud.deleted_at = now
-            db.session.commit()
+            
             flash('{} was Terminated.'.format(cloud.hostname), 'success')
         except Exception as e:
             db.session.rollback()
