@@ -251,7 +251,7 @@ def detail(cloud_id):
             else:
                 outbound_traffic = "none"
              
-            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id, app_status=app_status , hostname = hostname)
+            return render_template('cloud/detail.html', cloud=response, screenshot=screenshot, output=output, traffic=outbound_traffic,cloudid=cloud_id, app_status=app_status , hostname = hostname,cloudinfo=cloud_with_user.Cloud)
         else:
             message = Markup("<strong>잘못된 접근입니다.</strong>  ")
             flash(message, 'danger') 

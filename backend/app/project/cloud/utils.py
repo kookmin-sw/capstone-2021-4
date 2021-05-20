@@ -691,6 +691,7 @@ def back_update_ec2_info(instance_id):
             Protocol='HTTP',
             VpcId=cloud_vpc.vpc_id,
         )
+        cloud.is_lb_env_created = True
         cloud.targetgroup_arn = tg["TargetGroups"][0]["TargetGroupArn"]
         print("wait for 10 sec for instance state running")
         time.sleep(10)

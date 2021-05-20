@@ -177,21 +177,22 @@
                 </fieldset>
 
               
-
-                <fieldset>
-                    <div class="col-md-12">
-                        <h3>Actions</h3>
-                        <button class="btn btn-sm btn-inverse" onclick="update( {{ cloudid }} )">Update App </button>
-                        <button class="btn btn-sm btn-inverse" onclick="rollback( {{ cloudid }} )">Rollback App </button>
-                        
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div class="col-md-12">
-                        <h3>App Status</h3>  
-                        {{ app_status }}
-                    </div>
-                </fieldset>
+                {% if cloudinfo.is_lb_env_created == True %} 
+                    <fieldset>
+                        <div class="col-md-12">
+                            <h3>Actions</h3>
+                            <button class="btn btn-sm btn-inverse" onclick="update( {{ cloudid }} )">Update App </button>
+                            <button class="btn btn-sm btn-inverse" onclick="rollback( {{ cloudid }} )">Rollback App </button>
+                            
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="col-md-12">
+                            <h3>App Status</h3>  
+                            {{ app_status }}
+                        </div>
+                    </fieldset>
+                {% endif %}
                 
             </div>
       </section> 
