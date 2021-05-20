@@ -99,7 +99,7 @@ def delete_cloud(instance_id):
             job = q.enqueue(delete_ec2, parameter)
             
             
-            flash('{} was Terminated.'.format(cloud.hostname), 'success')
+            
         except Exception as e:
             db.session.rollback()
             message = Markup("<strong>Error!</strong> Eroror{} ".format(e))
