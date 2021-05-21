@@ -931,13 +931,15 @@ def delete_ec2(param):
         client = boto3.client('elbv2')
         print("cloud.loadbalancer_arn {} 5".format(cloud.loadbalancer_arn))
         time.sleep(5)
+        response = client.delete_load_balancer(
+            LoadBalancerArn=cloud.loadbalancer_arn,
+        )
+        
         response = client.delete_target_group(
             TargetGroupArn=cloud.targetgroup_arn
         )
         
-        response = client.delete_load_balancer(
-            LoadBalancerArn=cloud.loadbalancer_arn,
-        )
+        
         time.sleep(10)
         
         
