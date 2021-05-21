@@ -930,13 +930,16 @@ def delete_ec2(param):
         
         client = boto3.client('elbv2')
         print("cloud.loadbalancer_arn {} 5".format(cloud.loadbalancer_arn))
+        time.sleep(5)
+        response = client.delete_target_group(
+            TargetGroupArn=cloud.targetgroup_arn
+        )
+        
         response = client.delete_load_balancer(
             LoadBalancerArn=cloud.loadbalancer_arn,
         )
         time.sleep(10)
-        response = client.delete_target_group(
-            TargetGroupArn=cloud.targetgroup_arn
-        )
+        
         
         # 로드벨런서를 먼저 삭제해주고, 그다음에 인증서를 삭제한다. 안그럼 인증서 삭제가 안됨
         client = boto3.client('acm')

@@ -25,6 +25,6 @@ if __name__ == '__main__':
     manager.add_command('runserver', Server(host='0.0.0.0', port=8000 ,   threaded=True))
     manager.run()
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db.remove()
+# @app.teardown_appcontext
+# def shutdown_session(exception=None):
+#     db.remove()
