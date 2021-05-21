@@ -934,14 +934,24 @@ def delete_ec2(param):
         response = client.delete_load_balancer(
             LoadBalancerArn=cloud.loadbalancer_arn,
         )
-        print("lb delete response : {} ".format(response))
+        print(response)
+        time.sleep(10)
+        response = client.deregister_targets(
+            TargetGroupArn=cloud.targetgroup_arn,
+            Targets=[
+                {
+                    'Id': cloud.aws_instance_id,
+                },
+            ],
+        )
+        print(response)
         time.sleep(10)
         response = client.delete_target_group(
             TargetGroupArn=cloud.targetgroup_arn
         )
+        print(response)
         
         
-        time.sleep(10)
         
         
         # 로드벨런서를 먼저 삭제해주고, 그다음에 인증서를 삭제한다. 안그럼 인증서 삭제가 안됨
