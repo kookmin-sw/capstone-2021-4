@@ -682,7 +682,7 @@ def back_update_ec2_info(instance_id):
     print("OS : {}".format(selected_os.os_name))
     print("HostedZoneID {}".format(os.getenv("HOSTED_ZONE_ID")))
     hosted_zone_id = os.getenv("HOSTED_ZONE_ID")
-    if selected_os.os_name == "flask":
+    if selected_os.os_name == "Amazon-Linux-flask":
         print("LB Deployment started")
         client = boto3.client('elbv2')
         tg = client.create_target_group(
@@ -861,7 +861,7 @@ def delete_ec2(param):
     cloud = db.session.query(Cloud).filter(Cloud.aws_instance_id == param["instance_id"]).first()
     os = db.session.query(Oslist).filter(Oslist.id == cloud.os).first()
     
-    if os.os_name == "flask":
+    if os.os_name == "Amazon-Linux-flask":
         
         client = boto3.client('acm')    
         
@@ -1051,7 +1051,7 @@ def back_ec2_create_ec2( param):
     elif param["os_name"] == "amazonLinux":
         use_userdata = amz_docker_install
         # load balancer create
-    elif param["os_name"] == "flask":
+    elif param["os_name"] == "Amazon-Linux-flask":
         print("secret install : {} ".format(flask_install) )
         use_userdata = flask_install
         

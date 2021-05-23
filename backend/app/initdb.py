@@ -40,7 +40,7 @@ def os_add():
     db.session.commit()
 
 def app_add():
-    flask = Oslist('flask', 'ami-0ee56963557a8a3e1')
+    flask = Oslist('Amazon-Linux-flask', 'ami-0ee56963557a8a3e1')
     db.session.add(flask)
     db.session.commit()
     

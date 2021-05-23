@@ -466,7 +466,7 @@ body {
 }
 .navbar-top .navbar-header .brand-logo > img,
 .navbar-top .navbar-header .brand-logo-collapsed > img {
-  margin: 0 auto;
+  margin: 10px auto;
 }
 .navbar-top .navbar-header .brand-logo {
   display: block;
