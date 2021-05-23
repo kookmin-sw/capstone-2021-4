@@ -86,7 +86,7 @@ http://localhost:8080
 - OS : Amazon Linux
 - 인터넷 연결이 필요함
 - Python Ver:  3.7.9
-- ELB (for 
+- ELB (for http/https)
 - Route53 Domain
 
 ## 1. Install supervisord 
