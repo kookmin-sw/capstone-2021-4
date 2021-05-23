@@ -1,5 +1,10 @@
 [![Work in Repl.it](https://classroom.github.com/assets/work-in-replit-14baed9a392b3a25080506f3b7b6d57f295ec2978f6f33ec97e36a161684cbe9.svg)](https://classroom.github.com/online_ide?assignment_repo_id=350588&assignment_repo_type=GroupAssignmentRepo)
 # SomeCloud
+<img width="218" alt="image" src="https://user-images.githubusercontent.com/3627483/119249954-c6a50b80-bbd7-11eb-8034-88d795425312.png">
+
+<img width="1326" alt="image" src="https://user-images.githubusercontent.com/3627483/119249964-d1f83700-bbd7-11eb-8065-a085eb622b3c.png">
+
+<img width="821" alt="image" src="https://user-images.githubusercontent.com/3627483/119249982-eb00e800-bbd7-11eb-9dba-1946b185966e.png">
 
 
 ### 프로잭트 소개
@@ -21,11 +26,12 @@ kimjenny, parkhuijoo
 
 ### Backend
 - Flask 로 html 을 Server side rendering 을 하고 있고, flask-app-blueprint 탬플릿을 기반으로 어플리케이션 서버를 작성하였습니다.
+- 현재는 frontend 폴더에 있는 내용이 backend/app/project/templates, backend/app/project/static 에 반영된 상태입니다.
 
 ### branch
  
 ```
 master
 backend  - Dockerfile, Python Flask 코드
-frontend - 팀 페이지(홈페이지), 대시보드 페이지, 관리자 페이지
+frontend - (legacy) 홈페이지 대시보드 페이지, 관리자 페이지
 ``` 
