@@ -127,6 +127,11 @@ sudo yum install python3-devel
 sudo wget http://download.redis.io/redis-stable.tar.gz
 sudo tar xvzf redis-stable.tar.gz
 cd redis-stable/
+```
+```
+sudo make
+```
+```
 sudo mkdir /etc/redis
 sudo mkdir /var/lib/redis
 sudo cp src/redis-server src/redis-cli /usr/local/bin/
