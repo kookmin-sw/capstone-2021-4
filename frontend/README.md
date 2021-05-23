@@ -24,6 +24,8 @@ python3 -m pip install http.server
 app
 - css
   - views - ./views 에 해당하는(cloud_add, cloud_list ...) 파일 이름과 일치
+    - cloud_add.css
+    - cloud_list.css
 - img
 - js
   - cloud_add.js
@@ -63,3 +65,8 @@ git commit -m "cloud_add.html 에서 버튼을 추가하고, css디자인을 입
 git push origin frontend
 ```
 - 파일마다 꼭 할 필요는 없지만 해주면 좋고, 최소한 커밋할 때 어떤걸 했는지 커밋메세지로 남기는것이 중요함.
+
+## current status
+- 현재는 backend/app/project/templates 에 반영된 상태. 
+- 백엔드 templates 에는 여기에 있던 views/html file들이 들어가고
+- 백엔드 static 에는 app/에 있던 css&js 파일이 들어간다. 

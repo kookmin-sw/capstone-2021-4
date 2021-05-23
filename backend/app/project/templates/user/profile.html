@@ -14,52 +14,84 @@
    <meta name="description" content="">
    <meta name="keywords" content="">
    <meta name="author" content="">
-   <title>Wintermin - Bootstrap Admin Theme</title> 
+   <title>Somecloud-UserProfile</title> 
 </head>
 
 <body>
 
    <!-- START Main wrapper-->
+   
    <div id="wrapper" class="wrapper">
       <section id="content-area">
          <div class="main-content">
-            <div style="margin-bottom: 25px;">
-               <h3>사용자 변경
+            <div style="margin-bottom: 55px;">
+               <h3>사용자 정보
                  <br>
-                 <small>Support Page</small>
+                 <small>인적사항 변경 사항</small>
                </h3>
              </div>
-             <div class="card mb-3" style="max-width: 30rem;">
-              <div class="card-header text-white bg-primary mb-3">Email Address</div>
-              <div class="card-body">
-                <p class="card-text">{{current_user.email}}</p>
+
+             <fieldset>
+                <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Name</label>
+                     <input type="text" name="name" placeholder="희주" class="form-control">
+                  </div>
+               </div>
+             </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                   <div class="form-group">
+                      <label>Email Address</label>
+                      <a href="{{ url_for('users.user_email_change') }}" class="mb-sm btn btn-inverse" style="align-items: center; margin-left: 50px;">Change E-mail</a>
+                   </div>
+                   <small class="card-text">{{current_user.email}}</small>
+                   <br>
+                </div>
+            </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                   <label>Phone Number</label>
+                   <input type="text" name="Phone" placeholder="010-1234-5678" class="form-control">
+                </div>
+             </div>
+             </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Password</label>
+                  <a href="{{ url_for('users.user_password_change') }}" class="mb-sm btn btn-inverse" style="align-items: center; margin-left: 70px;">Change Password</a>
+                </div>
+              </div>  
+             </fieldset>
+
+             
+            <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <br>
+                  <label>Statistics</label>
+                  <br>
+                  <p class="card-text">Member since: {{ current_user.registered_on.strftime("%A %B %d, %Y") }}</a></p>
+                  {% if current_user.last_logged_in != None %}
+                  <p class="card-text">Last Logged In: {{ current_user.last_logged_in.strftime("%A %B %d, %Y") }}</p>
+                  {% else %}
+                  <p class="card-text">First time logged in. Welcome!</p>
+                  {% endif %}
+                  {% if current_user.email_confirmed_on != None %}
+                  <p class="card-text">Email confirmed on: {{ current_user.email_confirmed_on.strftime("%A %B %d, %Y") }}</p>
+                  {% else %}
+                  <p class="card-text">Email has not been confirmed!</p>
+                  {% endif %}
+                </div>
               </div>
-            </div>
+            </fieldset>
+             
             
-            <div class="card mb-3" style="max-width: 30rem;">
-              <div class="card-header bg-light mb-3">Account Actions</div>
-              <div class="card-body">
-                <p class="card-text"><a href="{{ url_for('users.user_email_change') }}">Change Email</a></p>
-                <p class="card-text"><a href="{{ url_for('users.user_password_change') }}">Change Password</a></p>
-              </div>
-            </div>
-            
-            <div class="card mb-3" style="max-width: 30rem;">
-              <div class="card-header bg-light mb-3">Statistics</div>
-              <div class="card-body">
-                <p class="card-text">Member since: {{ current_user.registered_on.strftime("%A %B %d, %Y") }}</a></p>
-                {% if current_user.last_logged_in != None %}
-                <p class="card-text">Last Logged In: {{ current_user.last_logged_in.strftime("%A %B %d, %Y") }}</p>
-                {% else %}
-                <p class="card-text">First time logged in. Welcome!</p>
-                {% endif %}
-                {% if current_user.email_confirmed_on != None %}
-                <p class="card-text">Email confirmed on: {{ current_user.email_confirmed_on.strftime("%A %B %d, %Y") }}</p>
-                {% else %}
-                <p class="card-text">Email has not been confirmed!</p>
-                {% endif %}
-              </div>
-            </div>
          </div>
       </section> 
    </div> 

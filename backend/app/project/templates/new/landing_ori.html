@@ -35,6 +35,7 @@
    header .menuapp-buttons a {
    text-decoration: none !important;
    }
+   
 
 </style>
 <head>
@@ -43,7 +44,7 @@
    <meta name="description" content="">
    <meta name="keywords" content="">
    <meta name="author" content="">
-   <title>Wintermin - Bootstrap Admin Theme</title>
+   <title>Somecloud</title>
    <link rel="stylesheet" href="/static/app/css/bootstrap.css">
    <!-- Vendor CSS-->
    <link rel="stylesheet" href="/static/vendor/fontawesome/css/font-awesome.min.css">
@@ -67,14 +68,14 @@
          <nav class="row" style="margin: 20px;">
             <div class="col-md-2 app-logo">
                <a href="#" class="logo-wrapper">
-                  <img src="/static/app/img/logo.png" alt="App Name" class="img-responsive">
+                  <img src="/static/app/img/blackcloudlogo.png" alt="App Name" class="img-responsive">
                </a>
             </div>
             <div class="col-md-10">
                <ul class="list-inline menuapp-buttons" style="float: right;">
                   <li class="mr-lg">
                      <a href="/">
-                        <strong class="text-green">HOME</strong>
+                        <strong>HOME</strong>
                      </a>
                   </li>
                   {% if current_user.is_authenticated %}
@@ -100,13 +101,6 @@
                      </a>
                   </li>
                   {% endif %}
-                  
-                  
-                  
-                  
-                  
-                  
-                  
                </ul>
             </div>
          </nav>
@@ -114,37 +108,24 @@
             <div class="row row-flush row-table">
                <div class="col-xs-12 col-lg-6 align-middle">
                   <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="0" class="app-presentation">
-                     <img src="/static/app/img/landing/app-mobile.png" alt="App Name" class="img-responsive">
-
+                     <img src="/static/app/img/landing1.png" alt="App Name" class="img-responsive">
                   </div>
                </div>
 
                <div class="col-xs-12 col-lg-6 align-middle">
                   <div class="side-presentation">
-                     <div class="h1 header-title" style=" display: inline; font-style: italic;">사이트 무제한 생성 </div>
-                     <div class="h1 header-title" style="display: inline; font-style: italic;">  클라우드 웹호스팅</div>
-                     <p class="header-subtitle">사용 여부에 따라 필요한 만큼만  사용하는 방식으로 기존 클라우드 방식 보다 70% 이상 비용 절약 가능</p>
+                     <div class="h1 header-title" style=" display: inline;">사이트 무제한 생성 클라우드 웹 호스팅 </div>
+                     <br>
+                     <br>
+                     <p style="font-size: larger;">사용 여부에 따라 필요한 만큼만 사용하는 방식이며</p>
+                     <p style="font-size: larger;"> 24시간 질문 페이지 / 다른 서비스와의 연동 / 모니터링 등의 기능을 통해</p>
+                     <p style="font-size: larger;">초심자에게 간편한 서비스를 제공합니다 </p>
                      <br>
                      <div class="header-button">
-                        <a href="#" class="btn btn-green btn-lg btn-fw">
-                           <strong>Discover Now</strong>
+                        <a href="/register" class="btn btn-inverse">
+                           <strong>지금 시작하세요</strong>
                         </a>
                      </div>
-                     <br>
-                     <br>
-                     <ul class="list-inline store-list">
-                        <!-- <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                           <h4>
-                              <span class="point point-primary point-lg"></span>Data Tables</h4>
-                           <p>Quisque luctus vehicula massa quis ultrices. Nunc et magna in metus pharetra ultricies ac sit amet justo.</p>
-                        </li> -->
-
-                        <li data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-                           <img src="/static/app/img/server.png" style="width: 600px;">
-                        </li>
-                        
-                        
-                     </ul>
                   </div>
                </div>
             </div>
@@ -153,7 +134,7 @@
    </header>
 
 
-   <section id="testimonial" class="bg-primary">
+   <section id="testimonial" class="bg-inverse">
       <div class="row" >
          <div id="carousel-testimonial" data-ride="carousel" class="carousel slide">
             <!-- Indicators -->
@@ -163,17 +144,27 @@
                <li data-target="#carousel-testimonial" data-slide-to="2"></li>
             </ol>
             <!-- Wrapper for slides -->
-            <div class="carousel-inner">
+            <div class="carousel-inner" style="height: 100px;">
                <div class="item active">
                   <div class="row">
                      <div class="col-xs-8 col-xs-offset-2">
                         <h4>
-                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
-                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
+                           <em class="fa fa-exchange"></em>
+                           <em>사용량 만큼 지불</em>
                         </h4>
-                        <p>
-                           <strong>- John Titor</strong>
-                        </p>
+                        <p>필요한 크기 만큼 필요한 기간만큼 자유자재로 사용 가능한 시스템입니다.</p>
+                        <p>계약에 얽매이지 않고 자유롭게 서비스를 이용하세요.</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="item ">
+                  <div class="row">
+                     <div class="col-xs-8 col-xs-offset-2">
+                        <h4>
+                           <em class="fa fa-male"></em>
+                           <em>24/7 지원가능</em>
+                        </h4>
+                        <p>24시간 상주하는 질문 관리자와 1:1 채팅 가능</p>
                      </div>
                   </div>
                </div>
@@ -181,24 +172,11 @@
                   <div class="row">
                      <div class="col-xs-8 col-xs-offset-2">
                         <h4>
-                           <em>Etiam id nunc felis. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Integer sagittis ultricies neque vitae suscipit. Integer ut convallis dui. Praesent vel nisi nibh. Nunc lacinia, sem ac laoreet
-                              egestas, risus lacus vulputate dui, quis pellentesque eros est id nisi.</em>
+                           <em class="fa fa-key"></em>
+                           <em>설치하기 쉬운 키체어</em>
                         </h4>
-                        <p>
-                           <strong>- Mary Mayer</strong>
-                        </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="item">
-                  <div class="row">
-                     <div class="col-xs-8 col-xs-offset-2">
-                        <h4>
-                           <em>Quisque non lacinia lacus. Pellentesque odio purus, egestas ac luctus gravida, rutrum ut quam. Quisque quam turpis, viverra sit amet auctor laoreet, aliquam vitae neque. Curabitur nec congue erat. Aliquam erat volutpat. Phasellus.</em>
-                        </h4>
-                        <p>
-                           <strong>- John Mayer</strong>
-                        </p>
+                        <p>사이트 내에서 쉽게 다운로드 할 수 있습니다.</p>
+                        <p>키 뿐만 아니라 방화벽도 한 사이트 내에서 쉽게 관리하세요.</p>
                      </div>
                   </div>
                </div>
@@ -219,24 +197,19 @@
       <div class="container">
          <div class="row">
             <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="-250" class="col-lg-6">
-               <img src="/static/app/img/landing/app-chart.png" alt="App Name" class="img-responsive">
+               <img src="/static/app/img/Dashboard.png" alt="App Name" class="img-responsive">
             </div>
             <div class="col-lg-6">
                <h2 class="page-header">간결한 서버 운용</h2>
                <p class="text-md">서버 운용 지식이 없어도 쉽게 사용가능한 방식 </p>
                <p>생성, 제거를 자유자재로 가능하므로 용량 내에서는 여러 웹사이트 제작 가능</p>
-               <p>안전하고 믿을 만한 단독 서버 사용(dashboard)</p>
+               <p>안전하고 믿을 만한 단독 서버 사용</p>
                <br>
-               <p>
-                  <a href="/" class="btn btn-success">
-                     <strong>Start Demo Now</strong>
-                  </a>
-               </p>
             </div>
          </div>
       </div>
    </section>
-   <section style="padding-bottom: 100px;">
+   <section>
       <div class="container">
          <div class="row">
             <div class="col-lg-6">
@@ -245,14 +218,25 @@
                <p>원하는 크기와 기간에 따른 다양한 선택폭</p>
                <p>타사보다 80% 정도 저렴한 가격</p>
                <br>
-               <p>
-                  <a href="../views/price_view.html" class="btn btn-green">
-                     <strong>Watch Now(price_view)</strong>
-                  </a>
-               </p>
             </div>
             <div data-toggle="play-animation" data-play="fadeInRight" data-offset="-250" class="col-lg-6">
-               <img src="/static/app/img/landing/app-widget.png" alt="App Name" class="img-responsive">
+               <img src="/static/app/img/billing.png" alt="App Name" class="img-responsive">
+            </div>
+         </div>
+      </div>
+   </section>
+   <section class="bg-white" style="padding-bottom: 100px;">
+      <div class="container">
+         <div class="row">
+            <div data-toggle="play-animation" data-play="fadeInLeft" data-offset="-250" class="col-lg-6">
+               <img src="/static/app/img/monitoring.png" alt="App Name" class="img-responsive">
+            </div>
+            <div class="col-lg-6">
+               <h2 class="page-header">지속적인 모니터링 가능</h2>
+               <p>사이트에서 제공하는 다양한 모니터링 기능 제공</p>
+               <p>24시간 질문 관리자 상주</p>
+               <p>사용량에 따라 서버 크기 자유롭게 변경 가능</p>
+               <br>
             </div>
          </div>
       </div>
@@ -272,69 +256,52 @@
             <br>
          </h2>
          <div class="row">
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/jquery.png" alt="client" class="img-responsive">
-            </div>
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/node.png" alt="client" class="img-responsive">
-            </div>
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/gulp.png" alt="client" class="img-responsive">
-            </div>
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/jade.png" alt="client" class="img-responsive">
-            </div>
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/less.png" alt="client" class="img-responsive">
-            </div>
-            <div class="col-lg-2 col-md-4 col-xs-6">
-               <img src="/static/app/img/landing/clients/bootstrap.png" alt="client" class="img-responsive">
-            </div>
+            <img src="/static/app/img/server.png" class="img-responsive">
          </div>
       </div>
    </section>
 
    <section class="bg-white" style="margin: 150px 0px;">
       <div class="container" style="text-align: center;">
-         <h2 class="section-header">원하는 호스팅을 선택해주세요
+         <h2 class="section-header">넓은 선택폭을 제공합니다
             <br>
-            <small class="text-muted text-center">필요한 서비스를 선택해주세요</small>
+            <small class="text-muted text-center">필요한 서비스와 필요한 크기에 따라 서비스를 선택해보세요</small>
             <br>
             <br>
          </h2>
          <div class="col-lg-3">
             <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="0">
-               <p id="option">1VCore</p>
-               <p id="option_detail">1GB RAM</p>
-               <p id="option_detail">30GB SSD</p>
-               <p id="option_detail">1TB</p>
+               <p id="option">m2.small</p>
+               <p id="option_detail">2048GB RAM</p>
+               <p id="option_detail">40GB SSD</p>
+               <p id="option_detail">2048 GB Traffic</p>
                <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
          <div class="col-lg-3">
             <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-100">
-               <p id="option">1VCore</p>
-               <p id="option_detail">1GB RAM</p>
-               <p id="option_detail">30GB SSD</p>
-               <p id="option_detail">1TB</p>
+               <p id="option">m3.medium</p>
+               <p id="option_detail">4000GB RAM</p>
+               <p id="option_detail">60GB SSD</p>
+               <p id="option_detail">2048 GB Traffic</p>
                <a href="#go_plan" class="btn btn-success" >select</a>
              </div>
          </div>
          <div class="col-lg-3">
             <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-200">
-               <p id="option">1VCore</p>
-               <p id="option_detail">1GB RAM</p>
-               <p id="option_detail">30GB SSD</p>
-               <p id="option_detail">1TB</p>
+               <p id="option">m3.big</p>
+               <p id="option_detail">16384GB RAM</p>
+               <p id="option_detail">100GB SSD</p>
+               <p id="option_detail">6000 GB Traffic</p>
                <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
          <div class="col-lg-3">
             <div class="box-placeholder" class="card"  data-toggle="play-animation" data-play="fadeInUp" data-offset="-300">
-               <p id="option">1VCore</p>
-               <p id="option_detail">1GB RAM</p>
-               <p id="option_detail">30GB SSD</p>
-               <p id="option_detail">1TB</p>
+               <p id="option">m4.large</p>
+               <p id="option_detail">32768GB RAM</p>
+               <p id="option_detail">100GB SSD</p>
+               <p id="option_detail">8000 GB Traffic</p>
                <a href="#go_plan" class="btn btn-success">select</a>
              </div>
          </div>
@@ -345,12 +312,10 @@
 
    <section id="callout" style="padding-bottom: 100px;">
       <div data-toggle="play-animation" data-play="fadeInLeftBig" data-offset="-200" class="container text-center">
-         <h1>Ready to start? Try this App today</h1>
-         <h4>And see why people around the world choose this APP to create great cross-platform websites</h4>
-         <p>
+         <h2>지금 시작하세요</h2>
             <br>
-            <a href="#" class="btn btn-green btn-lg btn-oval btn-fw">
-               <strong>Join Now!</strong>
+            <a href="/register" class="btn btn-inverse btn-lg btn-oval btn-inverse">
+               <strong>  Join NOW !  </strong>
             </a>
          </p>
       </div>
@@ -358,88 +323,41 @@
    
 
 
-
+<!-- 
    <footer class="footer-1 bg-inverse" style="padding: 100px 0px; font-size: larger;" >
       <div class="container">
          <div class="row">
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5 style="font-size: x-large;
-                  font-weight: bolder;">PRODUCT</h5>
-                  <ul class="list-unstyled">
-                     <li><a href="#">Documentation</a>
-                     </li>
-                     <li><a href="#">Customers</a>
-                     </li>
-                     <li><a href="#">Tour</a>
-                     </li>
-                     <li><a href="#">Pricing</a>
-                     </li>
-                  </ul>
+                  <h5 style="font-size: large; font-weight: bolder;">PRODUCT</h5>
+                  <p>2021 CAPSTONE</p>
                </nav>
             </div>
+            
+            <div class="col-sm-4 col-xs-6">
+               <nav>
+                  <h5 style="font-size: large; font-weight: bolder;">DETAIL</h5>
+                  <p>클라우드 리셀링 서비스</p>
+               </nav>
+            </div>
+            
             <div class="col-sm-2 col-xs-6">
                <nav>
-                  <h5 style="font-size: x-large;
-                  font-weight: bolder;">CONTACT</h5>
-                  <ul class="list-unstyled">
-                     <li><a href="#">Support</a>
-                     </li>
-                     <li><a href="#">Sales</a>
-                     </li>
-                     <li><a href="#">Forum</a>
-                     </li>
-                     <li><a href="#">Blog</a>
-                     </li>
-                  </ul>
+                  <h5 style="font-size: large; font-weight: bolder;">INFORMATION</h5>
+                  <p>20181299 김동규</p>
+                  <p>20181299 박희주</p>
                </nav>
             </div>
-            <div class="col-sm-2 col-xs-6">
+            <div class="col-sm-4 col-xs-6">
                <nav>
-                  <h5 style="font-size: x-large;
-                  font-weight: bolder;">COMPANY</h5>
-                  <ul class="list-unstyled">
-                     <li><a href="#">About</a>
-                     </li>
-                     <li><a href="#">Press Kit</a>
-                     </li>
-                     <li><a href="#">Education</a>
-                     </li>
-                     <li><a href="#">Non-profits</a>
-                     </li>
-                  </ul>
+                  <h5 style="font-size: large; font-weight: bolder;">CONTACT</h5>
+                  <p>gmlwngmlwn@kookmin.ac.kr</p>
+                  <p>gmlwngmlwn@kookmin.ac.kr</p>
                </nav>
-            </div>
-            <div class="col-sm-2 col-xs-6">
-               <nav>
-                  <h5 style="font-size: x-large;
-                  font-weight: bolder;">Information</h5>
-                  <ul class="list-unstyled">
-                     <li><a href="#">Twitter</a>
-                     </li>
-                     <li><a href="#">Facebook</a>
-                     </li>
-                     <li><a href="#">Google+</a>
-                     </li>
-                     <li><a href="#">Blog</a>
-                     </li>
-                  </ul>
-               </nav>
-            </div>
-            <div class="col-lg-4 col-xs-6">
-               <form action="#" method="post" style="margin-top: 50px; margin-left: 100px;">
-                  <h5>SUBSCRIBE TO OUR NEWSLETTER!</h5>
-                  <div class="input-group">
-                     <input type="email" name="email" placeholder="mail@example.com" required="" class="form-control">
-                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-green btn-info">Join</button>
-                     </span>
-                  </div>
-               </form>
             </div>
          </div>
       </div>
-   </footer>
+   </footer> -->
    
    
 

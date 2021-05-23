@@ -11,6 +11,7 @@ class CloudForm(FlaskForm):
     subnet = TextField('subnet')
     keypair = TextField('keypair')
     secgroup = TextField('secgroup')
+    appname = TextField('appname')
     
 
 

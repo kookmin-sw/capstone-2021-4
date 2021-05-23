@@ -98,38 +98,41 @@
                 </div>
              </fieldset>
             </div> 
-            <div class="col-xs-6">
+            <div class="col-xs-6" style="margin-bottom: 100px;">
               <div class="container">
                 <button class="mainbtn">크레딧 충전 요청</button>
               </div>
             </div> 
             </form> 
-            <div class="table-responsive" style="margin-top: 150px;">
-                        <table class="table table-hover">
-                           <thead>
-                              <tr>
-                                 <th>예금주</th>
-                                 <th>예금주 은행</th>
-                                 <th>크레딧 금액</th>
-                                 <th>관리자 승인</th>
-                                 <th>요청 시간</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                               {% for item in items %}
-                               <tr>
-                                 <td>{{ item.deposit_name}} </td> 
-                                 <td>{{ item.bank }} </td>
-                                 <td>{{ item.charge_amount }}</td>
-                                 <td>{{ item.status  }} </td>
-                                 <td>{{ item.created_at }}</td>
-                              </tr>  
-                               {% endfor %}
-                              
-                           </tbody>
-                        </table>
-                     </div>
-                </div>  
+
+            <div class="table-responsive">
+               <table class="table table-hover">
+                  <thead>
+                     <tr>
+                        <th>예금주</th>
+                        <th>예금주 은행</th>
+                        <th>크레딧 금액</th>
+                        <th>관리자 승인</th>
+                        <th>요청 시간</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                      {% for item in items %}
+                      <tr>
+                        <td>{{ item.deposit_name}} </td> 
+                        <td>{{ item.bank }} </td>
+                        <td>{{ item.charge_amount }}</td>
+                        <td>{{ item.status  }} </td>
+                        <td>{{ item.created_at }}</td>
+                     </tr>  
+                      {% endfor %}
+                     
+                  </tbody>
+               </table>
+            </div>
+
+         </div>  
+
                 <div class="tabPanel">
                     <div class="col-lg-3" style="text-align: center;">
                         <p>이번달 사용 비용</p>

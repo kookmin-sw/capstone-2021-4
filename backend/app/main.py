@@ -7,7 +7,7 @@ from flask import abort, request
 
 
 app.config.from_object(os.getenv('APP_SETTINGS'))
-
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 migrate = Migrate(app, db)
 manager = Manager(app)
@@ -24,3 +24,7 @@ manager.add_command('db', MigrateCommand)
 if __name__ == '__main__':
     manager.add_command('runserver', Server(host='0.0.0.0', port=8000 ,   threaded=True))
     manager.run()
+
+# @app.teardown_appcontext
+# def shutdown_session(exception=None):
+#     db.remove()

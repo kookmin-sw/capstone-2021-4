@@ -15,7 +15,7 @@
    <meta name="description" content="">
    <meta name="keywords" content="">
    <meta name="author" content="">
-   <title>Wintermin - Bootstrap Admin Theme</title> 
+   <title>Somecloud</title> 
 </head>
 
 <body>
@@ -23,10 +23,13 @@
    <div id="wrapper" class="wrapper">
       <section id="content-area">
          <div class="main-content">
-            <h3>Keypair
-               <br>
-               <small>키페어 리스트</small>
-            </h3>
+            <div style="margin-bottom: 55px;">
+               <h3>Keypair
+                 <br>
+                 <small>키페어 리스트</small>
+               </h3>
+             </div>
+             
             {% include "_notifier.html" %}
             <!-- START row-->
             <div class="row">
@@ -59,7 +62,10 @@
                                         {{ item.fingerprint}}
                                       </td> 
                                       <td>
-                                        <a onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('keypair.delete', keypair_id=item.id) }}">Delete</a>
+
+                                        <button type="button" class="btn btn-oval btn-danger">
+                                           <a onclick="return confirm('정말로 삭제할까요?')" href="{{ url_for('keypair.delete', keypair_id=item.id) }}" style="color: white; text-decoration: none;">Delete</a>
+                                          </button>
                                       </td> 
                                     </tr>
                                     {% endfor %}
@@ -75,8 +81,10 @@
             </div>
             <!-- END row-->
             <div class="container">
-               <a href="{{ url_for('keypair.add') }}">add a new keypair</a>.</p>
-            </div> 
+               <a href="{{ url_for('keypair.add') }}" class="mb-sm btn btn-default" style="align-items: center;">키페어 추가</a>
+            </div>
+
+         
          </div>
       </section> 
    </div> 

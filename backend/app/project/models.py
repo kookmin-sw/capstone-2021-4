@@ -213,17 +213,19 @@ class VPC(db.Model):
     inter_gw_id = db.Column(db.String(40), nullable=False)
     default_subnet_id = db.Column(db.String(40), nullable=False)
     default_sec_id = db.Column(db.String(40), nullable=False)
-    
+    sub_subnet_id = db.Column(db.String(40), nullable=True) # other zone subnet for load banlanacer(app)
+
     secgroups = db.relationship('SecurityGroup', cascade = "all, delete", backref="VPC")
     subnets = db.relationship('Subnet', cascade = "all, delete", backref="VPC")
     
-
-    def __init__(self, user_id, vpc_id, inter_gw_id, default_subnet_id, default_sec_id):
+    def __init__(self, user_id, vpc_id, inter_gw_id, default_subnet_id, default_sec_id, sub_subnet_id):
         self.user_id = user_id
         self.vpc_id = vpc_id
         self.inter_gw_id = inter_gw_id
         self.default_subnet_id = default_subnet_id
         self.default_sec_id = default_sec_id
+        self.sub_subnet_id = sub_subnet_id
+        
     @property
     def as_dict(self):
        return {c.name: unicode(getattr(self, c.name)) for c in self.__table__.columns}
@@ -263,6 +265,7 @@ class SecurityGroup(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     associated_to = db.Column(db.Integer, nullable=True) # cloud.id
     vpc_id = db.Column(db.Integer, db.ForeignKey("user_vpc.id"))
+    lb_sec_group_id = db.Column(db.String(30), nullable=True)
     
     secgroups = db.relationship('SecurityRule', cascade = "all, delete", backref="SecurityRule")
     
@@ -361,7 +364,11 @@ class Cloud(db.Model):
     keypair_id: str
     vpc_id: str
     aws_instance_id: str
-
+    app_secret_access: str  
+    is_lb_env_created: bool
+    certificate_arn : str
+    sec_group_id : int
+    
     id = db.Column(db.Integer, primary_key=True)
     hostname = db.Column(db.String(30), nullable=False)
     plan_id = db.Column(db.Integer, db.ForeignKey('plan.id'))
@@ -375,13 +382,19 @@ class Cloud(db.Model):
     keypair_id = db.Column(db.Integer, db.ForeignKey('keypair.id'))
     vpc_id = db.Column(db.Integer, db.ForeignKey('user_vpc.id'))
     aws_instance_id = db.Column(db.String(30), nullable=False)
-    
+    app_secret_access = db.Column(db.String(80), nullable=True) # access code .. 
+    is_lb_env_created = db.Column(db.Boolean, nullable=True)
+    certificate_arn = db.Column(db.String(100), nullable=True)
+    sec_group_id = db.Column(db.Integer, db.ForeignKey('securitygroup.id'))
+    targetgroup_arn = db.Column(db.String(100), nullable=True)
+    loadbalancer_arn = db.Column(db.String(70), nullable=True)
+    app_status = db.Column(db.String(6), nullable=True)
     def __json__(self):
         return ['id', 'hostname', 'plan_id', 'user_id', 'os', 
         'status', 'ip_addr', 'region', 'created_at', 'keypair_id',
         'vpc_id', 'aws_instance_id']
 
-    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id):
+    def __init__(self, hostname, plan_id, user_id, os, status, ip_addr, region, keypair_id, vpc_id, aws_instance_id, app_secret_access,certificate_arn, sec_group_id):
         self.hostname = hostname
         self.plan_id = plan_id
         self.user_id = user_id
@@ -393,6 +406,13 @@ class Cloud(db.Model):
         self.keypair_id = keypair_id
         self.vpc_id = vpc_id
         self.aws_instance_id = aws_instance_id
+        self.app_secret_access = app_secret_access
+        self.is_lb_env_created = False 
+        self.certificate_arn = ""
+        self.sec_group_id = sec_group_id
+        self.loadbalancer_arn=""
+        self.targetgroup_arn= ""
+        self.app_status = "blue"
 
     
     
@@ -457,7 +477,11 @@ class ReplyTicket(db.Model):
     reply_to = db.Column(db.Integer, db.ForeignKey('support.id'))
     content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
+    
+    def __init__(self, reply_to, content , author_id):
+        self.reply_to = reply_to
+        self.content = content
+        self.author_id = author_id
 
 class BlacklistToken(db.Model):
     """
@@ -477,7 +501,85 @@ class BlacklistToken(db.Model):
         return '<id: token: {}'.format(self.token)
 
 
+class SystemApi(db.Column):
+    __tablename__ = 'systemapi'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    apiname = db.Column(db.String(20), nullable=False)
+    version = db.Column(db.String(20), nullable=False)
+    
+    def __init__(self, apiname, version):
+        self.apiname = apiname
+        self.version = version
+        
+    
+ 
+    
+    
+# class CloudApp(db.Model):
+#     __tablename__ = "apps"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     name = db.Column(db.String(10), nullable=False)
+#     image_source = db.Column(db.String(200), nullable=False) # Docker Image Id
+#     bind_port = db.Column(db.Integer, nullable=False) # container's Port, main docker webserver must 80, 443
 
+    
+#     def __init__(self, name, image_source, bind_port, internal_api_version):
+#         self.name = name
+#         self.image_source = image_source
+#         self.bind_port = bind_port # docker continaer port 
+#         self.internal_api_version = internal_api_version
+        
+
+#         pass
+
+# class CloudAppAssigned(db.Model):
+#     __tablename__ = "cloudappassign"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     cloudid = db.Column(db.Integer, db.ForeignKey("cloud.id"))
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     lb_instance_id = db.Column(db.String(20), nullable=True)
+#     blue_port = db.Column(db.Integer, default=8080)
+#     green_port = db.Column(db.Integer, default=8081)
+#     status = db.Column(db.String(10), nullable=True, default="blue") # green / blue status
+#     created_at = db.Column(db.DateTime, nullable=True)
+    
+#     def __init__(self, cloudid, appid, lb_instance_id, blue_port=8080, green_port=8081):
+#         self.cloudid = cloudid
+#         self.appid = appid
+#         self.lb_instance_id = lbInstance_id
+#         self.blue_port = blue_port
+#         self.green_port = green_port
+#         self.created_at = datetime.datetime.now()
+        
+    
+
+class CloudAppCommand(db.Model):
+    __tablename__ = "appcommand"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    action = db.Column(db.String(10), nullable=False) # deploy , update , rollback
+    script = db.Column(db.Text, nullable=False)
+    app_id = db.Column(db.Integer, db.ForeignKey('oslist.id'))
+    sequence_num = db.Column(db.Integer, nullable=False)
+    command_type = db.Column(db.String(10), nullable=True) # script / api , api -> somecloud  internal API 
+    
+    
+    def __init__(self, action, script, app_id, sequence_num, command_type):
+        self.action = action
+        self.script = script
+        self.app_id = app_id
+        self.sequence_num = sequence_num
+        self.command_type = command_type
+        
+# class AppVersions(db.Model):
+#     __tablename__ = "appversions"
+#     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     appid = db.Column(db.Integer, db.ForeignKey("apps.id"))
+#     version = db.Column(db.String(10), nullable=True)
+#     def __init__(self, appid, version):
+#         self.appid = appid
+#         self.version = version
+        
+        
 # class ChargeRequest(db.Model):
 #     __tablename__= 'chargerequest'
 

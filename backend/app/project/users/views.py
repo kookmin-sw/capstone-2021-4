@@ -97,7 +97,7 @@ def register():
                 message = Markup(
                     "<strong>Error!</strong> Unable to process registration.")
                 flash(message, 'danger')
-    return render_template('register.html', form=form)
+    return render_template('new/signup.html', form=form)
 
 @users_blueprint.route('/token', methods=["POST"])
 def token_login():
@@ -139,6 +139,7 @@ def token_login():
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    print("Login")
     form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -220,7 +221,9 @@ def confirm_email(token):
         
         if cloud_env.check_environment(user.id) == False: # cloud env init
             try:
-                cloud_env.create_environment(user.id)
+                print("Start Start user id {} , user email {} ".format(user.id, email))
+                cloud_env.create_environment(user.id, email)
+             
                 message = Markup(
                     "Thank you for confirming your email address!")
             except:

@@ -13,6 +13,21 @@ function load(url, callback, renderTo, elementId) {
     xhr.send('');
 }
 
+
+function call(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        callback(xhr.response); 
+      }
+    }
+    xhr.onerror = function() {
+        callback(false)
+    }
+    xhr.open('GET', url, true);
+    xhr.send('');
+}
+
 function render(response, renderTo, elementId) {  
     document.getElementById(elementId).insertAdjacentHTML(renderTo, response)    
 }
@@ -97,8 +112,8 @@ function init() { // custom init
         // app/css/views/{pathname}
         // var filename = pathname.split('.')[0].split('/')
         // var parse_view = filename[filename.length - 1]
-        defaultCssLoader(pathname)
-        scriptLoader(pathname)
+        defaultCssLoader(pathname.replace(/[0-9]/g, "").replace("//","/"))
+        scriptLoader(pathname.replace(/[0-9]/g, "").replace("//","/"))
     } 
 }
 init() 
