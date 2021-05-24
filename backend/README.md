@@ -32,8 +32,8 @@ AWS_SECRET_ACCESS_KEY= < AWS Secret Access Key>
 
 #DB
 SQLALCHEMY_DATABASE_URI=sqlite:///testcode.db
-HOSTED_ZONE_ID=Z01531342TJHRLBMP4RYK
-PUBLIC_IP_ADDR=3.36.213.43
+HOSTED_ZONE_ID=<SomeCloud system domain HostedZone Id (Route53)>
+PUBLIC_IP_ADDR=<SomeCloud System PublicIP>
 ```
 
 
