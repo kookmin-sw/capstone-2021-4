@@ -8,6 +8,9 @@
 - 키페어, 방화벽, 클라우드 인스턴스는 AWS EC2 자원을 활용합니다. SomeCloud 와 AWS 통신은 boto3 를 이용합니다.
 - Flask 어플리케이션을 클라우드 서버에 배포하고, blue-green 배포를 지원합니다. (Rollback, Update 지원)
 
+## DB schema, Backend blueprint
+- https://docs.google.com/spreadsheets/d/1_fLHyhQrNPJ-qX4y3P5JEYWzwkZ2lrZBPZAP0lruyPg/edit?usp=sharing
+
 ### SomeCloud members
 
 ```
