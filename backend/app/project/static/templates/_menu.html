@@ -1,0 +1,69 @@
+
+<nav role="navigation" class="navbar navbar-default navbar-top navbar-fixed-top">
+    <!-- START navbar header-->
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">
+         <div class="brand-logo">
+            <img src="/static/app/img/cloudlogo.png" alt="App Logo" class="img-responsive">
+         </div>
+         <div class="brand-logo-collapsed">
+            <em class="fa fa-cloud" alt="App Logo" style="margin-top: 10px;"></em>
+            
+            <!-- <img src="/static/app/img/logo-single.png" alt="App Logo" class="img-responsive"> -->
+         </div>
+      </a>
+    </div>
+    <!-- END navbar header-->
+    <!-- START Nav wrapper-->
+    <div class="nav-wrapper">
+       <!-- START Left navbar-->
+       <ul class="nav navbar-nav">
+          <li>
+             <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+             <a href="#" data-toggle-state="aside-collapsed" data-persists="true" class="hidden-xs">
+                <em class="fa fa-navicon"></em>
+             </a>
+             <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+             <a href="#" data-toggle-state="aside-toggled" class="visible-xs">
+                <em class="fa fa-navicon"></em>
+             </a>
+          </li>
+          <li class="dropdown dropdown-list">
+          </li>  
+       </ul>
+       
+
+       <ul class="nav navbar-nav navbar-right">
+          <!-- Search icon-->
+         
+         <li class="dropdown"  style="margin-right: 20px;">
+            <a href="#" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">
+               <em class="fa fa-user" style="margin-right: 10px;"></em><em class="fa fa-angle-down"></em>
+            </a>
+            <ul class="dropdown-menu">
+               <li><a class="router" href="/user_profile">User profile</a>
+               </li>
+               <li><a class="router" href="/logout">Logout</a>
+               </li>
+            </ul>
+         </li> 
+       </ul>
+       
+    </div>
+
+
+  
+    
+      
+    <!-- END Nav wrapper-->
+
+    <!-- START Search form-->
+    <form role="search" class="navbar-form">
+       <div class="form-group has-feedback">
+          <input type="text" placeholder="Type and hit Enter.." class="form-control">
+          <div data-toggle="navbar-search-dismiss" class="fa fa-times form-control-feedback"></div>
+       </div>
+       <button type="submit" class="hidden btn btn-default">Submit</button>
+    </form>
+    <!-- END Search form-->
+ </nav>

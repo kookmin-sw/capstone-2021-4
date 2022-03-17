@@ -1,77 +1,42 @@
 [![Work in Repl.it](https://classroom.github.com/assets/work-in-replit-14baed9a392b3a25080506f3b7b6d57f295ec2978f6f33ec97e36a161684cbe9.svg)](https://classroom.github.com/online_ide?assignment_repo_id=350588&assignment_repo_type=GroupAssignmentRepo)
-# Welcome to GitHub
+# SomeCloud
+<img width="218" alt="image" src="https://user-images.githubusercontent.com/3627483/119249954-c6a50b80-bbd7-11eb-8034-88d795425312.png">
 
-캡스톤 팀 생성을 축하합니다.
+### 프로잭트 소개
 
-## 팀소개 및 페이지를 꾸며주세요.
+- AWS EC2 를 리셀링 하는 클라우드 컴퓨팅 프로젝트 입니다. SomeCloud 대시보드 상에서 클라우드 인스턴스를 추가할 수 있고, 키페어를 관리하고, 방화벽을 관리하고, 요금을 지불하는 시스템입니다.
+- 키페어, 방화벽, 클라우드 인스턴스는 AWS EC2 자원을 활용합니다. SomeCloud 와 AWS 통신은 boto3 를 이용합니다.
+- Flask 어플리케이션을 클라우드 서버에 배포하고, blue-green 배포를 지원합니다. (Rollback, Update 지원)
 
-- 프로젝트 소개
-  - 프로젝트 설치방법 및 데모, 사용방법, 프리뷰등을 readme.md에 작성.
-  - Api나 사용방법등 내용이 많을경우 wiki에 꾸미고 링크 추가.
+## DB schema, Backend blueprint
+- https://docs.google.com/spreadsheets/d/1_fLHyhQrNPJ-qX4y3P5JEYWzwkZ2lrZBPZAP0lruyPg/edit?usp=sharing
 
-- 팀페이지 꾸미기
-  - 프로젝트 소개 및 팀원 소개
-  - index.md 예시보고 수정.
+### SomeCloud members
 
-- GitHub Pages 리파지토리 Settings > Options > GitHub Pages 
-  - Source를 marster branch
-  - Theme Chooser에서 태마선택
-  - 수정후 팀페이지 확인하여 점검.
-
-**팀페이지 주소** -> https://kookmin-sw.github.io/ '{{자신의 리파지토리 아이디}}'
-
-**예시)** 2020년 0조  https://kookmin-sw.github.io/capstone-2020-0/
-
-
-## 내용에 아래와 같은 내용들을 추가하세요.
-
-### 1. 프로잭트 소개
-
-프로젝트
-
-### 2. 소개 영상
-
-프로젝트 소개하는 영상을 추가하세요
-
-### 3. 팀 소개
-
-팀을 소개하세요.
-
-팀원정보 및 담당이나 사진 및 SNS를 이용하여 소개하세요.
-
-### 4. 사용법
-
-소스코드제출시 설치법이나 사용법을 작성하세요.
-
-### 5. 기타
-
-추가적인 내용은 자유롭게 작성하세요.
-
-
-## Markdown을 사용하여 내용꾸미기
-
-Markdown은 작문을 스타일링하기위한 가볍고 사용하기 쉬운 구문입니다. 여기에는 다음을위한 규칙이 포함됩니다.
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+kimjenny, parkhuijoo
 ```
 
-자세한 내용은 [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Frontend
+- static html 로 구현하였고, 반복적인 부분은 분리하고, 화면 전환이 쉽게 html 로 분리하였습니다.
+- load.js 에서 상단, 좌측 메뉴 부분을 가져오도록 구현하였습니다.
 
-### Support or Contact
 
-readme 파일 생성에 추가적인 도움이 필요하면 [도움말](https://help.github.com/articles/about-readmes/) 이나 [contact support](https://github.com/contact) 을 이용하세요.
+### Backend
+- Flask 로 html 을 Server side rendering 을 하고 있고, flask-app-blueprint 탬플릿을 기반으로 어플리케이션 서버를 작성하였습니다.
+- 현재는 frontend 폴더에 있는 내용이 backend/app/project/templates, backend/app/project/static 에 반영된 상태입니다.
+
+### branch
+ 
+```
+master
+backend  - Dockerfile, Python Flask 코드
+frontend - (legacy) 홈페이지 대시보드 페이지, 관리자 페이지
+``` 
+
+## Preview
+
+
+<img width="1326" alt="image" src="https://user-images.githubusercontent.com/3627483/119249964-d1f83700-bbd7-11eb-8065-a085eb622b3c.png">
+
+<img width="821" alt="image" src="https://user-images.githubusercontent.com/3627483/119249997-023fd580-bbd8-11eb-88b2-25ffdb11debd.png">

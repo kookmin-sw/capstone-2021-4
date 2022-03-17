@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Somecloud-Security</title> 
+</head>
+
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+         {% include "_notifier.html" %}
+         <div class="main-content">
+            <div style="margin-bottom: 55px;">
+               <h3>방화벽
+                 <br>
+                 <small>생성된 방화벽 목록</small>
+               </h3>
+             </div>
+            <!-- START row-->
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body">
+                        <div class="table-responsive">
+                           <table class="table table-hover">
+                              <thead>
+                                 <tr> 
+      <th class="border-top-0">이름</th>
+      <th class="border-top-0">그룹 ID</th>
+      <th class="border-top-0">사용중인 인스턴스</th>
+      <th class="border-top-0">VPC ID</th> 
+    </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in secgroups %}
+                               <tr>
+                               
+                                 <td>
+                                 <button type="button" class="btn btn-oval btn-inverse"><a href="/secgroup/{{item.id}}/detail" style="color: white;">{{ item.name }}</a></button>
+                                   <!-- <a href="/secgroup/{{item.id}}/detail">{{ item.name }}</a> -->
+                                 </td>
+                                 <td>
+                                   {{ item.sec_group_id}}
+                                 </td>
+                                 
+                                 <td>
+                                   {{ item.associated_to}}
+                                 </td>
+                                 
+                                 <td>
+                                   {{ item.vpc_id}}
+                                 </td>
+                               
+                               </tr>
+                               {% endfor %}
+                              </tbody>
+                              
+                              
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                
+            </div>
+            <!-- END row-->
+            
+            <div class="container">
+               <p>보안 그룹을 더 생성할 수 있습니다.</p>
+               <a href="{{ url_for('secgroup.add') }}" class="mb-sm btn btn-default" style="align-items: center;">방화벽 생성</a>
+            </div>
+            
+            
+
+         </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>

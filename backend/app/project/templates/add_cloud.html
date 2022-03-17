@@ -1,0 +1,65 @@
+{% extends "_base.html" %}
+{% block title %}Add Cloud instance{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-6">
+    <form action="{{ url_for('cloud.add_cloud') }}" method="post" name="itemsform">
+        {{ form.csrf_token }}
+        <div class="form-group">
+          {{ form.Hostname.label }}
+          {{ render_field(form.Hostname, class="form-control") }}
+        </div>
+        <div class="form-group"> <!-- Plan을 DB 에서 가져와야해..-->
+          <label for="planlist">Plan 선택</label>
+          <select class="form-control" name="plan" id="">
+            {% for o in planlist %}
+             <option value="{{ o.id }}">{{ o.plan_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="oslist">OS 선택</label>
+          <select class="form-control" name="os" id="">
+            {% for o in oslist %}
+            <option value="{{ o.id }}">{{ o.os_name }}</option>
+            {% endfor %}
+          </select> 
+        </div> 
+        <div class="form-group">
+          <label for="oslist">Keypair 선택</label> 
+            {% if keypair[0] == NULL %}
+            <p>Keypair로 들어가서 Keypair를 새로 생성해 주세요.</p>
+            {% else %}
+            <select class="form-control" name="keypair" id="">
+            {% for o in keypair %}
+            <option value="{{ o.id }}">{{ o.name }}</option>
+            {% endfor %}
+            </select> 
+            {% endif %} 
+        </div>
+        <div class="form-group">
+          <label for="oslist">Secuirty Rule 선택</label> 
+            {% if secgroup[0] == NULL %}
+            <p>Security Group 을 생성해 주세요.</p>
+            {% else %}
+            <select class="form-control" name="secgroup" id="">
+            {% for o in secgroup %}
+            <option value="{{ o.id }}">{{ o.name }}</option>
+            {% endfor %}
+            </select> 
+            {% endif %} 
+        </div>
+        
+         
+        <input type="submit" value="Add Item" class="btn btn-lg btn-success">
+    </form>
+  </div>
+  <div class="col-md-6">
+    <h4>클라우드 인스턴스를 만듭니다.</h4>
+    <p>Hostname, Plan, OS 를 고르시기 바랍니다.</p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Somecloud-Security</title> 
+</head>
+
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+
+         <div class="main-content">
+            <div style="margin-bottom: 25px;">
+               <h3>SECURITY
+                 <br>
+                 <small>Security Detail</small>
+               </h3>
+             </div>
+            
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body">
+                        <div class="table-responsive">
+                           <table class="table table-hover">
+                              <thead>
+                                 <tr>
+                                    <th>Protocol</th>
+                                    <th>FromPort</th>
+                                    <th>Toport</th>
+                                    <th>Cidr</th>
+                                    <th>Detail</th>
+                                    <th>Actions</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                              {% for item in detail %}
+                              <tr> 
+                                <td> 
+                                  {{ item.protocol }}
+                                </td>
+                                <td>
+                                  {{ item.fromport }}
+                                </td>
+                                <td>
+                                  {{ item.toport }}
+                                </td>
+                                <td>
+                                  {{ item.cidr }}
+                                </td> 
+                                <td>
+                                    {{ item.desc }}
+                                </td>
+                                <td>
+                                 <div class="btn-group mb-sm">
+                                    <button type="button" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle">Actions
+                                       <span class="caret"></span>
+                                    </button>
+                                    <ul role="menu" class="dropdown-menu">
+                                       <li><a class="dropdown-item" href="{{ url_for('secgroup.delete', secgroup_id=groupid, ruleid=item.id) }}">삭제</a> 
+                                       </li>
+                                       <li><a class="dropdown-item" href="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=item.id) }}">편집</a> 
+                                       </li>
+                                    </ul>
+                                 </div>  
+
+                           
+                                </td>
+                                
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                           </table>
+                           <div class="container">
+                              <br>
+                              <p>방화벽 규칙을 더 생성할 수 있습니다.</p>
+                              <a href="{{ url_for('secgroup.sec_add', secgroup_id=groupid)}}" class="mb-sm btn btn-default" style="align-items: center;">규칙 생성</a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                
+            </div>
+         </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>

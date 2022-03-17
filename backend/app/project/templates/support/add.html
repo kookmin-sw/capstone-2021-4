@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+<style>
+    #blackA{
+        color: #525252;
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    #whiteA{
+        color: white;
+    }
+    .cont textarea{
+        display: block;
+        width: 100%;
+        height: 300px;
+        padding: 15px;
+        box-sizing: border-box;
+        border: 0;
+        resize: vertical;
+    }
+</style>
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Somecloud-Support</title> 
+</head>
+
+<body>
+
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+         <div class="main-content">
+            <div style="margin-bottom: 25px;">
+               <h3>SUPPORT
+                 <br>
+                 <small>Support Add</small>
+               </h3>
+             </div>
+            <div class="row">
+                <hr> 
+                
+                <fieldset>
+                    <div class="form-group">
+                       <label for="input-id-1" class="col-sm-1 control-label" style="line-height: 35px;">타입</label>
+                       <div class="col-sm-10">
+                          <select class="form-control">
+                    <option value="0">기술지원</option>
+                    <option value="1">서버관련</option>
+                    <option value="2">요금관련</option>
+                    <option value="3">기타</option>
+                </select>
+                       </div>
+                    </div>
+                 </fieldset>
+                 <!--<fieldset style="border-bottom: none;">-->
+                 <!--   <div class="form-group">-->
+                 <!--      <label for="input-id-1" class="col-sm-1 control-label" style="line-height: 35px;">글쓴이</label>-->
+                 <!--      <div class="col-sm-3">-->
+                 <!--         <input id="input-id-1" type="text" class="form-control">-->
+                 <!--      </div>-->
+                 <!--      <div class="col-sm-3"></div>-->
+                 <!--      <label for="input-id-1" class="col-sm-1 control-label" style="line-height: 35px;">비밀번호</label>-->
+                 <!--      <div class="col-sm-3">-->
+                 <!--         <input id="input-id-1" type="text" class="form-control">-->
+                 <!--      </div>-->
+                 <!--   </div>-->
+                 <!--</fieldset>-->
+                 <!--<hr>-->
+                 
+                 <div class="cont">
+                     <textarea placeholder="내용입력"></textarea>
+                 </div>
+
+                 <hr>
+
+                 <div class="col-sm-3"></div>
+                 <div class="col-sm-3" style="margin-right: 0; padding-right: 0;text-align: right;">
+                    <button type="submit" class="btn btn-sm btn-inverse" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;"><a href="support.html" id="whiteA" onclick="return confirm('정말로 등록하시겠습니까?')">등록</a></button>
+                 </div>
+                 <div class="col-sm-3" style="margin-left: 0;">
+                    <button type="submit" class="btn btn-sm btn-default" style="padding-right: 18px; padding-left: 18px; padding-top: 7px; padding-bottom: 7px;"><a href="support.html" id="blackA" onclick="return confirm('정말로 취소하시겠습니까?')">취소</a></button>
+                 </div>
+                 <div class="col-sm-3"></div>
+
+                
+                
+            </div>
+         </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>

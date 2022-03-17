@@ -1,0 +1,69 @@
+
+   #option{
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
+    font-style: italic;
+   } 
+   #option_detail{
+      color:  #8f8f8f;
+   }
+   label {
+    display: inline;
+    font-weight: lighter;
+  	}
+
+   input,label {
+    margin: 5px;
+   }
+
+   .textbox {
+      position: relative;
+      width: 100%;
+   } 
+   .textbox label { 
+      position: absolute; 
+      top: 1px; /* input 요소의 border-top 설정값 만큼 */ 
+      left: 1px; /* input 요소의 border-left 설정값 만큼 */ 
+      padding: .8em .5em; /* input 요소의 padding 값 만큼 */ 
+      color: #999; 
+      cursor: text; 
+   } 
+   .textbox input[type="text"]{ 
+      width: 100%;
+      height: auto; 
+      line-height : normal;
+      padding: .8em .5em; 
+      border: 1px solid #999; 
+      border-radius: 0;
+      border-radius: 5px;
+   }
+   
+   
+
+   .box-placeholder {
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+      border-radius: 10px;
+      border: none;
+   }
+   .box-placeholder:hover{
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+      background-color: rgba(214, 214, 214, 0.342);
+      color: white;
+   }
+   .box-placeholder.selected{
+      background-color: rgba(214, 214, 214, 0.342);
+   }
+
+   #nonebox {
+      box-shadow: none;
+   }
+   #nonebox:hover {
+      background-color:white;
+      box-shadow: none;
+   }
+
+
+
