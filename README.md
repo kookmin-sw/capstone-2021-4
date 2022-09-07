@@ -40,3 +40,7 @@ frontend - (legacy) 홈페이지 대시보드 페이지, 관리자 페이지
 <img width="1326" alt="image" src="https://user-images.githubusercontent.com/3627483/119249964-d1f83700-bbd7-11eb-8065-a085eb622b3c.png">
 
 <img width="821" alt="image" src="https://user-images.githubusercontent.com/3627483/119249997-023fd580-bbd8-11eb-88b2-25ffdb11debd.png">
+
+## SomeCloud Blue-green update 
+[![Alt text](https://img.youtube.com/vi/Oy1Rli7alD0/0.jpg)](https://www.youtube.com/embed/Oy1Rli7alD0)
+- Youtube link
