@@ -34,7 +34,7 @@ importlib-metadata==3.4.0
 itsdangerous==1.1.0
 Jinja2==2.11.3
 jmespath==0.10.0
-Mako==1.1.4
+Mako==1.2.2
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mock==4.0.3
