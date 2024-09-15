@@ -1,0 +1,54 @@
+{% extends "_base.html" %}
+{% block title %}Security Rule Detail{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-stripe">
+        <thead>
+          <tr> 
+            <th class="border-top-0">Protocol</th>
+            <th class="border-top-0">FromPort</th>
+            <th class="border-top-0">ToPort</th>
+            <th class="border-top-0">CIDR</th>
+            <th class="border-top-0">Description</th>
+            <th class="border-top-0"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in detail %}
+          <tr> 
+            <td> 
+              {{ item.protocol }}
+            </td>
+            <td>
+              {{ item.fromport }}
+            </td>
+            <td>
+              {{ item.toport }}
+            </td>
+            <td>
+              {{ item.cidr }}
+            </td> 
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Actions            
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="{{ url_for('secgroup.delete', secgroup_id=groupid, ruleid=item.id) }}">삭제</a> 
+                  <a class="dropdown-item" href="{{ url_for('secgroup.edit', secgroup_id=groupid, ruleid=item.id) }}">편집</a> 
+                </div>
+              </div>
+            </td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p>보안 규칙을 더 생성할 수 있습니다.<a href="{{ url_for('secgroup.sec_add', secgroup_id=groupid)}}"> add a new item</a>.</p>
+  </div>
+</div>
+
+{% endblock %}

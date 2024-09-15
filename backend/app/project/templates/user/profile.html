@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Somecloud-UserProfile</title> 
+</head>
+
+<body>
+
+   <!-- START Main wrapper-->
+   
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+         <div class="main-content">
+            <div style="margin-bottom: 55px;">
+               <h3>사용자 정보
+                 <br>
+                 <small>인적사항 변경 사항</small>
+               </h3>
+             </div>
+
+             <fieldset>
+                <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Name</label>
+                     <input type="text" name="name" placeholder="희주" class="form-control">
+                  </div>
+               </div>
+             </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                   <div class="form-group">
+                      <label>Email Address</label>
+                      <a href="{{ url_for('users.user_email_change') }}" class="mb-sm btn btn-inverse" style="align-items: center; margin-left: 50px;">Change E-mail</a>
+                   </div>
+                   <small class="card-text">{{current_user.email}}</small>
+                   <br>
+                </div>
+            </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                   <label>Phone Number</label>
+                   <input type="text" name="Phone" placeholder="010-1234-5678" class="form-control">
+                </div>
+             </div>
+             </fieldset>
+
+             <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Password</label>
+                  <a href="{{ url_for('users.user_password_change') }}" class="mb-sm btn btn-inverse" style="align-items: center; margin-left: 70px;">Change Password</a>
+                </div>
+              </div>  
+             </fieldset>
+
+             
+            <fieldset>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <br>
+                  <label>Statistics</label>
+                  <br>
+                  <p class="card-text">Member since: {{ current_user.registered_on.strftime("%A %B %d, %Y") }}</a></p>
+                  {% if current_user.last_logged_in != None %}
+                  <p class="card-text">Last Logged In: {{ current_user.last_logged_in.strftime("%A %B %d, %Y") }}</p>
+                  {% else %}
+                  <p class="card-text">First time logged in. Welcome!</p>
+                  {% endif %}
+                  {% if current_user.email_confirmed_on != None %}
+                  <p class="card-text">Email confirmed on: {{ current_user.email_confirmed_on.strftime("%A %B %d, %Y") }}</p>
+                  {% else %}
+                  <p class="card-text">Email has not been confirmed!</p>
+                  {% endif %}
+                </div>
+              </div>
+            </fieldset>
+             
+            
+         </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>

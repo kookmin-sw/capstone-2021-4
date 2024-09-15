@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Wintermin - Bootstrap Admin Theme</title> 
+</head>
+
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+
+         <div class="main-content">
+            <div style="margin-bottom: 25px;">
+               <h3>SECURITY
+                 <br>
+                 <small>Security Detail</small>
+               </h3>
+             </div>
+            
+            <div class="row">
+               <div class="col-lg-12">
+                  <div class="panel panel-default">
+                     <div class="panel-body">
+                        <div class="table-responsive">
+                           <table class="table table-hover">
+                              <thead>
+                                 <tr>
+                                    <th>Protocol</th>
+                                    <th>FromPort</th>
+                                    <th>Toport</th>
+                                    <th>Cidr</th>
+                                    <th>Detail</th>
+                                    <th>Actions</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                    <th>TCP</th>
+                                    <th>22</th>
+                                    <th>22</th>
+                                    <th>0.0.0.0/0</th>
+                                    <th>SSH 접속</th>
+                                    <th>
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">작업
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">작업</a>
+                                                   </li>
+                                                   <li><a href="security_edit.html">편집</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
+                                            </div>
+                                         </div>
+                                      </div> 
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>TCP</th>
+                                    <th>22</th>
+                                    <th>22</th>
+                                    <th>0.0.0.0/0</th>
+                                    <th>SSH 접속</th>
+                                    <th>
+                                        <div class="dropdown">
+                                            <div class="input-group">
+                                              <div class="input-group-btn">
+                                                 <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Action
+                                                    <span class="caret"></span>
+                                                 </button>
+                                                 <ul class="dropdown-menu pull-left">
+                                                    <li><a href="#">Action</a>
+                                                    </li>
+                                                    <li><a onclick="return confirm('정말로 재부팅 할까요?')">Reboot</a>
+                                                    </li>
+                                                    <li><a onclick="return confirm('정말로 삭제 할까요?')">Delete</a>
+                                                    </li>
+                                                 </ul>
+                                              </div>
+                                           </div>
+                                        </div> 
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>TCP</th>
+                                    <th>80</th>
+                                    <th>80</th>
+                                    <th>0.0.0.0/0</th>
+                                    <th>WEB Port</th>
+                                    <th>
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
+                                            </div>
+                                         </div>
+                                      </div> 
+                                       
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>TCP</th>
+                                    <th>443</th>
+                                    <th>80</th>
+                                    <th>0.0.0.0/0</th>
+                                    <th>Web HTTPS port</th>
+                                    <th>
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
+                                            </div>
+                                         </div>
+                                      </div> 
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>UDP</th>
+                                    <th>441</th>
+                                    <th>441</th>
+                                    <th>0.0.0.0/0</th>
+                                    <th>UDP</th>
+                                    <th>
+                                       <div class="dropdown">
+                                          <div class="input-group">
+                                            <div class="input-group-btn">
+                                               <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">실행
+                                                  <span class="caret"></span>
+                                               </button>
+                                               <ul class="dropdown-menu pull-left">
+                                                   <li><a href="#">실행</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 재부팅 할까요?')">재부팅</a>
+                                                   </li>
+                                                   <li><a onclick="return confirm('정말로 삭제 할까요?')">삭제</a>
+                                                   </li>
+                                               </ul>
+                                            </div>
+                                         </div>
+                                      </div> 
+                                    </th>
+                                </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                
+            </div>
+         </div>
+      </section> 
+   </div> 
+   <script src="/app/js/load.js"></script>
+</body>
+
+</html>

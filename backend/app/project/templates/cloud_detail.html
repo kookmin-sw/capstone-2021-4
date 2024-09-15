@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+{% block title %}Cloud Detail{% endblock %}
+{% from "_formshelper.html" import render_field %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+     <h2>Information</h2>
+      <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
+      <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
+      <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
+      <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+      <p>OutboundTraffic Usage :  {{traffic }} </p>
+  </div>
+  <div class="col-md-12">
+      <h2>Console Status</h2>
+      
+      <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="300" height="300" src="">
+  </div>
+  <div class="col-md-12">
+    <h2>Console Logs</h2>
+    <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+</div>
+
+</div>
+
+{% endblock %}

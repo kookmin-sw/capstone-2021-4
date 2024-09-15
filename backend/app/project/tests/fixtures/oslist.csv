@@ -1,0 +1,3 @@
+id,os_name,aws_image_id
+1,ubuntu,ami-067abcae434ee508b
+2,amazonLinux,ami-09282971cf2faa4c9

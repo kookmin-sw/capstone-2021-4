@@ -1,0 +1,28 @@
+.mainbtn {
+    background-color: rgba(0, 0, 0, 0);
+    color:  #31ba85;
+    border-radius: 5px;
+    border: #31ba85 1px solid;
+    outline: none !important;
+    padding: 7px 18px;
+    font-size: 13px;
+    line-height: 1.52857143;
+    display: inline-block;
+ }
+ .mainbtn:hover{
+    background-color: #31ba85;
+    color: white ;
+    text-decoration: none;
+ }
+ .opbtn{
+   background-color: #31ba85;
+   border: #31ba85 1px solid;
+   color: white;
+   border-radius: 2px;
+}
+ .container{  
+   text-align: center;  
+   width: 100%;
+   height: max-content;
+}  
+

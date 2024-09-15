@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="ie ie6 lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="ie ie7 lt-ie9 lt-ie8"        lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="ie ie8 lt-ie9"               lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="ie ie9"                      lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-ie">
+<!--<![endif]-->
+
+<head>
+   <!-- Meta-->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="description" content="">
+   <meta name="keywords" content="">
+   <meta name="author" content="">
+   <title>Somecloud-Monitoring</title> 
+    <link rel="stylesheet" href="/static/app/css/views/cloudlist2.css" type="text/css" />
+</head>
+
+<body>
+   <!-- START Main wrapper-->
+   <div id="wrapper" class="wrapper">
+      <section id="content-area">
+        <div class="main-content">
+            <div style="margin-bottom: 55px;">
+               <h3>클라우드 모니터링
+                 <br>
+                 <small>클라우드 사용량 / 네트워크 사용량</small>
+               </h3>
+             </div>
+            
+             
+            <div class="row">
+                  <!-- test -->
+                  <fieldset>
+                    <div class="col-md-12">
+                        <!-- START panel-->
+                        <div class="panel panel-default">
+                           <div class="panel-heading"><h4>Cloud Detail</h4></div>
+                           <div class="panel-body">
+                              <!-- Nav tabs -->
+                              <ul class="nav nav-pills">
+                                 <li><a href="#home-pills" data-toggle="tab">Information</a>
+                                 </li>
+                                 <li><a href="#status-pills" data-toggle="tab">Console Status</a>
+                                 </li>
+                                 <li><a href="#Logs-pills" data-toggle="tab">Console Logs</a>
+                                 </li>
+                                 {% if cloudinfo.is_lb_env_created == True %} 
+                                 <li><a href="#preview-pills" data-toggle="tab">Preview</a>
+                                 </li>
+                                 {% endif %}
+                              </ul>
+                              <!-- Tab panes -->
+                              <div class="tab-content">
+                                <div id="home-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-12">
+                                        <!-- <h4>Information</h4><br> -->
+                                        <br>
+                                        <p>Hostname : {{ hostname }}.some-cloud.net</p>
+                                        <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
+                                        <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
+                                        <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
+                                        <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+                                        <p>OutboundTraffic Usage :  {{traffic }} </p>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="status-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <!-- <h4>Console Status</h4> -->
+                                        <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="auto" height="auto">
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="Logs-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <!-- <h4>Console Logs</h4> -->
+                                        <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                                 <div id="preview-pills" class="tab-pane fade">
+                                    <fieldset>
+                                        <div class="col-md-6">
+                                        <iframe name="preview_web" src="http://{{hostname}}.some-cloud.net"></iframe>
+                                        <br>
+                                        <button class="btn btn-sm btn-inverse" onclick="refreshIframe()">reload</button>
+                        
+                                        </div>
+                                    </fieldset>
+                                 </div>
+                              </div>
+                           </div>
+                           <!--/.panel-body -->
+                        </div>
+                        <!-- END panel-->
+                     </div>
+                  </fieldset>
+                  
+
+                <!-- <fieldset>
+                    <div class="col-md-12">
+                    <h3>Information</h3>
+                    <p>Cloud Public IP : {{ cloud["Reservations"][0]["Instances"][0]["PublicIpAddress"]}}</p>
+                    <p>Cloud Private IP : {{ cloud["Reservations"][0]["Instances"][0]["PrivateIpAddress"]}}</p>
+                    <p>Architecture :  {{ cloud["Reservations"][0]["Instances"][0]["Architecture"]}} </p>
+                    <p>PrivateDnsName :  {{ cloud["Reservations"][0]["Instances"][0]["PrivateDnsName"]}} </p>
+                    <p>OutboundTraffic Usage :  {{traffic }} </p>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                    <h3>Console Status</h3>
+                    <img src="data:image/jpeg;base64, {{ screenshot["ImageData"] }}" width="300" height="300">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                    <h3>Console Logs</h3>
+                    <pre style="height:400px; overflow: auto;"><code>{{ output["Output"] }}</code></pre>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="col-md-12">
+                        <h3>CPU Usage</h3>
+                        <img src="/cloud/detail/{{ cloudid }}/CPUUtilization/1">
+                    </div>
+                </fieldset> -->
+                
+               <fieldset>
+                    <div class="col-md-12">
+                        <h4 class="page-header">CPU Usage
+                            <small> CPU 사용량</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/CPUUtilization/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+               
+                <fieldset>
+                    <div class="col-md-12">
+                        <h4 class="page-header">Network Usage (Inbound)
+                            <small> inbound 네트워크 사용량</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/NetworkIn/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="col-md-12">
+                        <h4 class="page-header">Network Usage (Outbound)
+                            <small> outbound 네트워크 사용량</small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/NetworkOut/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+               
+                
+                <fieldset>
+                    <div class="col-md-12" >
+                        <h4 class="page-header">SSD IO Balance
+                            <small> I/O 크기 모니터링 </small>
+                         </h4>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <div class="col-md-6">
+                                    <img src="/cloud/detail/{{ cloudid }}/EBSIOBalance/1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+              
+                {% if cloudinfo.is_lb_env_created == True %} 
+                    <fieldset>
+                        <div class="col-md-12">
+                            <h3>Actions</h3>
+                            <button class="btn btn-sm btn-inverse" onclick="update( {{ cloudid }} )">Update App </button>
+                            <button class="btn btn-sm btn-inverse" onclick="rollback( {{ cloudid }} )">Rollback App </button>
+                            
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <div class="col-md-12">
+                            <h3>App Status</h3>  
+                            {{ app_status }}
+                        </div>
+                    </fieldset>
+                {% endif %}
+                
+            </div>
+      </section> 
+   </div> 
+   <script src="/static/app/js/load.js"></script>
+</body>
+
+</html>
